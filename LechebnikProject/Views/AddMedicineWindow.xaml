@@ -1,0 +1,45 @@
+﻿<Window x:Class="LechebnikProject.Views.AddMedicineWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:LechebnikProject.Helpers"
+        Title="Добавить препарат" Height="600" Width="400">
+    <Window.Resources>
+        <local:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
+    </Window.Resources>
+    <ScrollViewer>
+        <StackPanel Margin="10">
+            <Label Content="Название:"/>
+            <TextBox Text="{Binding Name}"/>
+            <Label Content="Форма:"/>
+            <ComboBox ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm}"/>
+            <Label Content="Вес/объем:"/>
+            <TextBox Text="{Binding WeightVolume}"/>
+            <Label Content="Серийный номер:"/>
+            <TextBox Text="{Binding SerialNumber}"/>
+            <Label Content="Применение при болезнях:"/>
+            <TextBox Text="{Binding Usage}"/>
+            <Label Content="Действующее вещество:"/>
+            <TextBox Text="{Binding ActiveIngredient}"/>
+            <Label Content="Способ применения:"/>
+            <ComboBox ItemsSource="{Binding ApplicationMethods}" SelectedItem="{Binding SelectedApplicationMethod}"/>
+            <Label Content="Агрегатное состояние:"/>
+            <ComboBox ItemsSource="{Binding AggregateStates}" SelectedItem="{Binding SelectedAggregateState}"/>
+            <Label Content="Тип препарата:"/>
+            <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}"/>
+            <Label Content="Производитель:"/>
+            <ComboBox ItemsSource="{Binding Manufacturers}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedManufacturer}"/>
+            <Label Content="Поставщик:"/>
+            <ComboBox ItemsSource="{Binding Suppliers}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSupplier}"/>
+            <Label Content="Количество на складе:"/>
+            <TextBox Text="{Binding StockQuantity}"/>
+            <Label Content="Требуется рецепт:"/>
+            <CheckBox IsChecked="{Binding RequiresPrescription}"/>
+            <Label Content="Цена:"/>
+            <TextBox Text="{Binding Price}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="0,0,10,0"/>
+                <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
