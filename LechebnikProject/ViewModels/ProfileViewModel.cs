@@ -2,6 +2,7 @@
 using LechebnikProject.Models;
 using LechebnikProject.Views;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,13 +22,16 @@ namespace LechebnikProject.ViewModels
 
         private void Save(object parameter)
         {
-            string query = "UPDATE Users SET LastName = @LastName, FirstName = @FirstName, PhoneNumber = @PhoneNumber, Email = @Email WHERE UserId = @UserId";
+            string query = "UPDATE Users SET LastName = @LastName, FirstName = @FirstName, MiddleName = @, PhoneNumber = @PhoneNumber, Email = @Email, Position = @Position, PharmacyAddress = @PharmacyAddress WHERE UserId = @UserId";
             var parameters = new[]
             {
                 new SqlParameter("@LastName", CurrentUser.LastName),
                 new SqlParameter("@FirstName", CurrentUser.FirstName),
+                new SqlParameter("@MiddleName", CurrentUser.MiddleName),
                 new SqlParameter("@PhoneNumber", CurrentUser.PhoneNumber),
                 new SqlParameter("@Email", CurrentUser.Email),
+                new SqlParameter("@Position", CurrentUser.Position),
+                new SqlParameter("@PharmacyAddress", CurrentUser.PharmacyAddress),
                 new SqlParameter("@UserId", CurrentUser.UserId)
             };
             DatabaseHelper.ExecuteQuery(query, parameters);
@@ -36,10 +40,10 @@ namespace LechebnikProject.ViewModels
 
         private void GoBack(object parameter)
         {
-            var window = new MainMenuWindow();
-            window.Show();
-            Application.Current.MainWindow = window;
-            (Application.Current.MainWindow as Window)?.Close();
+            var mainMenuWindow = new MainMenuWindow();
+            mainMenuWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is ProfileWindow))?.Close();
+            Application.Current.MainWindow = mainMenuWindow;
         }
     }
 }

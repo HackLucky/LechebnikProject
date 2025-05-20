@@ -1,14 +1,16 @@
 ﻿<Window x:Class="LechebnikProject.Views.QuantityInputWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Ввод количества" Height="200" Width="300" WindowStartupLocation="CenterScreen">
+        Title="ЛЕЧЕБНИК [окно ввода количества приобретаемого препарата]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
     <Grid Margin="20">
         <StackPanel>
+            <TextBlock Text="Приобретаемый препарат:"/>
             <TextBlock Text="{Binding SelectedMedicine.Name}" Margin="0,0,0,10"/>
+            <TextBlock Text="Введите количество:"/>
             <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="25" Margin="0,0,0,10"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Height="30" Margin="5"/>
-                <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="30" Margin="5"/>
+                <Button Content="Добавить в корзину" Command="{Binding AddCommand}" Width="200" Height="30" Margin="5"/>
+                <Button Content="Отменить добавление" Command="{Binding CancelCommand}" Width="200" Height="30" Margin="5"/>
             </StackPanel>
         </StackPanel>
     </Grid>

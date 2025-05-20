@@ -2,6 +2,7 @@
 using LechebnikProject.Models;
 using LechebnikProject.Views;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -43,10 +44,10 @@ namespace LechebnikProject.ViewModels
 
         private void GoToMedicineList(object parameter)
         {
-            var window = new MedicineListWindow();
-            window.Show();
-            (Application.Current.MainWindow as Window)?.Close();
-            Application.Current.MainWindow = window;
+            var medicineListWindow = new MedicineListWindow();
+            medicineListWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is QuantityInputWindow))?.Close();
+            Application.Current.MainWindow = medicineListWindow;
         }
     }
 }

@@ -110,7 +110,8 @@ namespace LechebnikProject.ViewModels
         {
             var adminPanelWindow = new AdminPanelWindow();
             adminPanelWindow.Show();
-            Application.Current.Windows.OfType<ManageUsersWindow>().FirstOrDefault()?.Close();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is ManageUsersWindow))?.Close();
+            Application.Current.MainWindow = adminPanelWindow;
         }
     }
 }

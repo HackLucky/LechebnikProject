@@ -83,9 +83,10 @@ namespace LechebnikProject.ViewModels
 
         private void GoBack()
         {
-            var window = new MedicineListWindow();
-            window.Show();
-            Application.Current.Windows.OfType<PrescriptionInputWindow>().FirstOrDefault()?.Close();
+            var medicineListWindow = new MedicineListWindow();
+            medicineListWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is PrescriptionInputWindow))?.Close();
+            Application.Current.MainWindow = medicineListWindow;
         }
     }
 }

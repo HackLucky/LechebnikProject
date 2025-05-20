@@ -2,6 +2,7 @@
 using LechebnikProject.Models;
 using LechebnikProject.Views;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -36,58 +37,66 @@ namespace LechebnikProject.ViewModels
 
         private void GoToMedicineList(object parameter)
         {
-            var window = new MedicineListWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var medicineListWindow = new MedicineListWindow();
+            medicineListWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = medicineListWindow;
         }
 
         private void GoToCart(object parameter)
         {
-            var window = new CartWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var cartWindow = new CartWindow();
+            cartWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = cartWindow;
         }
 
         private void GoToAddMedicine(object parameter)
         {
-            var window = new AddMedicineWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var addMedicineWindow = new AddMedicineWindow();
+            addMedicineWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = addMedicineWindow;
         }
 
         private void GoToReports(object parameter)
         {
-            var window = new ReportsWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var reportsWindow = new ReportsWindow();
+            reportsWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = reportsWindow;
         }
 
         private void GoToPrescriptions(object parameter)
         {
-            var window = new PrescriptionsWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var prescriptionsWindow = new PrescriptionsWindow();
+            prescriptionsWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = prescriptionsWindow;
         }
 
         private void GoToProfile(object parameter)
         {
-            var window = new ProfileWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var profileWindow = new ProfileWindow();
+            profileWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = profileWindow;
         }
 
         private void GoToContactAdmin(object parameter)
         {
-            var window = new ContactAdminWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var contactAdminWindow = new ContactAdminWindow();
+            contactAdminWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = contactAdminWindow;
         }
 
         private void GoToAdminPanel(object parameter)
         {
-            var window = new AdminPanelWindow();
-            window.Show();
-            (parameter as Window)?.Close();
+            var adminPanelWindow = new AdminPanelWindow();
+            adminPanelWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
+            Application.Current.MainWindow = adminPanelWindow;
         }
 
         private bool CanGoToAdminPanel(object parameter)

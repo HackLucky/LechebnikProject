@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -63,7 +64,7 @@ namespace LechebnikProject.ViewModels
             {
                 var window = new MedicineDetailsWindow(medicine);
                 window.Show();
-                (Application.Current.MainWindow as Window)?.Close();
+                (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
                 Application.Current.MainWindow = window;
             }
         }
@@ -79,7 +80,7 @@ namespace LechebnikProject.ViewModels
                 }
                 var window = new QuantityInputWindow(medicine);
                 window.Show();
-                (Application.Current.MainWindow as Window)?.Close();
+                (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
                 Application.Current.MainWindow = window;
             }
         }
@@ -93,27 +94,27 @@ namespace LechebnikProject.ViewModels
         {
             if (parameter is Medicine medicine)
             {
-                var window = new PrescriptionInputWindow(medicine);
-                window.Show();
-                (Application.Current.MainWindow as Window)?.Close();
-                Application.Current.MainWindow = window;
+                var prescriptionInputWindow = new PrescriptionInputWindow(medicine);
+                prescriptionInputWindow.ShowDialog();
+                (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
+                Application.Current.MainWindow = prescriptionInputWindow;
             }
         }
 
         private void GoToCart(object parameter)
         {
-            var window = new CartWindow();
-            window.Show();
-            (Application.Current.MainWindow as Window)?.Close();
-            Application.Current.MainWindow = window;
+            var cartWindow = new CartWindow();
+            cartWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
+            Application.Current.MainWindow = cartWindow;
         }
 
         private void GoBack(object parameter)
         {
-            var window = new MainMenuWindow();
-            window.Show();
-            (Application.Current.MainWindow as Window)?.Close();
-            Application.Current.MainWindow = window;
+            var mainMenuWindow = new MainMenuWindow();
+            mainMenuWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
+            Application.Current.MainWindow = mainMenuWindow;
         }
     }
 }

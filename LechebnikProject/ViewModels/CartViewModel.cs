@@ -1,8 +1,7 @@
-﻿using LechebnikProject.Helpers;
-using LechebnikProject.Models;
+﻿using LechebnikProject.Models;
 using LechebnikProject.Views;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -44,10 +43,10 @@ namespace LechebnikProject.ViewModels
 
         private void GoBack(object parameter)
         {
-            var window = new MainMenuWindow();
-            window.Show();
-            (Application.Current.MainWindow as Window)?.Close();
-            Application.Current.MainWindow = window;
+            var mainMenuWindow = new MainMenuWindow();
+            mainMenuWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is CartWindow))?.Close();
+            Application.Current.MainWindow = mainMenuWindow;
         }
     }
 }

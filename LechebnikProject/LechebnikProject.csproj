@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Favicons\favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>LechebnikProject.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.5.4.0\lib\net46\NLog.dll</HintPath>
@@ -235,13 +241,22 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\Fonts\Arkhip.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Packages\" />
-    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LechebnikLogo.png" />
+    <Resource Include="Resources\LechebnikLogoMain.png" />
+    <Resource Include="Resources\LechebnikLogoMainX.png" />
+    <Resource Include="Resources\LechebnikBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Favicons\favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

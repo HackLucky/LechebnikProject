@@ -10,14 +10,14 @@ namespace LechebnikProject.ViewModels
     {
         public ICommand ManageUsersCommand { get; }
         public ICommand ManageMedicinesCommand { get; }
-        public ICommand ViewReportsCommand { get; }
+        public ICommand ManageReportsCommand { get; }
         public ICommand GoBackCommand { get; }
 
         public AdminPanelViewModel()
         {
             ManageUsersCommand = new RelayCommand(ManageUsers);
             ManageMedicinesCommand = new RelayCommand(ManageMedicines);
-            ViewReportsCommand = new RelayCommand(ViewReports);
+            ManageReportsCommand = new RelayCommand(ManageReports);
             GoBackCommand = new RelayCommand(GoBack);
         }
 
@@ -25,16 +25,17 @@ namespace LechebnikProject.ViewModels
         {
             var manageUsersWindow = new ManageUsersWindow();
             manageUsersWindow.Show();
-            Application.Current.Windows.OfType<AdminPanelWindow>().FirstOrDefault()?.Close();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
         }
 
         private void ManageMedicines(object parameter)
         {
             var addMedicineWindow = new AddMedicineWindow();
             addMedicineWindow.Show();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
         }
 
-        private void ViewReports(object parameter)
+        private void ManageReports(object parameter)
         {
             var reportsWindow = new ReportsWindow();
             reportsWindow.Show();

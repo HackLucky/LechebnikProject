@@ -48,8 +48,8 @@ namespace LechebnikProject.ViewModels
 
         private void AddPrescription(object parameter)
         {
-            var window = new PrescriptionInputWindow(new Medicine()); // Предполагаем выбор препарата в окне
-            window.ShowDialog();
+            var prescriptionInputWindow = new PrescriptionInputWindow(new Medicine()); // Предполагаем выбор препарата в окне
+            prescriptionInputWindow.ShowDialog();
             LoadPrescriptions();
         }
 
@@ -96,7 +96,7 @@ namespace LechebnikProject.ViewModels
         {
             var mainMenuWindow = new MainMenuWindow();
             mainMenuWindow.Show();
-            Application.Current.Windows.OfType<PrescriptionsWindow>().FirstOrDefault()?.Close();
+            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is PrescriptionsWindow))?.Close();
             Application.Current.MainWindow = mainMenuWindow;
         }
     }

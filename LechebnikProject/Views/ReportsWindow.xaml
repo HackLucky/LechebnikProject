@@ -1,13 +1,13 @@
 ﻿<Window x:Class="LechebnikProject.Views.ReportsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Отчёты" Height="400" Width="600">
+        Title="ЛЕЧЕБНИК [окно списка отчётов]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" ItemsSource="{Binding SalesData}" AutoGenerateColumns="True" IsReadOnly="True"/>
-        <Button Grid.Row="1" Content="Назад" Command="{Binding GoBackCommand}" Width="100" Margin="10"/>
+        <Button Grid.Row="1" Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="200" Margin="10"/>
     </Grid>
 </Window>
