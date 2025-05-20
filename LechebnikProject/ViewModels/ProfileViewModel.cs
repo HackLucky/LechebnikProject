@@ -22,7 +22,7 @@ namespace LechebnikProject.ViewModels
 
         private void Save(object parameter)
         {
-            string query = "UPDATE Users SET LastName = @LastName, FirstName = @FirstName, MiddleName = @, PhoneNumber = @PhoneNumber, Email = @Email, Position = @Position, PharmacyAddress = @PharmacyAddress WHERE UserId = @UserId";
+            string query = "UPDATE Users SET LastName = @LastName, FirstName = @FirstName, MiddleName = @MiddleName, PhoneNumber = @PhoneNumber, Email = @Email, Position = @Position, PharmacyAddress = @PharmacyAddress WHERE UserId = @UserId";
             var parameters = new[]
             {
                 new SqlParameter("@LastName", CurrentUser.LastName),

@@ -95,7 +95,7 @@ namespace LechebnikProject.ViewModels
             if (parameter is Medicine medicine)
             {
                 var prescriptionInputWindow = new PrescriptionInputWindow(medicine);
-                prescriptionInputWindow.ShowDialog();
+                prescriptionInputWindow.Show();
                 (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
                 Application.Current.MainWindow = prescriptionInputWindow;
             }

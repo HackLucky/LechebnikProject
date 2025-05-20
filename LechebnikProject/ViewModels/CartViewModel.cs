@@ -32,6 +32,7 @@ namespace LechebnikProject.ViewModels
         private void Clear(object parameter)
         {
             CartItems.Clear();
+
         }
 
         private void Checkout(object parameter)
