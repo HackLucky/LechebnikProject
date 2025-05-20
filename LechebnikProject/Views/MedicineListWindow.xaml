@@ -20,8 +20,8 @@
         <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding MedicineId}"/>
                 <DataGridTextColumn Header="Препарат (название, лекарственная форма, вес/объём)" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Производитель" Binding="{Binding ManufacturerId}"/>
-                <DataGridTextColumn Header="Цена в рублях" Binding="{Binding Price}"/>
+                <DataGridTextColumn Header="Производитель" Binding="{Binding ManufacturerName}"/>
+                <DataGridTextColumn Header="Цена в рублях" Binding="{Binding Price, StringFormat={}{0:N2} ₽}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

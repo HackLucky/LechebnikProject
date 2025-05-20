@@ -30,15 +30,15 @@ namespace LechebnikProject.ViewModels
 
         private void ManageMedicines(object parameter)
         {
-            var addMedicineWindow = new AddMedicineWindow();
-            addMedicineWindow.Show();
+            var manageMedicinesWindow = new ManageMedicinesWindow();
+            manageMedicinesWindow.Show();
             (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
         }
 
         private void ManageReports(object parameter)
         {
-            var reportsWindow = new ReportsWindow();
-            reportsWindow.Show();
+            var manageReportsWindow = new ManageReportsWindow();
+            manageReportsWindow.Show();
             (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
         }
 

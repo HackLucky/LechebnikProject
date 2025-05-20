@@ -1,8 +1,9 @@
-﻿using LechebnikProject.Helpers;
+﻿using Lechebnik.ViewModels;
+using LechebnikProject.Helpers;
 using LechebnikProject.Models;
 using LechebnikProject.Views;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -11,34 +12,53 @@ using System.Windows.Input;
 
 namespace LechebnikProject.ViewModels
 {
-    public class MedicineListViewModel
+    public class MedicineListViewModel : BaseViewModel
     {
-        public List<Medicine> Medicines { get; set; }
-        public string SearchText { get; set; }
-        public ICommand SearchCommand { get; }
+        private ObservableCollection<Medicine> _medicines;
+        private string _searchText;
+        public ObservableCollection<Medicine> Medicines
+        {
+            get => _medicines;
+            set => SetProperty(ref _medicines, value);
+        }
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                LoadMedicines(_searchText);
+            }
+        }
         public ICommand ViewDetailsCommand { get; }
         public ICommand AddToCartCommand { get; }
         public ICommand AddToCartByPrescriptionCommand { get; }
+        public ICommand SearchCommand { get; }
         public ICommand GoToCartCommand { get; }
         public ICommand GoBackCommand { get; }
 
         public MedicineListViewModel()
         {
             LoadMedicines();
-            SearchCommand = new RelayCommand(Search);
             ViewDetailsCommand = new RelayCommand(ViewDetails);
-            AddToCartCommand = new RelayCommand(AddToCart, CanAddToCart);
+            AddToCartCommand = new RelayCommand(AddToCart);
             AddToCartByPrescriptionCommand = new RelayCommand(AddToCartByPrescription);
+            SearchCommand = new RelayCommand(Search);
             GoToCartCommand = new RelayCommand(GoToCart);
             GoBackCommand = new RelayCommand(GoBack);
         }
 
         private void LoadMedicines(string searchText = "")
         {
-            string query = "SELECT * FROM Medicines WHERE Name LIKE @SearchText OR SerialNumber LIKE @SearchText";
+            string query = @"
+                SELECT m.*, man.Name AS ManufacturerName 
+                FROM Medicines m 
+                JOIN Manufacturers man ON m.ManufacturerId = man.ManufacturerId 
+                WHERE m.Name LIKE @SearchText OR m.SerialNumber LIKE @SearchText";
             var parameters = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
             DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
-            Medicines = new List<Medicine>();
+            Medicines = new ObservableCollection<Medicine>();
             foreach (DataRow row in dataTable.Rows)
             {
                 Medicines.Add(new Medicine
@@ -48,24 +68,20 @@ namespace LechebnikProject.ViewModels
                     Price = Convert.ToDecimal(row["Price"]),
                     StockQuantity = Convert.ToInt32(row["StockQuantity"]),
                     RequiresPrescription = Convert.ToBoolean(row["RequiresPrescription"]),
-                    ManufacturerId = Convert.ToInt32(row["ManufacturerId"])
+                    ManufacturerId = Convert.ToInt32(row["ManufacturerId"]),
+                    ManufacturerName = row["ManufacturerName"].ToString()
                 });
             }
-        }
-
-        private void Search(object parameter)
-        {
-            LoadMedicines(SearchText ?? "");
         }
 
         private void ViewDetails(object parameter)
         {
             if (parameter is Medicine medicine)
             {
-                var window = new MedicineDetailsWindow(medicine);
-                window.Show();
+                var medicineDetailsWindow = new MedicineDetailsWindow(medicine.MedicineId);
+                medicineDetailsWindow.Show();
                 (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
-                Application.Current.MainWindow = window;
+                Application.Current.MainWindow = medicineDetailsWindow;
             }
         }
 
@@ -73,21 +89,34 @@ namespace LechebnikProject.ViewModels
         {
             if (parameter is Medicine medicine)
             {
-                if (medicine.RequiresPrescription)
+                var clientAuthWindow = new ClientAuthWindow();
+                Client authenticatedClient = null;
+                if (clientAuthWindow.ShowDialog() == true)
                 {
-                    MessageBox.Show("Требуется рецепт. Используйте 'По рецепту'.");
-                    return;
+                    authenticatedClient = clientAuthWindow.AuthenticatedClient;
                 }
-                var window = new QuantityInputWindow(medicine);
-                window.Show();
-                (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
-                Application.Current.MainWindow = window;
-            }
-        }
 
-        private bool CanAddToCart(object parameter)
-        {
-            return parameter is Medicine medicine && !medicine.RequiresPrescription;
+                var quantityWindow = new QuantityInputWindow(medicine);
+                if (quantityWindow.ShowDialog() == true)
+                {
+                    int quantity = (quantityWindow.DataContext as QuantityInputViewModel).Quantity;
+                    string query = "INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription) VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription)";
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
+                        new SqlParameter("@MedicineId", medicine.MedicineId),
+                        new SqlParameter("@Quantity", quantity),
+                        new SqlParameter("@IsByPrescription", false)
+                    };
+                    DatabaseHelper.ExecuteNonQuery(query, parameters);
+                    if (authenticatedClient != null)
+                    {
+                        // Сохраняем информацию о клиенте для применения скидки
+                        AppContext.CurrentClient = authenticatedClient;
+                    }
+                    MessageBox.Show("Препарат добавлен в корзину!");
+                }
+            }
         }
 
         private void AddToCartByPrescription(object parameter)
@@ -100,6 +129,8 @@ namespace LechebnikProject.ViewModels
                 Application.Current.MainWindow = prescriptionInputWindow;
             }
         }
+
+        private void Search(object parameter) => LoadMedicines(SearchText);
 
         private void GoToCart(object parameter)
         {

@@ -1,7 +1,5 @@
-﻿using LechebnikProject.Helpers;
-using LechebnikProject.Models;
+﻿using LechebnikProject.Models;
 using LechebnikProject.Views;
-using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -14,12 +12,14 @@ namespace LechebnikProject.ViewModels
         public int Quantity { get; set; }
         public ICommand AddCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand GoToMedicineListCommand { get; }
 
         public QuantityInputViewModel(Medicine medicine)
         {
             SelectedMedicine = medicine;
             AddCommand = new RelayCommand(Add);
             CancelCommand = new RelayCommand(Cancel);
+            GoToMedicineListCommand = new RelayCommand(GoToMedicineList);
         }
 
         private void Add(object parameter)

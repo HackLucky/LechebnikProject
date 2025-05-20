@@ -4,14 +4,33 @@
         Title="ЛЕЧЕБНИК [окно управления пользователями]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Users}" AutoGenerateColumns="True" SelectedItem="{Binding SelectedUser}" IsReadOnly="True"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+        <TextBox Grid.Row="0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding CombinedList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedItem}" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Тип" Binding="{Binding Type}"/>
+                <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Header="Роль" Binding="{Binding Role}"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Status}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding Discount}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <Button Content="Добавить" Command="{Binding AddUserCommand}" Width="100" Margin="5"/>
             <Button Content="Редактировать" Command="{Binding EditUserCommand}" Width="100" Margin="5"/>
+            <Button Content="Сменить роль" Command="{Binding ChangeRoleCommand}" Width="100" Margin="5"/>
             <Button Content="Блокировать/Разблокировать" Command="{Binding BlockUserCommand}" Width="200" Margin="5"/>
+            <ComboBox Width="100" Margin="5" SelectedValue="{Binding SelectedDiscount}">
+                <ComboBoxItem Content="15%" Tag="15.00"/>
+                <ComboBoxItem Content="25%" Tag="25.00"/>
+                <ComboBoxItem Content="50%" Tag="50.00"/>
+                <ComboBoxItem Content="75%" Tag="75.00"/>
+            </ComboBox>
+            <Button Content="Изменить скидку" Command="{Binding ChangeDiscountCommand}" Width="150" Margin="5"/>
             <Button Content="Вернуться к панели администратора" Command="{Binding GoBackCommand}" Width="250" Margin="5"/>
         </StackPanel>
     </Grid>

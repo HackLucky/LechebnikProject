@@ -5,5 +5,7 @@
              StartupUri="Views/WelcomeWindow.xaml">
     <Application.Resources>
         <converter:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
+        <converter:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
+        <converter:SenderToColorConverter x:Key="SenderToColorConverter"/>
     </Application.Resources>
 </Application>

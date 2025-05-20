@@ -1,7 +1,10 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
+using LechebnikProject.Models;
 using LechebnikProject.Views;
 using System;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
@@ -12,6 +15,7 @@ namespace LechebnikProject.ViewModels
     public class ContactAdminViewModel : BaseViewModel
     {
         private string _messageText;
+        public ObservableCollection<Message> Messages { get; set; }
         public string MessageText
         {
             get => _messageText;
@@ -23,8 +27,27 @@ namespace LechebnikProject.ViewModels
 
         public ContactAdminViewModel()
         {
+            LoadMessages();
             SendCommand = new RelayCommand(Send);
             GoBackCommand = new RelayCommand(GoBack);
+        }
+
+        private void LoadMessages()
+        {
+            string query = "SELECT m.*, u.Login AS SenderLogin FROM Messages m JOIN Users u ON m.SenderId = u.UserId WHERE (m.SenderId = @UserId AND m.ReceiverId = 1) OR (m.SenderId = 1 AND m.ReceiverId = @UserId)";
+            var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
+            DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
+            Messages = new ObservableCollection<Message>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Messages.Add(new Message
+                {
+                    SenderId = Convert.ToInt32(row["SenderId"]),
+                    MessageText = row["MessageText"].ToString(),
+                    SendDate = Convert.ToDateTime(row["SendDate"]),
+                    SenderLogin = row["SenderLogin"].ToString()
+                });
+            }
         }
 
         private void Send(object parameter)
@@ -52,6 +75,7 @@ namespace LechebnikProject.ViewModels
             {
                 MessageBox.Show($"Произошла ошибка при отправке сообщения. {ex}");
             }
+            LoadMessages();
         }
 
         private void GoBack(object parameter)

@@ -22,6 +22,9 @@ namespace LechebnikProject.ViewModels
         public string ICD10Code { get; set; }
         public int Quantity { get; set; }
         public string DiscountType { get; set; }
+        public string DoctorLastName { get; set; }
+        public string DoctorFirstName { get; set; }
+        public string DoctorMiddleName { get; set; }
         public DateTime ExpiryDate { get; set; } = DateTime.Now.AddMonths(1);
         public List<string> DiscountTypes { get; } = new List<string> { "50%", "Free" };
 
@@ -37,7 +40,7 @@ namespace LechebnikProject.ViewModels
 
         private void Add(object parameter)
         {
-            if (string.IsNullOrWhiteSpace(Series) || Quantity <= 0 || Quantity > _medicine.StockQuantity)
+            if (string.IsNullOrWhiteSpace(Series) || Quantity <= 0 || Quantity > _medicine.StockQuantity || string.IsNullOrWhiteSpace(DoctorLastName) || string.IsNullOrWhiteSpace(DoctorFirstName))
             {
                 MessageBox.Show("Проверьте введенные данные.");
                 return;
@@ -52,20 +55,27 @@ namespace LechebnikProject.ViewModels
                 ICD10Code = ICD10Code ?? "Не указано",
                 Quantity = Quantity,
                 DiscountType = DiscountType,
+                DoctorLastName = DoctorLastName,
+                DoctorFirstName = DoctorFirstName,
+                DoctorMiddleName = DoctorMiddleName,
                 MedicineId = _medicine.MedicineId,
                 PharmacistId = AppContext.CurrentUser.UserId,
                 ExpiryDate = ExpiryDate
             };
 
-            string query = "INSERT INTO Prescriptions (Series, MedicalInstitution, PatientLastName, PatientFirstName, ICD10Code, Quantity, DiscountType, MedicineId, PharmacistId, ExpiryDate) VALUES (@Series, @MedicalInstitution, @PatientLastName, @PatientFirstName, @ICD10Code, @Quantity, @DiscountType, @MedicineId, @PharmacistId, @ExpiryDate)";
+            string query = "INSERT INTO Prescriptions (Series, MedicalInstitution, PatientLastName, PatientFirstName, PatientMiddleName, ICD10Code, Quantity, DiscountType, DoctorLastName, DoctorFirstName, DoctorMiddleName, MedicineId, PharmacistId, ExpiryDate) VALUES (@Series, @MedicalInstitution, @PatientLastName, @PatientFirstName, @PatientMiddleName, @ICD10Code, @Quantity, @DiscountType, @DoctorLastName, @DoctorFirstName, @DoctorMiddleName, @MedicineId, @PharmacistId, @ExpiryDate)";
             SqlParameter[] parameters = {
                 new SqlParameter("@Series", prescription.Series),
                 new SqlParameter("@MedicalInstitution", prescription.MedicalInstitution),
                 new SqlParameter("@PatientLastName", prescription.PatientLastName),
                 new SqlParameter("@PatientFirstName", prescription.PatientFirstName),
+                new SqlParameter("@PatientMiddleName", prescription.PatientMiddleName ?? (object)DBNull.Value),
                 new SqlParameter("@ICD10Code", prescription.ICD10Code),
                 new SqlParameter("@Quantity", prescription.Quantity),
                 new SqlParameter("@DiscountType", prescription.DiscountType),
+                new SqlParameter("@DoctorLastName", prescription.DoctorLastName),
+                new SqlParameter("@DoctorFirstName", prescription.DoctorFirstName),
+                new SqlParameter("@DoctorMiddleName", prescription.DoctorMiddleName ?? (object)DBNull.Value),
                 new SqlParameter("@MedicineId", prescription.MedicineId),
                 new SqlParameter("@PharmacistId", prescription.PharmacistId),
                 new SqlParameter("@ExpiryDate", prescription.ExpiryDate)

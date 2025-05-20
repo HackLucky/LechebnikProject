@@ -3,13 +3,44 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ЛЕЧЕБНИК [окно деталей препарата]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
     <Grid Margin="20">
-        <StackPanel>
-            <TextBlock Text="{Binding SelectedMedicine.Name}" FontWeight="Bold" Margin="0,0,0,10"/>
-            <TextBlock Text="{Binding SelectedMedicine.Form}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding SelectedMedicine.Price, StringFormat='Цена в рублях: {0:C}'}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding SelectedMedicine.StockQuantity, StringFormat='В наличии: {0}'}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding SelectedMedicine.RequiresPrescription, StringFormat='Рецепт: {0}'}" Margin="0,0,0,5"/>
-            <Button Content="Вернуться к списку препаратов" Command="{Binding GoBackCommand}" Width="250" Height="30" Margin="0,10"/>
-        </StackPanel>
+        <ScrollViewer>
+            <StackPanel>
+                <TextBlock Text="ID:"/>
+                <TextBlock Text="{Binding SelectedMedicine.MedicineId}"/>
+                <TextBlock Text="Название:"/>
+                <TextBlock Text="{Binding SelectedMedicine.Name}"/>
+                <TextBlock Text="Форма:"/>
+                <TextBlock Text="{Binding SelectedMedicine.Form}"/>
+                <TextBlock Text="Вес/объем:"/>
+                <TextBlock Text="{Binding SelectedMedicine.WeightVolume}"/>
+                <TextBlock Text="Серийный номер:"/>
+                <TextBlock Text="{Binding SelectedMedicine.SerialNumber}"/>
+                <TextBlock Text="Применение:"/>
+                <TextBlock Text="{Binding SelectedMedicine.Usage}"/>
+                <TextBlock Text="Действующее вещество:"/>
+                <TextBlock Text="{Binding SelectedMedicine.ActiveIngredient}"/>
+                <TextBlock Text="Способ применения:"/>
+                <TextBlock Text="{Binding SelectedMedicine.ApplicationMethod}"/>
+                <TextBlock Text="Агрегатное состояние:"/>
+                <TextBlock Text="{Binding SelectedMedicine.AggregateState}"/>
+                <TextBlock Text="Тип:"/>
+                <TextBlock Text="{Binding SelectedMedicine.Type}"/>
+                <TextBlock Text="Производитель:"/>
+                <TextBlock Text="{Binding SelectedMedicine.ManufacturerName}"/>
+                <TextBlock Text="Страна производителя:"/>
+                <TextBlock Text="{Binding SelectedMedicine.ManufacturerCountry}"/>
+                <TextBlock Text="Поставщик:"/>
+                <TextBlock Text="{Binding SelectedMedicine.SupplierName}"/>
+                <TextBlock Text="Страна поставщика:"/>
+                <TextBlock Text="{Binding SelectedMedicine.SupplierCountry}"/>
+                <TextBlock Text="Количество на складе:"/>
+                <TextBlock Text="{Binding SelectedMedicine.StockQuantity}"/>
+                <TextBlock Text="Требуется рецепт:"/>
+                <TextBlock Text="{Binding SelectedMedicine.RequiresPrescription, Converter={StaticResource BooleanToStringConverter}}"/>
+                <TextBlock Text="Цена:"/>
+                <TextBlock Text="{Binding SelectedMedicine.Price, StringFormat={}{0:N2} ₽}"/>
+                <Button Content="Вернуться к списку препаратов" Command="{Binding GoBackCommand}" Width="250" Height="30" Margin="0,10"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

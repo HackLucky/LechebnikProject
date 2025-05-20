@@ -29,10 +29,10 @@ namespace LechebnikProject.ViewModels
         public bool RequiresPrescription { get; set; }
         public string Price { get; set; }
 
-        public List<string> Forms { get; } = new List<string> { "Таблетки", "Сироп", "Мазь", "Капли" };
-        public List<string> ApplicationMethods { get; } = new List<string> { "Inhalation", "Nasal", "Ophthalmic", "Parenteral", "Oral", "Sublingual", "Rectal", "Topical", "Otic" };
-        public List<string> AggregateStates { get; } = new List<string> { "Gas", "Liquid", "Soft", "Solid" };
-        public List<string> Types { get; } = new List<string> { "Pathogenetic", "Prophylactic", "Symptomatic", "Stimulating", "Etiotropic" };
+        public List<string> ApplicationMethods { get; } = new List<string> { "Ингаляционный", "Носовой", "Офтальмологический", "Парентеральный", "Пероральный", "Подъязычный", "Ректальный", "Топический", "Ушной" };
+        public List<string> AggregateStates { get; } = new List<string> { "Газообразное", "Жидкое", "Мягкое", "Твёрдое" };
+        public List<string> Types { get; } = new List<string> { "Патогенетическое", "Профилактическое", "Симптоматическое", "Стимулирующее", "Этиотропное" };
+        public List<string> Forms { get; } = new List<string> { "Таблетки", "Сироп", "Мазь", "Капли", "Инъекции", "Капсулы", "Гель" };
         public List<Manufacturer> Manufacturers { get; set; }
         public List<Supplier> Suppliers { get; set; }
 

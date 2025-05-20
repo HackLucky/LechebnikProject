@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,7 +67,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\BooleanToStringConverter.cs" />
+    <Compile Include="Helpers\CaptchaHelper.cs" />
     <Compile Include="Helpers\RoleToVisibilityConverter.cs" />
+    <Compile Include="Helpers\SenderToColorConverter.cs" />
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
@@ -74,9 +79,13 @@
     <Compile Include="ViewModels\AdminPanelViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
+    <Compile Include="ViewModels\ClientLoginViewModel.cs" />
+    <Compile Include="ViewModels\ClientRegisterViewModel.cs" />
     <Compile Include="ViewModels\ContactAdminViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
+    <Compile Include="ViewModels\ManageMedicinesViewModel.cs" />
+    <Compile Include="ViewModels\ManageReportsViewModel.cs" />
     <Compile Include="ViewModels\ManageUsersViewModel.cs" />
     <Compile Include="ViewModels\MedicineDetailsViewModel.cs" />
     <Compile Include="ViewModels\MedicineListViewModel.cs" />
@@ -96,6 +105,15 @@
     <Compile Include="Views\CartWindow.xaml.cs">
       <DependentUpon>CartWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ClientAuthWindow.xaml.cs">
+      <DependentUpon>ClientAuthWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientLoginWindow.xaml.cs">
+      <DependentUpon>ClientLoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientRegisterWindow.xaml.cs">
+      <DependentUpon>ClientRegisterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ContactAdminWindow.xaml.cs">
       <DependentUpon>ContactAdminWindow.xaml</DependentUpon>
     </Compile>
@@ -104,6 +122,12 @@
     </Compile>
     <Compile Include="Views\MainMenuWindow.xaml.cs">
       <DependentUpon>MainMenuWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageMedicinesWindow.xaml.cs">
+      <DependentUpon>ManageMedicinesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageReportsWindow.xaml.cs">
+      <DependentUpon>ManageReportsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ManageUsersWindow.xaml.cs">
       <DependentUpon>ManageUsersWindow.xaml</DependentUpon>
@@ -155,6 +179,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ClientAuthWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientLoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientRegisterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ContactAdminWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -164,6 +200,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainMenuWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManageMedicinesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManageReportsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

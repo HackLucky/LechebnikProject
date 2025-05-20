@@ -1,0 +1,62 @@
+﻿using Lechebnik.ViewModels;
+using LechebnikProject.Helpers;
+using LechebnikProject.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Input;
+
+public class ManageMedicinesViewModel : BaseViewModel
+{
+    public ObservableCollection<Medicine> Medicines { get; set; }
+    public Medicine SelectedMedicine { get; set; }
+    public string SearchText { get; set; }
+    public ICommand AddCommand => new RelayCommand(o => { /* Открыть AddMedicineWindow */ });
+    public ICommand EditCommand => new RelayCommand(o => { /* Открыть окно редактирования */ });
+    public ICommand DeleteCommand => new RelayCommand(Delete);
+    public ICommand GoBackCommand => new RelayCommand(o => { /* Вернуться в AdminPanel */ });
+
+    public ManageMedicinesViewModel()
+    {
+        LoadMedicines();
+    }
+
+    private void LoadMedicines(string searchText = "")
+    {
+        string query = @"
+        SELECT m.*, man.Name AS ManufacturerName 
+        FROM Medicines m 
+        JOIN Manufacturers man ON m.ManufacturerId = man.ManufacturerId 
+        WHERE m.Name LIKE @SearchText OR m.SerialNumber LIKE @SearchText";
+        var parameters = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
+        DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
+        var medicinesList = new List<Medicine>();
+        foreach (DataRow row in dataTable.Rows)
+        {
+            medicinesList.Add(new Medicine
+            {
+                MedicineId = Convert.ToInt32(row["MedicineId"]),
+                Name = row["Name"].ToString(),
+                Price = Convert.ToDecimal(row["Price"]),
+                StockQuantity = Convert.ToInt32(row["StockQuantity"]),
+                RequiresPrescription = Convert.ToBoolean(row["RequiresPrescription"]),
+                ManufacturerId = Convert.ToInt32(row["ManufacturerId"]),
+                ManufacturerName = row["ManufacturerName"].ToString()
+            });
+        }
+        Medicines = new ObservableCollection<Medicine>(medicinesList); // Преобразование в ObservableCollection
+    }
+
+    private void Delete(object parameter)
+    {
+        if (SelectedMedicine != null)
+        {
+            string query = "DELETE FROM Medicines WHERE MedicineId = @MedicineId";
+            var parameters = new[] { new SqlParameter("@MedicineId", SelectedMedicine.MedicineId) };
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
+            Medicines.Remove(SelectedMedicine);
+        }
+    }
+}

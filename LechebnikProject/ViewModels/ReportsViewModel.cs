@@ -21,8 +21,18 @@ namespace LechebnikProject.ViewModels
 
         private void LoadSalesData()
         {
-            string query = "SELECT OrderDate AS [Дата заказа], TotalAmount AS [Сумма] FROM Orders ORDER BY OrderDate DESC";
+            string query = @"
+                SELECT o.OrderId AS [Номер], o.OrderDate AS [Дата и время], 
+                       o.TotalAmount AS [Сумма], u.LastName AS [Фамилия], 
+                       u.FirstName AS [Имя], u.MiddleName AS [Отчество] 
+                FROM Orders o 
+                JOIN Users u ON o.UserId = u.UserId";
             SalesData = DatabaseHelper.ExecuteQuery(query);
+            foreach (DataColumn column in SalesData.Columns)
+            {
+                if (column.ColumnName == "Отчество" && SalesData.AsEnumerable().All(row => row.IsNull(column)))
+                    column.DefaultValue = "Не указано";
+            }
         }
 
         private void GoBack(object parameter)

@@ -7,7 +7,24 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Prescriptions}" AutoGenerateColumns="True" IsReadOnly="True" SelectedItem="{Binding SelectedPrescription}"/>
+        <DataGrid Grid.Row="0" ItemsSource="{Binding Prescriptions}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Серия" Binding="{Binding Series}"/>
+                <DataGridTextColumn Header="Учреждение" Binding="{Binding MedicalInstitution}"/>
+                <DataGridTextColumn Header="Фамилия пациента" Binding="{Binding PatientLastName}"/>
+                <DataGridTextColumn Header="Имя пациента" Binding="{Binding PatientFirstName}"/>
+                <DataGridTextColumn Header="Отчество пациента" Binding="{Binding PatientMiddleName}"/>
+                <DataGridTextColumn Header="Код МКБ-10" Binding="{Binding ICD10Code}"/>
+                <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}"/>
+                <DataGridTextColumn Header="Тип скидки" Binding="{Binding DiscountType}"/>
+                <DataGridTextColumn Header="Фамилия врача" Binding="{Binding DoctorLastName}"/>
+                <DataGridTextColumn Header="Имя врача" Binding="{Binding DoctorFirstName}"/>
+                <DataGridTextColumn Header="Отчество врача" Binding="{Binding DoctorMiddleName}"/>
+                <DataGridTextColumn Header="Препарат" Binding="{Binding MedicineId}"/>
+                <DataGridTextColumn Header="Фармацевт" Binding="{Binding PharmacistId}"/>
+                <DataGridTextColumn Header="Срок действия" Binding="{Binding ExpiryDate, StringFormat=dd.MM.yyyy}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <Button Content="Зарегистрировать новый рецепт" Command="{Binding AddPrescriptionCommand}" Width="300" Margin="0,0,10,0"/>
             <Button Content="Редактировать" Command="{Binding EditPrescriptionCommand}" Width="300" Margin="0,0,10,0"/>

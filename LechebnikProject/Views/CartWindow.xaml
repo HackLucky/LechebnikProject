@@ -9,9 +9,11 @@
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Medicine.MedicineId}"/>
                 <DataGridTextColumn Header="Препарат (название, лекарственная форма, вес/объём)" Binding="{Binding Medicine.Name}"/>
                 <DataGridTextColumn Header="Приобретаемое количество" Binding="{Binding Quantity}"/>
-                <DataGridTextColumn Header="Цена в рублях" Binding="{Binding Medicine.Price, StringFormat={}{0:C}}"/>
+                <DataGridTextColumn Header="Цена за единицу" Binding="{Binding Medicine.Price, StringFormat={}{0:N2} ₽}"/>
+                <DataGridTextColumn Header="Итоговая сумма" Binding="{Binding TotalPrice, StringFormat={}{0:N2} ₽}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

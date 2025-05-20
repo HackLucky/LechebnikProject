@@ -16,7 +16,11 @@
         public string AggregateState { get; set; }  // Агрегатное состояние
         public string Type { get; set; }            // Тип препарата
         public int ManufacturerId { get; set; }     // Идентификатор производителя
+        public string ManufacturerName { get; set; }
+        public string ManufacturerCountry { get; set; }
         public int SupplierId { get; set; }         // Идентификатор поставщика
+        public string SupplierName { get; set; }
+        public string SupplierCountry { get; set; }
         public int StockQuantity { get; set; }      // Количество на складе
         public bool RequiresPrescription { get; set; } // Требуется ли рецепт
         public decimal Price { get; set; }          // Цена в рублях
