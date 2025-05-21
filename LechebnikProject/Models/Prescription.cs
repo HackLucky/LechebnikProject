@@ -15,7 +15,7 @@ namespace LechebnikProject.Models
         public string PatientMiddleName { get; set; } // Отчество пациента
         public string ICD10Code { get; set; }       // Код МКБ-10
         public int Quantity { get; set; }           // Количество
-        public string DiscountType { get; set; }    // Тип скидки (50%/Free)
+        public string DiscountType { get; set; }    // Тип скидки (50%/Бесплатно)
         public string DoctorLastName { get; set; }  // Фамилия врача
         public string DoctorFirstName { get; set; } // Имя врача
         public string DoctorMiddleName { get; set; } // Отчество врача

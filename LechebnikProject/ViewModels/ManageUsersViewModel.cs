@@ -1,8 +1,6 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
-using LechebnikProject.Models;
 using LechebnikProject.Views;
-using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -19,7 +17,6 @@ namespace LechebnikProject.ViewModels
         public object SelectedItem { get; set; }
         public decimal SelectedDiscount { get; set; }
         public ICommand AddUserCommand { get; }
-        public ICommand EditUserCommand { get; }
         public ICommand ChangeRoleCommand { get; }
         public ICommand BlockUserCommand { get; }
         public ICommand GoBackCommand { get; }
@@ -29,7 +26,6 @@ namespace LechebnikProject.ViewModels
         {
             LoadCombinedList();
             AddUserCommand = new RelayCommand(AddUser);
-            EditUserCommand = new RelayCommand(EditUser);
             ChangeRoleCommand = new RelayCommand(ChangeRole);
             BlockUserCommand = new RelayCommand(BlockUser);
             GoBackCommand = new RelayCommand(GoBack);
@@ -86,8 +82,6 @@ namespace LechebnikProject.ViewModels
         }
 
         private void AddUser(object parameter) { /* Реализация добавления */ }
-
-        private void EditUser(object parameter) { /* Реализация редактирования */ }
 
         private void ChangeRole(object parameter)
         {

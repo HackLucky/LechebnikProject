@@ -45,7 +45,6 @@ namespace LechebnikProject.ViewModels
         private void GoToMedicineList(object parameter)
         {
             var medicineListWindow = new MedicineListWindow();
-            medicineListWindow.Show();
             (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is QuantityInputWindow))?.Close();
             Application.Current.MainWindow = medicineListWindow;
         }

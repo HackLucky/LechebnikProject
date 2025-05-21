@@ -19,6 +19,7 @@ namespace LechebnikProject.ViewModels
         public string MedicalInstitution { get; set; }
         public string PatientLastName { get; set; }
         public string PatientFirstName { get; set; }
+        public string PatientMiddleName { get; set; }
         public string ICD10Code { get; set; }
         public int Quantity { get; set; }
         public string DiscountType { get; set; }
@@ -26,7 +27,7 @@ namespace LechebnikProject.ViewModels
         public string DoctorFirstName { get; set; }
         public string DoctorMiddleName { get; set; }
         public DateTime ExpiryDate { get; set; } = DateTime.Now.AddMonths(1);
-        public List<string> DiscountTypes { get; } = new List<string> { "50%", "Free" };
+        public List<string> DiscountTypes { get; } = new List<string> { "50%", "Бесплатно" };
 
         public ICommand AddCommand { get; }
         public ICommand CancelCommand { get; }
@@ -52,6 +53,7 @@ namespace LechebnikProject.ViewModels
                 MedicalInstitution = MedicalInstitution ?? "Не указано",
                 PatientLastName = PatientLastName ?? "Не указано",
                 PatientFirstName = PatientFirstName ?? "Не указано",
+                PatientMiddleName = PatientMiddleName ?? "Не указано",
                 ICD10Code = ICD10Code ?? "Не указано",
                 Quantity = Quantity,
                 DiscountType = DiscountType,

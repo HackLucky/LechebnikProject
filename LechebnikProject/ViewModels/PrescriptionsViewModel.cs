@@ -64,6 +64,7 @@ namespace LechebnikProject.ViewModels
                     MedicalInstitution = row["MedicalInstitution"].ToString(),
                     PatientLastName = row["PatientLastName"].ToString(),
                     PatientFirstName = row["PatientFirstName"].ToString(),
+                    PatientMiddleName = row["PatientMiddleName"].ToString(),
                     ICD10Code = row["ICD10Code"].ToString(),
                     Quantity = Convert.ToInt32(row["Quantity"]),
                     DiscountType = row["DiscountType"].ToString(),
@@ -72,12 +73,13 @@ namespace LechebnikProject.ViewModels
                     ExpiryDate = Convert.ToDateTime(row["ExpiryDate"])
                 };
 
-                string query = "UPDATE Prescriptions SET Series = @Series, MedicalInstitution = @MedicalInstitution, PatientLastName = @PatientLastName, PatientFirstName = @PatientFirstName, ICD10Code = @ICD10Code, Quantity = @Quantity, DiscountType = @DiscountType, ExpiryDate = @ExpiryDate WHERE PrescriptionId = @PrescriptionId";
+                string query = "UPDATE Prescriptions SET Series = @Series, MedicalInstitution = @MedicalInstitution, PatientLastName = @PatientLastName, PatientFirstName = @PatientFirstName, PatientMiddleName = @PatientMiddleName, ICD10Code = @ICD10Code, Quantity = @Quantity, DiscountType = @DiscountType, ExpiryDate = @ExpiryDate WHERE PrescriptionId = @PrescriptionId";
                 SqlParameter[] parameters = {
                     new SqlParameter("@Series", prescription.Series),
                     new SqlParameter("@MedicalInstitution", prescription.MedicalInstitution),
                     new SqlParameter("@PatientLastName", prescription.PatientLastName),
                     new SqlParameter("@PatientFirstName", prescription.PatientFirstName),
+                    new SqlParameter("@PatientMiddleName", prescription.PatientMiddleName),
                     new SqlParameter("@ICD10Code", prescription.ICD10Code),
                     new SqlParameter("@Quantity", prescription.Quantity),
                     new SqlParameter("@DiscountType", prescription.DiscountType),

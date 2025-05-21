@@ -24,71 +24,15 @@ namespace LechebnikProject.ViewModels
 
         public MainMenuViewModel()
         {
-            GoToMedicineListCommand = new RelayCommand(GoToMedicineList);
-            GoToCartCommand = new RelayCommand(GoToCart);
-            GoToAddMedicineCommand = new RelayCommand(GoToAddMedicine);
-            GoToReportsCommand = new RelayCommand(GoToReports);
-            GoToPrescriptionsCommand = new RelayCommand(GoToPrescriptions);
-            GoToProfileCommand = new RelayCommand(GoToProfile);
-            GoToContactAdminCommand = new RelayCommand(GoToContactAdmin);
+            GoToMedicineListCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
+            GoToCartCommand = new RelayCommand(o => WindowManager.ShowWindow<CartWindow>());
+            GoToAddMedicineCommand = new RelayCommand(o => WindowManager.ShowWindow<AddMedicineWindow>());
+            GoToReportsCommand = new RelayCommand(o => WindowManager.ShowWindow<ReportsWindow>());
+            GoToPrescriptionsCommand = new RelayCommand(o => WindowManager.ShowWindow<PrescriptionsWindow>());
+            GoToProfileCommand = new RelayCommand(o => WindowManager.ShowWindow<ProfileWindow>());
+            GoToContactAdminCommand = new RelayCommand(o => WindowManager.ShowWindow<ContactAdminWindow>());
             GoToAdminPanelCommand = new RelayCommand(GoToAdminPanel, CanGoToAdminPanel);
-            ExitCommand = new RelayCommand(Exit);
-        }
-
-        private void GoToMedicineList(object parameter)
-        {
-            var medicineListWindow = new MedicineListWindow();
-            medicineListWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = medicineListWindow;
-        }
-
-        private void GoToCart(object parameter)
-        {
-            var cartWindow = new CartWindow();
-            cartWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = cartWindow;
-        }
-
-        private void GoToAddMedicine(object parameter)
-        {
-            var addMedicineWindow = new AddMedicineWindow();
-            addMedicineWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = addMedicineWindow;
-        }
-
-        private void GoToReports(object parameter)
-        {
-            var reportsWindow = new ReportsWindow();
-            reportsWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = reportsWindow;
-        }
-
-        private void GoToPrescriptions(object parameter)
-        {
-            var prescriptionsWindow = new PrescriptionsWindow();
-            prescriptionsWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = prescriptionsWindow;
-        }
-
-        private void GoToProfile(object parameter)
-        {
-            var profileWindow = new ProfileWindow();
-            profileWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = profileWindow;
-        }
-
-        private void GoToContactAdmin(object parameter)
-        {
-            var contactAdminWindow = new ContactAdminWindow();
-            contactAdminWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = contactAdminWindow;
+            ExitCommand = new RelayCommand(o => WindowManager.CloseAllWindows());
         }
 
         private void GoToAdminPanel(object parameter)
@@ -102,11 +46,6 @@ namespace LechebnikProject.ViewModels
         private bool CanGoToAdminPanel(object parameter)
         {
             return CurrentUser?.Role == "Admin";
-        }
-
-        private void Exit(object parameter)
-        {
-            Application.Current.Shutdown();
         }
     }
 }

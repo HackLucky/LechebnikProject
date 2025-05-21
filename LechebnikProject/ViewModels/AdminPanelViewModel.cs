@@ -26,6 +26,7 @@ namespace LechebnikProject.ViewModels
             var manageUsersWindow = new ManageUsersWindow();
             manageUsersWindow.Show();
             (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
+            Application.Current.MainWindow = manageUsersWindow;
         }
 
         private void ManageMedicines(object parameter)
@@ -33,6 +34,7 @@ namespace LechebnikProject.ViewModels
             var manageMedicinesWindow = new ManageMedicinesWindow();
             manageMedicinesWindow.Show();
             (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
+            Application.Current.MainWindow = manageMedicinesWindow;
         }
 
         private void ManageReports(object parameter)
@@ -40,6 +42,7 @@ namespace LechebnikProject.ViewModels
             var manageReportsWindow = new ManageReportsWindow();
             manageReportsWindow.Show();
             (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
+            Application.Current.MainWindow = manageReportsWindow;
         }
 
         private void GoBack(object parameter)

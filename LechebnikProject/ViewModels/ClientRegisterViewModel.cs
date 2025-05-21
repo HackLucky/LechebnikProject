@@ -29,6 +29,19 @@ namespace LechebnikProject.ViewModels
 
         public bool Register()
         {
+            string checkQuery = "SELECT COUNT(*) FROM Clients WHERE PhoneNumber = @PhoneNumber OR Email = @Email OR Login = @Login";
+            var parameters1 = new[]
+            {
+                new SqlParameter("@PhoneNumber", PhoneNumber ?? (object)DBNull.Value),
+                new SqlParameter("@Email", Email ?? (object)DBNull.Value),
+                new SqlParameter("@Login", Login)
+            };
+            int count = (int)DatabaseHelper.ExecuteScalar(checkQuery, parameters1);
+            if (count > 0)
+            {
+                MessageBox.Show("Клиент с таким телефоном, почтой или логином уже существует.");
+                return false;
+            }
             if (!ValidationHelper.IsValidName(LastName) || !ValidationHelper.IsValidName(FirstName))
             {
                 MessageBox.Show("Фамилия и имя должны содержать минимум 2 символа.");
@@ -56,7 +69,7 @@ namespace LechebnikProject.ViewModels
             }
 
             string query = "INSERT INTO Clients (LastName, FirstName, MiddleName, Login, Code, Discount, PhoneNumber, Email) VALUES (@LastName, @FirstName, @MiddleName, @Login, @Code, @Discount, @PhoneNumber, @Email)";
-            var parameters = new[]
+            var parameters2 = new[]
             {
                 new SqlParameter("@LastName", LastName),
                 new SqlParameter("@FirstName", FirstName),
@@ -70,7 +83,7 @@ namespace LechebnikProject.ViewModels
 
             try
             {
-                DatabaseHelper.ExecuteNonQuery(query, parameters);
+                DatabaseHelper.ExecuteNonQuery(query, parameters2);
                 MessageBox.Show($"Клиент успешно зарегистрирован! Код клиента: {Code}");
                 return true;
             }

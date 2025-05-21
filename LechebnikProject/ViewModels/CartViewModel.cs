@@ -20,17 +20,8 @@ namespace LechebnikProject.ViewModels
             get => _cartItems;
             set => SetProperty(ref _cartItems, value);
         }
-        public decimal TotalAmount
-        {
-            get
-            {
-                if (AppContext.CurrentClient != null)
-                {
-                    return CartItems.Sum(item => item.Medicine.Price * item.Quantity * (1 - AppContext.CurrentClient.Discount / 100));
-                }
-                return CartItems.Sum(item => item.Medicine.Price * item.Quantity);
-            }
-        }
+        public decimal TotalAmount => CartItems?.Sum(item => item.Medicine.Price * item.Quantity * (1 - (AppContext.CurrentClient?.Discount ?? 0) / 100)) ?? 0;
+        public bool CanCheckout => CartItems?.Any() == true;
 
         public ICommand RemoveCommand { get; }
         public ICommand ClearCommand { get; }
@@ -45,6 +36,8 @@ namespace LechebnikProject.ViewModels
             ClearCommand = new RelayCommand(Clear);
             CheckoutCommand = new RelayCommand(Checkout);
             GoBackCommand = new RelayCommand(GoBack);
+            OnPropertyChanged(nameof(CanCheckout)); // Обновляем при инициализации
+            CartItems.CollectionChanged += (s, e) => { OnPropertyChanged(nameof(TotalAmount)); OnPropertyChanged(nameof(CanCheckout)); };
         }
 
         private void LoadCartItems()

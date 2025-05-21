@@ -70,7 +70,8 @@
     <Compile Include="Helpers\BooleanToStringConverter.cs" />
     <Compile Include="Helpers\CaptchaHelper.cs" />
     <Compile Include="Helpers\RoleToVisibilityConverter.cs" />
-    <Compile Include="Helpers\SenderToColorConverter.cs" />
+    <Compile Include="Helpers\SenderRoleToColorConverter.cs" />
+    <Compile Include="Helpers\WindowManager.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\CartItem.cs" />

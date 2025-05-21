@@ -96,10 +96,10 @@ namespace LechebnikProject.ViewModels
                     authenticatedClient = clientAuthWindow.AuthenticatedClient;
                 }
 
-                var quantityWindow = new QuantityInputWindow(medicine);
-                if (quantityWindow.ShowDialog() == true)
+                var quantityInputWindow = new QuantityInputWindow(medicine);
+                if (quantityInputWindow.ShowDialog() == true)
                 {
-                    int quantity = (quantityWindow.DataContext as QuantityInputViewModel).Quantity;
+                    int quantity = (quantityInputWindow.DataContext as QuantityInputViewModel).Quantity;
                     string query = "INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription) VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription)";
                     var parameters = new[]
                     {
@@ -115,6 +115,7 @@ namespace LechebnikProject.ViewModels
                         AppContext.CurrentClient = authenticatedClient;
                     }
                     MessageBox.Show("Препарат добавлен в корзину!");
+                    (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is QuantityInputWindow))?.Close();
                 }
             }
         }

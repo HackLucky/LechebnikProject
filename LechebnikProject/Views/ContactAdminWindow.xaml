@@ -9,18 +9,18 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Messages}" Margin="10">
+        <ListBox Grid.Row="1" ItemsSource="{Binding Messages}" Margin="10" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Background="{Binding SenderId, Converter={StaticResource SenderToColorConverter}}">
-                        <TextBlock Text="{Binding SenderLogin}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding SendDate, StringFormat=dd.MM.yyyy HH:mm}"/>
-                        <TextBlock Text="{Binding MessageText}"/>
+                    <StackPanel>
+                        <TextBlock Text="{Binding SenderLogin}" FontWeight="Bold" Foreground="{Binding SenderId, Converter={StaticResource SenderRoleToColorConverter}}"/>
+                <TextBlock Text="{Binding SendDate, StringFormat=dd.MM.yyyy HH:mm}"/>
+                <TextBlock Text="{Binding MessageText}" TextWrapping="Wrap"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBox Grid.Row="2" Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}" Height="auto" AcceptsReturn="True" Margin="10"/>
+        <TextBox Grid.Row="2" Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}" Height="auto" AcceptsReturn="True" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <Button Content="Отправить сообщение" Command="{Binding SendCommand}" Width="300" Margin="0,0,10,0"/>
             <Button Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="300"/>

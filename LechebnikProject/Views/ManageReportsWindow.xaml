@@ -2,14 +2,18 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ЛЕЧЕБНИК [окно управления отчётами]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Reports}" AutoGenerateColumns="True" 
-                  SelectedItem="{Binding SelectedReport}" IsReadOnly="True" Margin="10"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Text="Поиск:" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="850" Margin="5" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Reports}" AutoGenerateColumns="True" SelectedItem="{Binding SelectedReport}" IsReadOnly="True"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button Content="Удалить отчёт" Command="{Binding DeleteReportCommand}" Width="200" Margin="5"/>
             <Button Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="200" Margin="5"/>
         </StackPanel>

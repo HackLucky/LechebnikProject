@@ -6,6 +6,6 @@
     <Application.Resources>
         <converter:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
         <converter:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
-        <converter:SenderToColorConverter x:Key="SenderToColorConverter"/>
+        <converter:SenderRoleToColorConverter x:Key="SenderRoleToColorConverter"/>
     </Application.Resources>
 </Application>

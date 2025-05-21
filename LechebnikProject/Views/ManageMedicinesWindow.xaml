@@ -5,24 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LechebnikProject.Views"
         mc:Ignorable="d"
-        Title="ManageMedicinesWindow" Height="450" Width="800">
-    <Grid>
+        Title="ЛЕЧЕБНИК [окно управления препаратами]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Medicines}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMedicine}" IsReadOnly="True">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Text="Поиск:" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="850" Margin="5" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Medicines}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMedicine}" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding MedicineId}"/>
                 <DataGridTextColumn Header="Название" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat={}{0:N2} ₽}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Content="Добавить" Command="{Binding AddCommand}"/>
-            <Button Content="Редактировать" Command="{Binding EditCommand}"/>
-            <Button Content="Удалить" Command="{Binding DeleteCommand}"/>
-            <Button Content="Назад" Command="{Binding GoBackCommand}"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button Content="Добавить" Command="{Binding AddCommand}" Width="200" Margin="5"/>
+            <Button Content="Редактировать" Command="{Binding EditCommand}" Width="200" Margin="5"/>
+            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="200" Margin="5"/>
+            <Button Content="Назад" Command="{Binding GoBackCommand}" Width="200" Margin="5"/>
         </StackPanel>
     </Grid>
 </Window>

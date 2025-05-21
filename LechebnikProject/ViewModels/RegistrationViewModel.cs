@@ -29,6 +29,19 @@ namespace LechebnikProject.ViewModels
         /// <returns>true, если регистрация успешна</returns>
         public bool Register()
         {
+            string checkQuery = "SELECT COUNT(*) FROM Users WHERE PhoneNumber = @PhoneNumber OR Email = @Email OR Login = @Login";
+            var parameters1 = new[]
+            {
+                new SqlParameter("@PhoneNumber", PhoneNumber),
+                new SqlParameter("@Email", Email),
+                new SqlParameter("@Login", Login)
+            };
+            int count = (int)DatabaseHelper.ExecuteScalar(checkQuery, parameters1);
+            if (count > 0)
+            {
+                MessageBox.Show("Пользователь с таким телефоном, почтой или логином уже существует.");
+                return false;
+            }
             // Валидация введенных данных
             if (!ValidationHelper.IsValidName(LastName) || !ValidationHelper.IsValidName(FirstName))
             {
@@ -75,7 +88,7 @@ namespace LechebnikProject.ViewModels
                 VALUES (@LastName, @FirstName, @MiddleName, @PhoneNumber, @Email, @Position, @PharmacyAddress, @Login, @PasswordHash, 'User', 'Active')";
 
             // Параметры для защиты от SQL-инъекций
-            SqlParameter[] parameters = {
+            SqlParameter[] parameters2 = {
                 new SqlParameter("@LastName", LastName),
                 new SqlParameter("@FirstName", FirstName),
                 new SqlParameter("@MiddleName", MiddleName ?? (object)DBNull.Value), // Отчество может быть null
@@ -89,7 +102,7 @@ namespace LechebnikProject.ViewModels
 
             try
             {
-                DatabaseHelper.ExecuteNonQuery(query, parameters); // Выполнение запроса
+                DatabaseHelper.ExecuteNonQuery(query, parameters2); // Выполнение запроса
                 MessageBox.Show("Регистрация прошла успешно!");
                 return true;
             }
