@@ -32,8 +32,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Content="Открыть окно корзины" Command="{Binding GoToCartCommand}" Width="300" Height="30" Margin="5"/>
-            <Button Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="300" Height="30" Margin="5"/>
+            <Button Content="Вернуться к главному меню" Command="{Binding GoToMainMenuCommand}" Width="300" Height="30" Margin="5"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using LechebnikProject.Helpers;
+using LechebnikProject.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
@@ -9,6 +10,7 @@ namespace LechebnikProject.ViewModels
     {
         public string Login { get; set; }
         public string Code { get; set; }
+        public Client AuthenticatedClient { get; set; }
 
         public bool Authenticate()
         {
@@ -21,7 +23,7 @@ namespace LechebnikProject.ViewModels
             DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
             if (dataTable.Rows.Count > 0)
             {
-                // Можно сохранить данные клиента в AppContext, если нужно
+                AuthenticatedClient = new Client { /* данные клиента */ };
                 return true;
             }
             MessageBox.Show("Неверный логин или код.");

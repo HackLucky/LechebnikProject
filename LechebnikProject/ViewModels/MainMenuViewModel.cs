@@ -1,9 +1,6 @@
 ﻿using LechebnikProject.Helpers;
 using LechebnikProject.Models;
 using LechebnikProject.Views;
-using System;
-using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace LechebnikProject.ViewModels
@@ -31,16 +28,8 @@ namespace LechebnikProject.ViewModels
             GoToPrescriptionsCommand = new RelayCommand(o => WindowManager.ShowWindow<PrescriptionsWindow>());
             GoToProfileCommand = new RelayCommand(o => WindowManager.ShowWindow<ProfileWindow>());
             GoToContactAdminCommand = new RelayCommand(o => WindowManager.ShowWindow<ContactAdminWindow>());
-            GoToAdminPanelCommand = new RelayCommand(GoToAdminPanel, CanGoToAdminPanel);
+            GoToAdminPanelCommand = new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>(), CanGoToAdminPanel);
             ExitCommand = new RelayCommand(o => WindowManager.CloseAllWindows());
-        }
-
-        private void GoToAdminPanel(object parameter)
-        {
-            var adminPanelWindow = new AdminPanelWindow();
-            adminPanelWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MainMenuWindow))?.Close();
-            Application.Current.MainWindow = adminPanelWindow;
         }
 
         private bool CanGoToAdminPanel(object parameter)

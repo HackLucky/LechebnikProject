@@ -1,17 +1,13 @@
-﻿using System;
+﻿using LechebnikProject.Helpers;
+using System;
 using System.Data.SqlClient;
 using System.Windows;
-using LechebnikProject.Helpers;
-using LechebnikProject.Models;
+using System.Windows.Media.Imaging;
 
 namespace LechebnikProject.ViewModels
 {
-    /// <summary>
-    /// ViewModel для окна регистрации нового пользователя.
-    /// </summary>
     public class RegistrationViewModel
     {
-        // Свойства для полей ввода
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -22,11 +18,24 @@ namespace LechebnikProject.ViewModels
         public string Login { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+        public string CaptchaInput { get; set; }
 
-        /// <summary>
-        /// Регистрирует нового пользователя в базе данных.
-        /// </summary>
-        /// <returns>true, если регистрация успешна</returns>
+        private BitmapImage _captchaImage;
+        public BitmapImage CaptchaImage
+        {
+            get => _captchaImage;
+            set => _captchaImage = value; // Здесь нет INotifyPropertyChanged, так как это не MVVM-класс
+        }
+
+        private readonly string _captchaCode;
+
+        public RegistrationViewModel()
+        {
+            var (code, imageBase64) = CaptchaHelper.GenerateCaptcha();
+            _captchaCode = code;
+            CaptchaImage = ImageHelper.Base64ToBitmapImage(imageBase64);
+        }
+
         public bool Register()
         {
             string checkQuery = "SELECT COUNT(*) FROM Users WHERE PhoneNumber = @PhoneNumber OR Email = @Email OR Login = @Login";
@@ -42,7 +51,6 @@ namespace LechebnikProject.ViewModels
                 MessageBox.Show("Пользователь с таким телефоном, почтой или логином уже существует.");
                 return false;
             }
-            // Валидация введенных данных
             if (!ValidationHelper.IsValidName(LastName) || !ValidationHelper.IsValidName(FirstName))
             {
                 MessageBox.Show("Фамилия и имя должны содержать минимум 2 символа.");
@@ -78,20 +86,20 @@ namespace LechebnikProject.ViewModels
                 MessageBox.Show("Пароли не совпадают.");
                 return false;
             }
+            if (CaptchaInput != _captchaCode)
+            {
+                MessageBox.Show("Неверный код CAPTCHA.");
+                return false;
+            }
 
-            // Хеширование пароля
             string hashedPassword = PasswordHasher.HashPassword(Password);
-
-            // SQL-запрос для вставки пользователя
             string query = @"
                 INSERT INTO Users (LastName, FirstName, MiddleName, PhoneNumber, Email, Position, PharmacyAddress, Login, PasswordHash, Role, Status)
                 VALUES (@LastName, @FirstName, @MiddleName, @PhoneNumber, @Email, @Position, @PharmacyAddress, @Login, @PasswordHash, 'User', 'Active')";
-
-            // Параметры для защиты от SQL-инъекций
             SqlParameter[] parameters2 = {
                 new SqlParameter("@LastName", LastName),
                 new SqlParameter("@FirstName", FirstName),
-                new SqlParameter("@MiddleName", MiddleName ?? (object)DBNull.Value), // Отчество может быть null
+                new SqlParameter("@MiddleName", MiddleName ?? (object)DBNull.Value),
                 new SqlParameter("@PhoneNumber", PhoneNumber),
                 new SqlParameter("@Email", Email),
                 new SqlParameter("@Position", Position),
@@ -102,7 +110,7 @@ namespace LechebnikProject.ViewModels
 
             try
             {
-                DatabaseHelper.ExecuteNonQuery(query, parameters2); // Выполнение запроса
+                DatabaseHelper.ExecuteNonQuery(query, parameters2);
                 MessageBox.Show("Регистрация прошла успешно!");
                 return true;
             }

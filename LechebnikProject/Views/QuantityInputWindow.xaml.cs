@@ -9,9 +9,13 @@ namespace LechebnikProject.Views
     /// </summary>
     public partial class QuantityInputWindow : Window
     {
-        public QuantityInputWindow(Medicine medicine)
+        public QuantityInputWindow()
         {
             InitializeComponent();
+        }
+
+        public QuantityInputWindow(Medicine medicine) : this()
+        {
             DataContext = new QuantityInputViewModel(medicine);
         }
     }

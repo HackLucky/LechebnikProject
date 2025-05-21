@@ -48,9 +48,10 @@ namespace LechebnikProject.ViewModels
             CombinedList = new ObservableCollection<object>();
             string userQuery = "SELECT * FROM Users WHERE Login LIKE @SearchText OR LastName LIKE @SearchText";
             string clientQuery = "SELECT * FROM Clients WHERE Login LIKE @SearchText OR LastName LIKE @SearchText";
-            var parameters = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
 
-            DataTable userTable = DatabaseHelper.ExecuteQuery(userQuery, parameters);
+            // Отдельные параметры для запроса пользователей
+            var userParams = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
+            DataTable userTable = DatabaseHelper.ExecuteQuery(userQuery, userParams);
             foreach (DataRow row in userTable.Rows)
             {
                 CombinedList.Add(new
@@ -65,7 +66,9 @@ namespace LechebnikProject.ViewModels
                 });
             }
 
-            DataTable clientTable = DatabaseHelper.ExecuteQuery(clientQuery, parameters);
+            // Отдельные параметры для запроса клиентов
+            var clientParams = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
+            DataTable clientTable = DatabaseHelper.ExecuteQuery(clientQuery, clientParams);
             foreach (DataRow row in clientTable.Rows)
             {
                 CombinedList.Add(new
@@ -75,7 +78,7 @@ namespace LechebnikProject.ViewModels
                     Login = row.Field<string>("Login"),
                     LastName = row.Field<string>("LastName"),
                     Role = "Client",
-                    Status = row.Field<string>("Status"),
+                    Status = row.Field<string>("Status"), // Предполагается, что колонка Status добавлена в таблицу Clients
                     Discount = row.Field<decimal>("Discount").ToString("F2") + "%"
                 });
             }

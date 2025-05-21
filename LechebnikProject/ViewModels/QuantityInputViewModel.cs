@@ -1,4 +1,5 @@
-﻿using LechebnikProject.Models;
+﻿using LechebnikProject.Helpers;
+using LechebnikProject.Models;
 using LechebnikProject.Views;
 using System.Linq;
 using System.Windows;
@@ -19,7 +20,7 @@ namespace LechebnikProject.ViewModels
             SelectedMedicine = medicine;
             AddCommand = new RelayCommand(Add);
             CancelCommand = new RelayCommand(Cancel);
-            GoToMedicineListCommand = new RelayCommand(GoToMedicineList);
+            GoToMedicineListCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
         }
 
         private void Add(object parameter)
@@ -34,19 +35,18 @@ namespace LechebnikProject.ViewModels
                 cartItem.Quantity += Quantity;
             else
                 AppContext.CartItems.Add(new CartItem { Medicine = SelectedMedicine, Quantity = Quantity });
-            GoToMedicineList(parameter);
+            GoToMedicineList();
         }
 
         private void Cancel(object parameter)
         {
-            GoToMedicineList(parameter);
+            GoToMedicineList();
         }
 
-        private void GoToMedicineList(object parameter)
+        private void GoToMedicineList()
         {
-            var medicineListWindow = new MedicineListWindow();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is QuantityInputWindow))?.Close();
-            Application.Current.MainWindow = medicineListWindow;
+            WindowManager.CloseWindow<QuantityInputWindow>();
+            WindowManager.ShowWindow<MedicineListWindow>();
         }
     }
 }

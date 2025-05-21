@@ -19,7 +19,7 @@
             <TextBlock Text="Код (6 символов):"/>
             <PasswordBox x:Name="CodePasswordBox"/>
             <TextBlock Text="Скидка:"/>
-            <ComboBox x:Name="DiscountComboBox" SelectedValue="{Binding SelectedDiscount}">
+            <ComboBox x:Name="DiscountComboBox" SelectedValue="{Binding SelectedDiscount}" SelectedValuePath="Tag">
                 <ComboBoxItem Content="15%" Tag="15.00"/>
                 <ComboBoxItem Content="25%" Tag="25.00"/>
                 <ComboBoxItem Content="50%" Tag="50.00"/>

@@ -35,8 +35,7 @@ namespace LechebnikProject.ViewModels
         public ICommand AddToCartCommand { get; }
         public ICommand AddToCartByPrescriptionCommand { get; }
         public ICommand SearchCommand { get; }
-        public ICommand GoToCartCommand { get; }
-        public ICommand GoBackCommand { get; }
+        public ICommand GoToMainMenuCommand { get; }
 
         public MedicineListViewModel()
         {
@@ -45,8 +44,7 @@ namespace LechebnikProject.ViewModels
             AddToCartCommand = new RelayCommand(AddToCart);
             AddToCartByPrescriptionCommand = new RelayCommand(AddToCartByPrescription);
             SearchCommand = new RelayCommand(Search);
-            GoToCartCommand = new RelayCommand(GoToCart);
-            GoBackCommand = new RelayCommand(GoBack);
+            GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
         private void LoadMedicines(string searchText = "")
@@ -76,77 +74,52 @@ namespace LechebnikProject.ViewModels
 
         private void ViewDetails(object parameter)
         {
-            if (parameter is Medicine medicine)
-            {
-                var medicineDetailsWindow = new MedicineDetailsWindow(medicine.MedicineId);
-                medicineDetailsWindow.Show();
-                (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
-                Application.Current.MainWindow = medicineDetailsWindow;
-            }
+            if (!(parameter is Medicine med)) return;
+
+            // Закрываем только список, открываем детали
+            WindowManager.ShowWindow<MedicineDetailsWindow>(w => w.DataContext = new MedicineDetailsViewModel(med.MedicineId));
         }
 
         private void AddToCart(object parameter)
         {
-            if (parameter is Medicine medicine)
-            {
-                var clientAuthWindow = new ClientAuthWindow();
-                Client authenticatedClient = null;
-                if (clientAuthWindow.ShowDialog() == true)
-                {
-                    authenticatedClient = clientAuthWindow.AuthenticatedClient;
-                }
+            if (!(parameter is Medicine med)) return;
 
-                var quantityInputWindow = new QuantityInputWindow(medicine);
-                if (quantityInputWindow.ShowDialog() == true)
-                {
-                    int quantity = (quantityInputWindow.DataContext as QuantityInputViewModel).Quantity;
-                    string query = "INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription) VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription)";
-                    var parameters = new[]
-                    {
-                        new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
-                        new SqlParameter("@MedicineId", medicine.MedicineId),
-                        new SqlParameter("@Quantity", quantity),
-                        new SqlParameter("@IsByPrescription", false)
-                    };
-                    DatabaseHelper.ExecuteNonQuery(query, parameters);
-                    if (authenticatedClient != null)
-                    {
-                        // Сохраняем информацию о клиенте для применения скидки
-                        AppContext.CurrentClient = authenticatedClient;
-                    }
-                    MessageBox.Show("Препарат добавлен в корзину!");
-                    (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is QuantityInputWindow))?.Close();
-                }
-            }
+            // 1) Открываем окно аутентификации и закрываем все остальные
+            WindowManager.ShowWindow<ClientAuthWindow>(w => w.DataContext = new ClientLoginViewModel());
+
+            // 2) Открываем окно ввода количества и снова закрываем всё остальное
+            WindowManager.ShowWindow<QuantityInputWindow>(w => w.DataContext = new QuantityInputViewModel(med));
+
+            // 3) Сохраняем в БД
+            const string sql = @"
+                INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription)
+                VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription)";
+
+            var qtyVm = (Application.Current.Windows.OfType<QuantityInputWindow>().First().DataContext as QuantityInputViewModel);
+
+            int quantity = qtyVm?.Quantity ?? 1;
+
+            var parameters = new[]
+            {
+                new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
+                new SqlParameter("@MedicineId", med.MedicineId),
+                new SqlParameter("@Quantity", quantity),
+                new SqlParameter("@IsByPrescription", false)
+            };
+            DatabaseHelper.ExecuteNonQuery(sql, parameters);
+
+            MessageBox.Show("Препарат добавлен в корзину!");
+
+            // 4) Переходим в корзину, закрывая все прочие окна:
+            WindowManager.ShowWindow<CartWindow>();
         }
 
         private void AddToCartByPrescription(object parameter)
         {
-            if (parameter is Medicine medicine)
-            {
-                var prescriptionInputWindow = new PrescriptionInputWindow(medicine);
-                prescriptionInputWindow.Show();
-                (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
-                Application.Current.MainWindow = prescriptionInputWindow;
-            }
+            if (!(parameter is Medicine med)) return;
+            WindowManager.ShowWindow<PrescriptionInputWindow>(w => w.DataContext = new PrescriptionInputViewModel(med));
         }
 
         private void Search(object parameter) => LoadMedicines(SearchText);
-
-        private void GoToCart(object parameter)
-        {
-            var cartWindow = new CartWindow();
-            cartWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
-            Application.Current.MainWindow = cartWindow;
-        }
-
-        private void GoBack(object parameter)
-        {
-            var mainMenuWindow = new MainMenuWindow();
-            mainMenuWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineListWindow))?.Close();
-            Application.Current.MainWindow = mainMenuWindow;
-        }
     }
 }

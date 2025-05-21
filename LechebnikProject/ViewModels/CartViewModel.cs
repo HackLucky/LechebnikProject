@@ -26,27 +26,33 @@ namespace LechebnikProject.ViewModels
         public ICommand RemoveCommand { get; }
         public ICommand ClearCommand { get; }
         public ICommand CheckoutCommand { get; }
-        public ICommand GoBackCommand { get; }
+        public ICommand GoToMainMenuCommand { get; }
 
         public CartViewModel()
         {
+            if (AppContext.CurrentUser == null)
+            {
+                MessageBox.Show("Пользователь не авторизован.");
+                WindowManager.ShowWindow<LoginWindow>();
+                return;
+            }
             LoadCartItems();
             CartItems.CollectionChanged += (s, e) => OnPropertyChanged(nameof(TotalAmount));
             RemoveCommand = new RelayCommand(Remove);
             ClearCommand = new RelayCommand(Clear);
             CheckoutCommand = new RelayCommand(Checkout);
-            GoBackCommand = new RelayCommand(GoBack);
             OnPropertyChanged(nameof(CanCheckout)); // Обновляем при инициализации
-            CartItems.CollectionChanged += (s, e) => { OnPropertyChanged(nameof(TotalAmount)); OnPropertyChanged(nameof(CanCheckout)); };
+            CartItems.CollectionChanged += (s, e) => OnPropertyChanged(nameof(TotalAmount));
+            GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
         private void LoadCartItems()
         {
             string query = @"
-            SELECT ci.*, m.Name, m.Price 
-            FROM CartItems ci 
-            JOIN Medicines m ON ci.MedicineId = m.MedicineId 
-            WHERE ci.UserId = @UserId";
+                SELECT ci.*, m.Name, m.Price 
+                FROM CartItems ci 
+                JOIN Medicines m ON ci.MedicineId = m.MedicineId 
+                WHERE ci.UserId = @UserId";
             var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
             DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
             CartItems = new ObservableCollection<CartItem>();
@@ -55,10 +61,15 @@ namespace LechebnikProject.ViewModels
                 CartItems.Add(new CartItem
                 {
                     CartItemId = Convert.ToInt32(row["CartItemId"]),
-                    Medicine = new Medicine { MedicineId = Convert.ToInt32(row["MedicineId"]), Name = row["Name"].ToString(), Price = Convert.ToDecimal(row["Price"]) },
+                    Medicine = new Medicine
+                    {
+                        MedicineId = Convert.ToInt32(row["MedicineId"]),
+                        Name = row["Name"].ToString(),
+                        Price = Convert.ToDecimal(row["Price"])
+                    },
                     Quantity = Convert.ToInt32(row["Quantity"]),
                     IsByPrescription = Convert.ToBoolean(row["IsByPrescription"]),
-                    PrescriptionId = (int)(row["PrescriptionId"] != DBNull.Value ? Convert.ToInt32(row["PrescriptionId"]) : (int?)null)
+                    PrescriptionId = row["PrescriptionId"] != DBNull.Value ? Convert.ToInt32(row["PrescriptionId"]) : (int?)null
                 });
             }
         }

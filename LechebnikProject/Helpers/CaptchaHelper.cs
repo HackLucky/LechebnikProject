@@ -9,7 +9,6 @@ namespace LechebnikProject.Helpers
     {
         public static (string Code, string ImageBase64) GenerateCaptcha()
         {
-            // Генерация случайного кода
             string code = new Random().Next(1000, 9999).ToString();
             int width = 100;
             int height = 30;
@@ -17,17 +16,12 @@ namespace LechebnikProject.Helpers
             using (var bitmap = new Bitmap(width, height))
             using (var g = Graphics.FromImage(bitmap))
             {
-                // Фон
                 g.Clear(Color.White);
-
-                // Текст
                 using (var font = new Font("Arial", 20, FontStyle.Bold, GraphicsUnit.Pixel))
                 using (var brush = new SolidBrush(Color.Black))
                 {
                     g.DrawString(code, font, brush, new PointF(10, 5));
                 }
-
-                // Шум
                 var rand = new Random();
                 for (int i = 0; i < 100; i++)
                 {
@@ -35,8 +29,6 @@ namespace LechebnikProject.Helpers
                     int y = rand.Next(height);
                     bitmap.SetPixel(x, y, Color.Gray);
                 }
-
-                // Сохранение в Base64
                 using (var ms = new MemoryStream())
                 {
                     bitmap.Save(ms, ImageFormat.Png);

@@ -3,6 +3,7 @@ using LechebnikProject.Helpers;
 using System;
 using System.Data.SqlClient;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace LechebnikProject.ViewModels
 {
@@ -15,20 +16,28 @@ namespace LechebnikProject.ViewModels
         public string Email { get; set; }
         public string Login { get; set; }
         public string Code { get; set; }
-        public decimal SelectedDiscount { get; set; } = 15.00m; // По умолчанию 15%
+        public decimal SelectedDiscount { get; set; } = 15.00m;
         public string CaptchaInput { get; set; }
-        public string CaptchaImage { get; set; }
+
+        private BitmapImage _captchaImage;
+        public BitmapImage CaptchaImage
+        {
+            get => _captchaImage;
+            set => SetProperty(ref _captchaImage, value); // Предполагается, что BaseViewModel реализует INotifyPropertyChanged
+        }
+
         private readonly string _captchaCode;
 
         public ClientRegisterViewModel()
         {
-            var (code, image) = CaptchaHelper.GenerateCaptcha();
+            var (code, imageBase64) = CaptchaHelper.GenerateCaptcha();
             _captchaCode = code;
-            CaptchaImage = $"data:image/png;base64,{image}";
+            CaptchaImage = ImageHelper.Base64ToBitmapImage(imageBase64); // Преобразуем Base64 в BitmapImage
         }
 
         public bool Register()
         {
+            // Код метода Register остаётся без изменений
             string checkQuery = "SELECT COUNT(*) FROM Clients WHERE PhoneNumber = @PhoneNumber OR Email = @Email OR Login = @Login";
             var parameters1 = new[]
             {

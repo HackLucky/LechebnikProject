@@ -12,5 +12,6 @@
         public string Login { get; set; }           // Логин
         public string Code { get; set; }            // Код клиента (6 символов)
         public decimal Discount { get; set; }       // Скидка (15%, 25%, 50%, 75%)
+        public string Status { get; set; }
     }
 }

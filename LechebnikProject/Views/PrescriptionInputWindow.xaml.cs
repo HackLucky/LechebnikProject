@@ -9,9 +9,13 @@ namespace LechebnikProject.Views
     /// </summary>
     public partial class PrescriptionInputWindow : Window
     {
-        public PrescriptionInputWindow(Medicine medicine)
+        public PrescriptionInputWindow()
         {
             InitializeComponent();
+        }
+
+        public PrescriptionInputWindow(Medicine medicine) : this()
+        {
             DataContext = new PrescriptionInputViewModel(medicine);
         }
     }

@@ -9,9 +9,13 @@ namespace LechebnikProject.Views
     /// </summary>
     public partial class MedicineDetailsWindow : Window
     {
-        public MedicineDetailsWindow(int medicineId)
+        public MedicineDetailsWindow()
         {
             InitializeComponent();
+        }
+
+        public MedicineDetailsWindow(int medicineId) : this()
+        {
             DataContext = new MedicineDetailsViewModel(medicineId);
         }
     }

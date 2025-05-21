@@ -25,6 +25,9 @@
                 <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10" Height="25"/>
                 <TextBlock Text="Повторите пароль:" FontSize="14" Margin="0,0,0,5"/>
                 <PasswordBox x:Name="ConfirmPasswordBox" Margin="0,0,0,10" Height="25"/>
+                <TextBlock Text="Введите код с изображения:" FontSize="14" Margin="0,0,0,5"/>
+                <Image Source="{Binding CaptchaImage}" Width="100" Height="30" Margin="0,0,0,10"/>
+                <TextBox x:Name="CaptchaTextBox" Margin="0,0,0,10" Height="25"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                     <Button Content="Зарегистрироваться" Click="RegisterButton_Click" Width="200" Height="30" Margin="0,0,10,0" Background="#4CAF50" Foreground="White"/>
                     <Button Content="Войти" Click="LoginButton_Click" Width="200" Height="30" Margin="10,0,10,0" Background="#2196F3" Foreground="White"/>

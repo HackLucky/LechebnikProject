@@ -1,11 +1,8 @@
-﻿using System.Windows;
-using LechebnikProject.ViewModels;
+﻿using LechebnikProject.ViewModels;
+using System.Windows;
 
 namespace LechebnikProject.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для RegistrationWindow.xaml
-    /// </summary>
     public partial class RegistrationWindow : Window
     {
         private readonly RegistrationViewModel _viewModel;
@@ -14,11 +11,11 @@ namespace LechebnikProject.Views
         {
             InitializeComponent();
             _viewModel = new RegistrationViewModel();
+            DataContext = _viewModel; // Устанавливаем DataContext для привязки CAPTCHA
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            // Заполнение свойств ViewModel из полей ввода
             _viewModel.LastName = LastNameTextBox.Text;
             _viewModel.FirstName = FirstNameTextBox.Text;
             _viewModel.MiddleName = MiddleNameTextBox.Text;
@@ -29,6 +26,7 @@ namespace LechebnikProject.Views
             _viewModel.Login = LoginTextBox.Text;
             _viewModel.Password = PasswordBox.Password;
             _viewModel.ConfirmPassword = ConfirmPasswordBox.Password;
+            _viewModel.CaptchaInput = CaptchaTextBox.Text;
 
             if (_viewModel.Register())
             {

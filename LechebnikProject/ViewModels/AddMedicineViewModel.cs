@@ -37,14 +37,15 @@ namespace LechebnikProject.ViewModels
         public List<Supplier> Suppliers { get; set; }
 
         public ICommand AddCommand { get; }
-        public ICommand CancelCommand { get; }
+        public ICommand GoToMainMenuCommand { get; }
 
         public AddMedicineViewModel()
         {
             LoadManufacturers();
             LoadSuppliers();
             AddCommand = new RelayCommand(Add);
-            CancelCommand = new RelayCommand(Cancel);
+            GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
+            GoToMainMenuCommand = new RelayCommand(o => WindowManager.CloseWindow<AddMedicineWindow>());
         }
 
         private void LoadManufacturers()
@@ -118,14 +119,6 @@ namespace LechebnikProject.ViewModels
             {
                 MessageBox.Show($"Произошла ошибка при добавлении препарата. {ex}");
             }
-        }
-
-        private void Cancel(object parameter)
-        {
-            var mainMenuWindow = new MainMenuWindow();
-            mainMenuWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AddMedicineWindow))?.Close();
-            Application.Current.MainWindow = mainMenuWindow;
         }
     }
 }
