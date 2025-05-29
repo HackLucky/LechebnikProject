@@ -1,13 +1,20 @@
 ﻿<Window x:Class="LechebnikProject.Views.ReportsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно списка отчётов]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="ЛЕЧЕБНИК [окно списка отчётов]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding SalesData}" AutoGenerateColumns="True" IsReadOnly="True"/>
-        <Button Grid.Row="1" Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="200" Margin="10"/>
+        <Label Content="СПИСОК ОТЧЁТОВ" Style="{StaticResource MainHeader}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding SalesData}" AutoGenerateColumns="True" IsReadOnly="True" Margin="10,0,10,0"/>
+        <Button Grid.Row="3" Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

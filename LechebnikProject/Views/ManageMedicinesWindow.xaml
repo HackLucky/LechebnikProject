@@ -5,29 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LechebnikProject.Views"
         mc:Ignorable="d"
-        Title="ЛЕЧЕБНИК [окно управления препаратами]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
+        Title="ЛЕЧЕБНИК [окно управления препаратами]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBlock Text="Поиск:" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="850" Margin="5" VerticalContentAlignment="Center"/>
+        <Label Content="УПРАВЛЕНИЕ ПРЕПАРАТАМИ" Style="{StaticResource MainHeader}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Medicines}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMedicine}" IsReadOnly="True">
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Medicines}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMedicine}" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding MedicineId}"/>
-                <DataGridTextColumn Header="Название" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat={}{0:N2} ₽}"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding MedicineId}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Content="Добавить" Command="{Binding AddCommand}" Width="200" Margin="5"/>
-            <Button Content="Редактировать" Command="{Binding EditCommand}" Width="200" Margin="5"/>
-            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="200" Margin="5"/>
-            <Button Content="Назад" Command="{Binding GoBackCommand}" Width="200" Margin="5"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button Content="ДОБАВИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}"/>
+            <Button Content="РЕДАКТИРОВАТЬ" Command="{Binding EditCommand}" Style="{StaticResource FuncButton}"/>
+            <Button Content="УДАЛИТЬ" Command="{Binding DeleteCommand}" Style="{StaticResource FuncButton}" Width="150"/>
+            <Button Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
         </StackPanel>
     </Grid>
 </Window>

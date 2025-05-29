@@ -11,7 +11,7 @@ namespace LechebnikProject.Helpers
     /// </summary>
     public static class DatabaseHelper
     {
-        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["LechebnikConnection"].ConnectionString; // Строка подключения из App.config
+        private static readonly string ConnectionString = AppConfigManager.GetConnectionString(); // Строка подключения из App.config
 
         /// <summary>
         /// Выполняет запрос с возвратом таблицы данных (SELECT).

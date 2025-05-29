@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Favicons\favicon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Favicons\LechebnikLogo-Mini.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>LechebnikProject.App</StartupObject>
@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\AppConfigManager.cs" />
     <Compile Include="Helpers\BooleanToStringConverter.cs" />
     <Compile Include="Helpers\CaptchaHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
@@ -107,14 +108,14 @@
     <Compile Include="Views\CartWindow.xaml.cs">
       <DependentUpon>CartWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ClientAuthWindow.xaml.cs">
-      <DependentUpon>ClientAuthWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ClientLoginWindow.xaml.cs">
       <DependentUpon>ClientLoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ClientRegisterWindow.xaml.cs">
       <DependentUpon>ClientRegisterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectionSettingsWindow.xaml.cs">
+      <DependentUpon>ConnectionSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ContactAdminWindow.xaml.cs">
       <DependentUpon>ContactAdminWindow.xaml</DependentUpon>
@@ -181,15 +182,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ClientAuthWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ClientLoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ClientRegisterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectionSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -293,16 +294,46 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Packages\" />
+    <Resource Include="Resources\Pictures\Settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\LechebnikLogo.png" />
-    <Resource Include="Resources\LechebnikLogoMain.png" />
-    <Resource Include="Resources\LechebnikLogoMainX.png" />
-    <Resource Include="Resources\LechebnikBackground.png" />
+    <Resource Include="Resources\Pictures\Medicines.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Favicons\favicon.ico" />
+    <Resource Include="Resources\Pictures\Cart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Order.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Prescription.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Admin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\User.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Power_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Own\LechebnikLogo-Full.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Own\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Own\LechebnikLogo-Mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Favicons\LechebnikLogo-Mini.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

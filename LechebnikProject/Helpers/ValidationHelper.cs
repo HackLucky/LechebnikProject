@@ -13,7 +13,7 @@ namespace LechebnikProject.Helpers
         public static bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email)) return false;
-            string pattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+            string pattern = @"^[\w\.\-]+@[\w\-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(email, pattern);
         }
 
@@ -23,7 +23,7 @@ namespace LechebnikProject.Helpers
         public static bool IsValidPhoneNumber(string phoneNumber)
         {
             if (string.IsNullOrWhiteSpace(phoneNumber)) return false;
-            string pattern = @"^\+?\d{10,15}$";
+            string pattern = @"^(\+7|8)\d{10}$";
             return Regex.IsMatch(phoneNumber, pattern);
         }
 

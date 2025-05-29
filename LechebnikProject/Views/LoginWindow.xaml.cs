@@ -43,5 +43,12 @@ namespace LechebnikProject.Views
         {
             Application.Current.Shutdown();
         }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            var connectionWindow = new ConnectionSettingsWindow();
+            connectionWindow.Show();
+            this.Close();
+        }
     }
 }

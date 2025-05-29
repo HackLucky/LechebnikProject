@@ -1,4 +1,8 @@
-﻿using LechebnikProject.ViewModels;
+﻿using LechebnikProject.Helpers;
+using LechebnikProject.Models;
+using LechebnikProject.ViewModels;
+using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
 
 namespace LechebnikProject.Views
@@ -6,6 +10,7 @@ namespace LechebnikProject.Views
     public partial class ClientLoginWindow : Window
     {
         private readonly ClientLoginViewModel _viewModel;
+        public Client AuthenticatedClient { get; private set; }
 
         public ClientLoginWindow()
         {
@@ -19,17 +24,36 @@ namespace LechebnikProject.Views
             _viewModel.Code = CodePasswordBox.Password;
             if (_viewModel.Authenticate())
             {
-                MessageBox.Show("Авторизация клиента успешна!");
-                // Здесь можно открыть окно клиента, например, ClientMainWindow
-                this.Close();
+                // Получаем данные клиента
+                string query = "SELECT * FROM Clients WHERE Login = @Login";
+                var parameters = new[] { new SqlParameter("@Login", _viewModel.Login) };
+                var dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
+                var row = dataTable.Rows[0];
+                AuthenticatedClient = new Client
+                {
+                    ClientId = row.Field<int>("ClientId"),
+                    Login = row.Field<string>("Login"),
+                    Discount = row.Field<decimal>("Discount")
+                };
+                DialogResult = true;
+                Close();
             }
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             var registerWindow = new ClientRegisterWindow();
-            registerWindow.Show();
-            this.Close();
+            if (registerWindow.ShowDialog() == true)
+            {
+                LoginTextBox.Text = registerWindow.RegisteredLogin;
+                CodePasswordBox.Password = registerWindow.RegisteredCode;
+            }
+        }
+
+        private void SkipButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
         }
     }
 }

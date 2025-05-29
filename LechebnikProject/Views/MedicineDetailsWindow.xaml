@@ -1,45 +1,46 @@
 ﻿<Window x:Class="LechebnikProject.Views.MedicineDetailsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно деталей препарата]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
+        Title="ЛЕЧЕБНИК [окно деталей препарата]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <ScrollViewer>
             <StackPanel>
-                <TextBlock Text="ID:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.MedicineId}"/>
-                <TextBlock Text="Название:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.Name}"/>
-                <TextBlock Text="Форма:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.Form}"/>
-                <TextBlock Text="Вес/объем:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.WeightVolume}"/>
-                <TextBlock Text="Серийный номер:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.SerialNumber}"/>
-                <TextBlock Text="Применение:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.Usage}"/>
-                <TextBlock Text="Действующее вещество:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.ActiveIngredient}"/>
-                <TextBlock Text="Способ применения:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.ApplicationMethod}"/>
-                <TextBlock Text="Агрегатное состояние:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.AggregateState}"/>
-                <TextBlock Text="Тип:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.Type}"/>
-                <TextBlock Text="Производитель:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.ManufacturerName}"/>
-                <TextBlock Text="Страна производителя:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.ManufacturerCountry}"/>
-                <TextBlock Text="Поставщик:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.SupplierName}"/>
-                <TextBlock Text="Страна поставщика:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.SupplierCountry}"/>
-                <TextBlock Text="Количество на складе:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.StockQuantity}"/>
-                <TextBlock Text="Требуется рецепт:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.RequiresPrescription, Converter={StaticResource BooleanToStringConverter}}"/>
-                <TextBlock Text="Цена:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding SelectedMedicine.Price, StringFormat={}{0:N2} ₽}"/>
-                <Button Content="Вернуться к списку препаратов" Command="{Binding GoBackCommand}" Width="250" Height="30" Margin="0,10"/>
+                <Label Content="ДЕТАЛИ ПРЕПАРАТА" Style="{StaticResource MainHeader}"/>
+                <Label Content="ID:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.MedicineId}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Название:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.Name}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Форма:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.Form}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Вес/объем:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.WeightVolume}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Серийный номер:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.SerialNumber}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Применение:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.Usage}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Действующее вещество:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.ActiveIngredient}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Способ применения:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.ApplicationMethod}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Агрегатное состояние:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.AggregateState}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Тип:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.Type}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Производитель:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.ManufacturerName}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Страна производителя:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.ManufacturerCountry}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Поставщик:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.SupplierName}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Страна поставщика:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.SupplierCountry}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Количество на складе:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.StockQuantity}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Требуется рецепт:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.RequiresPrescription, Converter={StaticResource BooleanToStringConverter}}" Style="{StaticResource TextBlock}"/>
+                <Label Content="Цена:" Style="{StaticResource MainText}"/>
+                <TextBlock Text="{Binding SelectedMedicine.Price, StringFormat={}{0:N2} ₽}" Style="{StaticResource TextBlock}"/>
+                <Button Content="Вернуться к списку препаратов" Command="{Binding GoBackCommand}" Style="{StaticResource Button}"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

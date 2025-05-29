@@ -1,37 +1,38 @@
 ﻿<Window x:Class="LechebnikProject.Views.PrescriptionInputWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно продажи по рецепту]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
+        Title="ЛЕЧЕБНИК [окно продажи по рецепту]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <ScrollViewer>
             <StackPanel>
-                <TextBlock Text="Серия рецепта:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding Series}" Margin="0,0,0,10"/>
-                <TextBlock Text="Медицинское учреждение, выдавшее рецепт:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding MedicalInstitution}" Margin="0,0,0,10"/>
-                <TextBlock Text="Фамилия пациента:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding PatientLastName}" Margin="0,0,0,10"/>
-                <TextBlock Text="Имя пациента:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding PatientFirstName}" Margin="0,0,0,10"/>
-                <TextBlock Text="Отчество пациента:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding PatientMiddleName}" Margin="0,0,0,10"/>
-                <TextBlock Text="Код МКБ-10:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding ICD10Code}" Margin="0,0,0,10"/>
-                <TextBlock Text="Количество разрешённых для продажи препаратов:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding Quantity}" Margin="0,0,0,10"/>
-                <TextBlock Text="Требуемая скидка:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <ComboBox ItemsSource="{Binding DiscountTypes}" SelectedItem="{Binding DiscountType}" Margin="0,0,0,10"/>
-                <TextBlock Text="Фамилия врача:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding DoctorLastName}" Margin="0,0,0,10"/>
-                <TextBlock Text="Имя врача:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding DoctorFirstName}" Margin="0,0,0,10"/>
-                <TextBlock Text="Отчество врача (при наличии):" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding DoctorMiddleName}" Margin="0,0,0,10"/>
-                <TextBlock Text="Срок действия рецепта:" FontWeight="Bold" Margin="0,0,0,5"/>
+                <Label Content="ПРОДАЖА ПО РЕЦЕПТУ" Style="{StaticResource MainHeader}"/>
+                <Label Content="Серия рецепта:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding Series}" Style="{StaticResource InputText}"/>
+                <Label Content="Медицинское учреждение, выдавшее рецепт:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding MedicalInstitution}" Style="{StaticResource InputText}"/>
+                <Label Content="Фамилия пациента:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding PatientLastName}" Style="{StaticResource InputText}"/>
+                <Label Content="Имя пациента:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding PatientFirstName}" Style="{StaticResource InputText}"/>
+                <Label Content="Отчество пациента:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding PatientMiddleName}" Style="{StaticResource InputText}"/>
+                <Label Content="Код МКБ-10:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding ICD10Code}" Style="{StaticResource InputText}"/>
+                <Label Content="Количество разрешённых для продажи препаратов:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding Quantity}" Style="{StaticResource InputText}"/>
+                <Label Content="Требуемая скидка:" Style="{StaticResource MainText}"/>
+                <ComboBox ItemsSource="{Binding DiscountTypes}" SelectedItem="{Binding DiscountType}"/>
+                <Label Content="Фамилия врача:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding DoctorLastName}" Style="{StaticResource InputText}"/>
+                <Label Content="Имя врача:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding DoctorFirstName}" Style="{StaticResource InputText}"/>
+                <Label Content="Отчество врача (при наличии):" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding DoctorMiddleName}" Style="{StaticResource InputText}"/>
+                <Label Content="Срок действия рецепта:" Style="{StaticResource MainText}"/>
                 <DatePicker SelectedDate="{Binding ExpiryDate}" Margin="0,0,0,10"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                    <Button Content="Подтвердить рецепт" Command="{Binding AddCommand}" Width="300" Margin="5"/>
-                    <Button Content="Отменить подтверждение рецепта" Command="{Binding CancelCommand}" Width="300" Margin="5"/>
+                    <Button Content="ПОДТВЕРДИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}"/>
+                    <Button Content="ОТМЕНИТЬ" Command="{Binding CancelCommand}" Style="{StaticResource FuncButton}"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

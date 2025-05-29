@@ -13,7 +13,7 @@ namespace LechebnikProject.Helpers
             bitmapImage.BeginInit();
             bitmapImage.StreamSource = new MemoryStream(binaryData);
             bitmapImage.EndInit();
-            bitmapImage.Freeze(); // Для потокобезопасности в WPF
+            bitmapImage.Freeze();
             return bitmapImage;
         }
     }

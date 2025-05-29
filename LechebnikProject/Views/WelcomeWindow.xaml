@@ -3,32 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Height="540" Width="960" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Window.Background>
-        <ImageBrush ImageSource="/Resources/LechebnikBackground.png"/>
+        <ImageBrush ImageSource="/Resources/Own/Background.png"/>
     </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Image Grid.Row="0" Source="/Resources/LechebnikLogo.png" HorizontalAlignment="Left" Margin="10,10,0,0"/>
-        <Label Grid.Row="1" Content="Добро пожаловать," FontFamily="#Arkhip" FontSize="50" Foreground="Yellow" VerticalContentAlignment="Bottom" Margin="150,0,0,0">
+        <Image Grid.Row="0" Source="/Resources/Own/LechebnikLogo-Full.png" HorizontalAlignment="Left" Margin="10,10,0,0"/>
+        <Label Grid.Row="1" Content="Добро пожаловать," FontFamily="#Arkhip" FontSize="50" FontWeight="ExtraBold" Foreground="LightGray" VerticalContentAlignment="Bottom" Margin="150,0,0,0">
             <Label.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Opacity="0.9"/>
             </Label.Effect>
         </Label>
-        <Label Grid.Row="2" Content="дорогой гость!" FontFamily="#Arkhip" FontSize="50" Foreground="Lime" HorizontalAlignment="Right" Margin="0,0,150,0">
+        <Label Grid.Row="2" Content="дорогой гость!" FontFamily="#Arkhip" FontSize="50" FontWeight="ExtraBold" Foreground="Green" HorizontalAlignment="Right" Margin="0,0,150,0">
             <Label.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Opacity="0.9"/>
             </Label.Effect>
         </Label>
-        <Label Grid.Row="3" Content="Загрузка программы..." FontFamily="#Arkhip" FontSize="30" FontWeight="Bold" Foreground="#FFFEFF00" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center">
+        <Label Grid.Row="3" Content="Загрузка программы..." FontFamily="#Arkhip" FontSize="30" FontWeight="Bold" Foreground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center">
             <Label.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Opacity="0.9"/>
             </Label.Effect>
         </Label>
-        <ProgressBar Grid.Row="4" Height="20" VerticalAlignment="Bottom" Background="#FF191919" Foreground="#00FF00" BorderBrush="{x:Null}" IsIndeterminate="True"/>
+        <ProgressBar Grid.Row="4" Height="20" VerticalAlignment="Bottom" Background="#FF191919" Foreground="Green" BorderBrush="{x:Null}" IsIndeterminate="True"/>
     </Grid>
 </Window>

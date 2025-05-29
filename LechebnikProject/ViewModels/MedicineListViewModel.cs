@@ -85,7 +85,7 @@ namespace LechebnikProject.ViewModels
             if (!(parameter is Medicine med)) return;
 
             // 1) Открываем окно аутентификации и закрываем все остальные
-            WindowManager.ShowWindow<ClientAuthWindow>(w => w.DataContext = new ClientLoginViewModel());
+            WindowManager.ShowWindow<ClientLoginWindow>(w => w.DataContext = new ClientLoginViewModel());
 
             // 2) Открываем окно ввода количества и снова закрываем всё остальное
             WindowManager.ShowWindow<QuantityInputWindow>(w => w.DataContext = new QuantityInputViewModel(med));

@@ -45,7 +45,6 @@ namespace LechebnikProject.ViewModels
             LoadSuppliers();
             AddCommand = new RelayCommand(Add);
             GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
-            GoToMainMenuCommand = new RelayCommand(o => WindowManager.CloseWindow<AddMedicineWindow>());
         }
 
         private void LoadManufacturers()
@@ -76,7 +75,7 @@ namespace LechebnikProject.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Name) || SelectedForm == null || SelectedManufacturer == null || SelectedSupplier == null)
             {
-                MessageBox.Show("Пожалуйста, заполните все обязательные поля.");
+                MessageBox.Show("Пожалуйста, заполните все поля.");
                 return;
             }
 

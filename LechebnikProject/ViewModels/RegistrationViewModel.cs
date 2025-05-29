@@ -58,7 +58,7 @@ namespace LechebnikProject.ViewModels
             }
             if (!ValidationHelper.IsValidPhoneNumber(PhoneNumber))
             {
-                MessageBox.Show("Номер телефона должен содержать от 10 до 15 цифр и может начинаться с +.");
+                MessageBox.Show("Введите российский формат номера.\nДолжен начинаться с +7 или 8.\nПосле префикса должно быть 10 цифр.");
                 return false;
             }
             if (!ValidationHelper.IsValidEmail(Email))

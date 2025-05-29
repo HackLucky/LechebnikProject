@@ -13,11 +13,13 @@ namespace LechebnikProject.ViewModels
         public User CurrentUser => AppContext.CurrentUser;
         public ICommand SaveCommand { get; }
         public ICommand GoBackCommand { get; }
+        public ICommand ExitProfile {  get; }
 
         public ProfileViewModel()
         {
             SaveCommand = new RelayCommand(Save);
-            GoBackCommand = new RelayCommand(GoBack);
+            GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
+            ExitProfile = new RelayCommand(o => WindowManager.ShowWindow<LoginWindow>());
         }
 
         private void Save(object parameter)
@@ -36,14 +38,6 @@ namespace LechebnikProject.ViewModels
             };
             DatabaseHelper.ExecuteQuery(query, parameters);
             MessageBox.Show("Профиль обновлен!");
-        }
-
-        private void GoBack(object parameter)
-        {
-            var mainMenuWindow = new MainMenuWindow();
-            mainMenuWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is ProfileWindow))?.Close();
-            Application.Current.MainWindow = mainMenuWindow;
         }
     }
 }

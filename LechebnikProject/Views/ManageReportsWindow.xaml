@@ -1,21 +1,23 @@
 ﻿<Window x:Class="LechebnikProject.Views.ManageReportsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно управления отчётами]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
+        Title="ЛЕЧЕБНИК [окно управления отчётами]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBlock Text="Поиск:" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="850" Margin="5" VerticalContentAlignment="Center"/>
+        <Label Content="УПРАВЛЕНИЕ ОТЧЁТАМИ" Style="{StaticResource MainHeader}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Reports}" AutoGenerateColumns="True" SelectedItem="{Binding SelectedReport}" IsReadOnly="True"/>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Content="Удалить отчёт" Command="{Binding DeleteReportCommand}" Width="200" Margin="5"/>
-            <Button Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="200" Margin="5"/>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Reports}" AutoGenerateColumns="True" SelectedItem="{Binding SelectedReport}" IsReadOnly="True" Margin="10,0,10,0"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button Content="УДАЛИТЬ" Command="{Binding DeleteReportCommand}" Style="{StaticResource FuncButton}"/>
+            <Button Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
         </StackPanel>
     </Grid>
 </Window>

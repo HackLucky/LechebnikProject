@@ -10,8 +10,7 @@ namespace LechebnikProject.Helpers
         /// <summary>
         /// Открыть новое окно и закрыть все остальные.
         /// </summary>
-        public static void ShowWindow<T>(Action<T> configure = null)
-            where T : Window, new()
+        public static void ShowWindow<T>(Action<T> configure = null) where T : Window, new()
         {
             // 1) Создаём и показываем ЦЕЛЕВОЕ окно
             var newWin = new T();
@@ -22,20 +21,16 @@ namespace LechebnikProject.Helpers
             Application.Current.MainWindow = newWin;
 
             // 2) Только после этого закрываем все окна, кроме него
-            foreach (Window w in Application.Current.Windows
-                                          .OfType<Window>()
-                                          .ToList())
+            foreach (Window w in Application.Current.Windows.OfType<Window>().ToList())
             {
-                if (w != newWin)
-                    w.Close();
+                if (w != newWin) w.Close();
             }
         }
 
         /// <summary>
         /// Открыть новое окно, закрыв текущее MainWindow (без рисков ShutdownMode).
         /// </summary>
-        public static void ShowWindowClosingCurrent<T>(Action<T> configure = null)
-            where T : Window, new()
+        public static void ShowWindowClosingCurrent<T>(Action<T> configure = null) where T : Window, new()
         {
             // 1) Помним предыдущее окно до создания нового
             var previous = Application.Current.MainWindow;
@@ -47,8 +42,7 @@ namespace LechebnikProject.Helpers
             Application.Current.MainWindow = newWin;
 
             // 3) Закрываем старое
-            if (previous != null && previous != newWin)
-                previous.Close();
+            if (previous != null && previous != newWin) previous.Close();
         }
 
         /// <summary>
@@ -82,8 +76,7 @@ namespace LechebnikProject.Helpers
         /// </summary>
         public static void CloseAllWindows()
         {
-            foreach (Window w in Application.Current.Windows.OfType<Window>().ToList())
-                w.Close();
+            foreach (Window w in Application.Current.Windows.OfType<Window>().ToList()) w.Close();
             Application.Current.Shutdown();
         }
     }
