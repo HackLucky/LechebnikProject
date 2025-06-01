@@ -11,7 +11,7 @@ namespace LechebnikProject.Views
         {
             InitializeComponent();
             _viewModel = new RegistrationViewModel();
-            DataContext = _viewModel; // Устанавливаем DataContext для привязки CAPTCHA
+            DataContext = _viewModel;
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)

@@ -3,7 +3,6 @@ using LechebnikProject.Helpers;
 using LechebnikProject.Views;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -33,19 +32,23 @@ namespace LechebnikProject.ViewModels
         {
             LoadReports();
             DeleteReportCommand = new RelayCommand(DeleteReport, CanDeleteReport);
-            GoBackCommand = new RelayCommand(GoBack);
+            GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>());
         }
 
         private void LoadReports()
         {
             string query = @"
-                SELECT o.OrderId AS [Номер], o.OrderDate AS [Дата и время], 
-                       o.TotalAmount AS [Сумма], u.LastName AS [Фамилия], 
-                       u.FirstName AS [Имя], u.MiddleName AS [Отчество] 
-                FROM Orders o 
+                SELECT 
+                    o.OrderId AS [Номер],
+                    CONVERT(varchar(10), o.OrderDate, 104) + ' ' + CONVERT(varchar(8), o.OrderDate, 108) AS [Дата и время],
+                    o.TotalAmount AS [Сумма],
+                    u.LastName AS [Фамилия], u.FirstName AS [Имя], u.MiddleName AS [Отчество]
+                FROM Orders o
                 JOIN Users u ON o.UserId = u.UserId";
             Reports = DatabaseHelper.ExecuteQuery(query);
         }
+
+        private bool CanDeleteReport(object parameter) => SelectedReport != null;
 
         private void DeleteReport(object parameter)
         {
@@ -55,18 +58,9 @@ namespace LechebnikProject.ViewModels
                 string query = "DELETE FROM Orders WHERE OrderId = @OrderId";
                 var parameters = new[] { new SqlParameter("@OrderId", orderId) };
                 DatabaseHelper.ExecuteNonQuery(query, parameters);
-                LoadReports(); // Обновляем таблицу после удаления
-                MessageBox.Show("Отчёт успешно удалён!");
+                LoadReports();
+                MessageBox.Show("Отчёт успешно удалён.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-        }
-
-        private bool CanDeleteReport(object parameter) => SelectedReport != null;
-
-        private void GoBack(object parameter)
-        {
-            var adminPanelWindow = new AdminPanelWindow();
-            adminPanelWindow.Show();
-            Application.Current.Windows.OfType<ManageReportsWindow>().FirstOrDefault()?.Close();
         }
     }
 }

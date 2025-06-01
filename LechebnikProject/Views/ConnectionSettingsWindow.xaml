@@ -8,14 +8,17 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="НАСТРОЙКА ПОДКЛЮЧЕНИЯ К БАЗЕ ДАННЫХ" Style="{StaticResource MainHeader}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="НАСТРОЙКА ПОДКЛЮЧЕНИЯ К БАЗЕ ДАННЫХ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
         <StackPanel Grid.Row="1">
             <Label Content="Имя сервера:" Style="{StaticResource MainText}"/>
             <TextBox x:Name="ServerTextBox" Grid.Row="1" Style="{StaticResource InputText}"/>
             <Label Content="Имя базы данных:" Style="{StaticResource MainText}"/>
             <TextBox x:Name="DatabaseTextBox" Grid.Row="3" Style="{StaticResource InputText}"/>
-            <RadioButton x:Name="WindowsAuthRadio" Content="Аутентификация Windows" GroupName="AuthType" Margin="0,0,0,5" Checked="AuthRadioButton_Checked"/>
-            <RadioButton x:Name="SqlAuthRadio" Content="Аутентификация SQL Server" GroupName="AuthType" Margin="0,0,0,10" Checked="AuthRadioButton_Checked"/>
+            <RadioButton x:Name="WindowsAuthRadio" Content="Аутентификация Windows" GroupName="AuthType" Checked="AuthRadioButton_Checked" Margin="10,5,0,5" />
+            <RadioButton x:Name="SqlAuthRadio" Content="Аутентификация SQL Server" GroupName="AuthType" Checked="AuthRadioButton_Checked" Margin="10,0,0,10"/>
             <StackPanel x:Name="SqlAuthPanel" Visibility="Collapsed">
                 <Label Content="Логин:" Style="{StaticResource MainText}"/>
                 <TextBox x:Name="UsernameTextBox" Style="{StaticResource InputText}"/>

@@ -12,12 +12,12 @@ namespace LechebnikProject.Helpers
             {
                 return boolValue ? "Да" : "Нет";
             }
-            return "Неизвестно"; // Значение по умолчанию, если входные данные некорректны
+            return "Неизвестно";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException(); // Обратное преобразование не требуется
+            throw new NotImplementedException();
         }
     }
 }

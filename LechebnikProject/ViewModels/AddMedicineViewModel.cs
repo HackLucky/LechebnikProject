@@ -73,6 +73,14 @@ namespace LechebnikProject.ViewModels
 
         private void Add(object parameter)
         {
+            const string checkSql = "SELECT COUNT(*) FROM Medicines WHERE SerialNumber = @Serial";
+            var checkPrm = new[] { new SqlParameter("@Serial", SerialNumber) };
+            int exist = Convert.ToInt32(DatabaseHelper.ExecuteScalar(checkSql, checkPrm));
+            if (exist > 0)
+            {
+                MessageBox.Show("Препарат с таким серийным номером уже существует.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             if (string.IsNullOrWhiteSpace(Name) || SelectedForm == null || SelectedManufacturer == null || SelectedSupplier == null)
             {
                 MessageBox.Show("Пожалуйста, заполните все поля.");
@@ -91,7 +99,8 @@ namespace LechebnikProject.ViewModels
                 return;
             }
 
-            string query = "INSERT INTO Medicines (Name, Form, WeightVolume, SerialNumber, Usage, ActiveIngredient, ApplicationMethod, AggregateState, Type, ManufacturerId, SupplierId, StockQuantity, RequiresPrescription, Price) VALUES (@Name, @Form, @WeightVolume, @SerialNumber, @Usage, @ActiveIngredient, @ApplicationMethod, @AggregateState, @Type, @ManufacturerId, @SupplierId, @StockQuantity, @RequiresPrescription, @Price)";
+            string query = @"INSERT INTO Medicines (Name, Form, WeightVolume, SerialNumber, Usage, ActiveIngredient, ApplicationMethod, AggregateState, Type, ManufacturerId, SupplierId, StockQuantity, RequiresPrescription, Price) 
+                VALUES (@Name, @Form, @WeightVolume, @SerialNumber, @Usage, @ActiveIngredient, @ApplicationMethod, @AggregateState, @Type, @ManufacturerId, @SupplierId, @StockQuantity, @RequiresPrescription, @Price)";
             SqlParameter[] parameters = {
                 new SqlParameter("@Name", Name),
                 new SqlParameter("@Form", SelectedForm),
@@ -112,11 +121,11 @@ namespace LechebnikProject.ViewModels
             try
             {
                 DatabaseHelper.ExecuteNonQuery(query, parameters);
-                MessageBox.Show("Препарат добавлен успешно!");
+                MessageBox.Show("Препарат добавлен успешно!", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Произошла ошибка при добавлении препарата. {ex}");
+                MessageBox.Show($"Произошла ошибка при добавлении препарата. {ex}", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

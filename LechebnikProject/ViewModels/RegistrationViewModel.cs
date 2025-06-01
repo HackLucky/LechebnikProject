@@ -24,7 +24,7 @@ namespace LechebnikProject.ViewModels
         public BitmapImage CaptchaImage
         {
             get => _captchaImage;
-            set => _captchaImage = value; // Здесь нет INotifyPropertyChanged, так как это не MVVM-класс
+            set => _captchaImage = value;
         }
 
         private readonly string _captchaCode;
@@ -48,47 +48,47 @@ namespace LechebnikProject.ViewModels
             int count = (int)DatabaseHelper.ExecuteScalar(checkQuery, parameters1);
             if (count > 0)
             {
-                MessageBox.Show("Пользователь с таким телефоном, почтой или логином уже существует.");
+                MessageBox.Show("Пользователь с таким телефоном, почтой или логином уже существует.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (!ValidationHelper.IsValidName(LastName) || !ValidationHelper.IsValidName(FirstName))
             {
-                MessageBox.Show("Фамилия и имя должны содержать минимум 2 символа.");
+                MessageBox.Show("Фамилия и имя должны содержать минимум 2 символа.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (!ValidationHelper.IsValidPhoneNumber(PhoneNumber))
             {
-                MessageBox.Show("Введите российский формат номера.\nДолжен начинаться с +7 или 8.\nПосле префикса должно быть 10 цифр.");
+                MessageBox.Show("Введите российский формат номера.\nДолжен начинаться с +7 или 8.\nПосле префикса должно быть 10 цифр.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (!ValidationHelper.IsValidEmail(Email))
             {
-                MessageBox.Show("Введите корректный email (например, example@mail.ru).");
+                MessageBox.Show("Введите корректный email (например, example@mail.ru).", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (!ValidationHelper.IsNotEmpty(Position) || !ValidationHelper.IsNotEmpty(PharmacyAddress))
             {
-                MessageBox.Show("Должность и адрес аптеки не могут быть пустыми.");
+                MessageBox.Show("Должность и адрес аптеки не могут быть пустыми.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (!ValidationHelper.IsNotEmpty(Login))
             {
-                MessageBox.Show("Логин не может быть пустым.");
+                MessageBox.Show("Логин не может быть пустым.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (!ValidationHelper.IsValidPassword(Password))
             {
-                MessageBox.Show("Пароль должен содержать минимум 8 символов, включая буквы и цифры.");
+                MessageBox.Show("Пароль должен содержать минимум 8 символов, включая буквы и цифры.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (Password != ConfirmPassword)
             {
-                MessageBox.Show("Пароли не совпадают.");
+                MessageBox.Show("Пароли не совпадают.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (CaptchaInput != _captchaCode)
             {
-                MessageBox.Show("Неверный код CAPTCHA.");
+                MessageBox.Show("Неверный код CAPTCHA.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -111,13 +111,13 @@ namespace LechebnikProject.ViewModels
             try
             {
                 DatabaseHelper.ExecuteNonQuery(query, parameters2);
-                MessageBox.Show("Регистрация прошла успешно!");
+                MessageBox.Show("Регистрация прошла успешно!", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
                 return true;
             }
             catch (Exception ex)
             {
                 Logger.LogError("Ошибка при регистрации пользователя.", ex);
-                MessageBox.Show("Ошибка при регистрации. Возможно, логин уже занят.");
+                MessageBox.Show("Ошибка при регистрации. Возможно, логин уже занят.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
         }

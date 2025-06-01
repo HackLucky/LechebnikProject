@@ -3,12 +3,12 @@ using System.Windows;
 
 namespace LechebnikProject.Views
 {
-    public partial class MainMenuWindow : Window
+    public partial class EditMedicineWindow : Window
     {
-        public MainMenuWindow()
+        public EditMedicineWindow()
         {
             InitializeComponent();
-            DataContext = new MainMenuViewModel();
+            DataContext = new EditMedicineViewModel();
         }
     }
 }

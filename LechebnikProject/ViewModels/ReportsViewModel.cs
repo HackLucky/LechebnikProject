@@ -16,7 +16,7 @@ namespace LechebnikProject.ViewModels
         public ReportsViewModel()
         {
             LoadSalesData();
-            GoBackCommand = new RelayCommand(GoBack);
+            GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
         private void LoadSalesData()
@@ -30,17 +30,8 @@ namespace LechebnikProject.ViewModels
             SalesData = DatabaseHelper.ExecuteQuery(query);
             foreach (DataColumn column in SalesData.Columns)
             {
-                if (column.ColumnName == "Отчество" && SalesData.AsEnumerable().All(row => row.IsNull(column)))
-                    column.DefaultValue = "Не указано";
+                if (column.ColumnName == "Отчество" && SalesData.AsEnumerable().All(row => row.IsNull(column))) column.DefaultValue = "Не указано";
             }
-        }
-
-        private void GoBack(object parameter)
-        {
-            var mainMenuWindow = new MainMenuWindow();
-            mainMenuWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is ReportsWindow))?.Close();
-            Application.Current.MainWindow = mainMenuWindow;
         }
     }
 }

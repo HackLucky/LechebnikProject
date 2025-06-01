@@ -1,28 +1,25 @@
 ﻿namespace LechebnikProject.Models
 {
-    /// <summary>
-    /// Модель препарата.
-    /// </summary>
     public class Medicine
     {
-        public int MedicineId { get; set; }         // Уникальный идентификатор
-        public string Name { get; set; }            // Название
-        public string Form { get; set; }            // Форма (таблетки, сироп и т.д.)
-        public string WeightVolume { get; set; }    // Вес/объем
-        public string SerialNumber { get; set; }    // Серийный номер
-        public string Usage { get; set; }           // Применение
-        public string ActiveIngredient { get; set; } // Действующее вещество
-        public string ApplicationMethod { get; set; } // Способ применения
-        public string AggregateState { get; set; }  // Агрегатное состояние
-        public string Type { get; set; }            // Тип препарата
-        public int ManufacturerId { get; set; }     // Идентификатор производителя
+        public int MedicineId { get; set; }
+        public string Name { get; set; }
+        public string Form { get; set; }
+        public string WeightVolume { get; set; }
+        public string SerialNumber { get; set; }
+        public string Usage { get; set; }
+        public string ActiveIngredient { get; set; }
+        public string ApplicationMethod { get; set; }
+        public string AggregateState { get; set; }
+        public string Type { get; set; }
+        public int ManufacturerId { get; set; }
         public string ManufacturerName { get; set; }
         public string ManufacturerCountry { get; set; }
-        public int SupplierId { get; set; }         // Идентификатор поставщика
+        public int SupplierId { get; set; }
         public string SupplierName { get; set; }
         public string SupplierCountry { get; set; }
-        public int StockQuantity { get; set; }      // Количество на складе
-        public bool RequiresPrescription { get; set; } // Требуется ли рецепт
-        public decimal Price { get; set; }          // Цена в рублях
+        public int StockQuantity { get; set; }
+        public bool RequiresPrescription { get; set; }
+        public decimal Price { get; set; }
     }
 }

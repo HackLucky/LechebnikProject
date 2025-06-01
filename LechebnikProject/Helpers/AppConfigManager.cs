@@ -6,7 +6,6 @@ using System.Xml;
 
 public static class AppConfigManager
 {
-    // Файл конфигураций подключения к серверу сохраняется по пути: C:\Users\[Имя_Пользователя]\AppData\Roaming\YourAppName\user.config
     private static readonly string UserConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LechebnikProjectConnection", "user.config");
 
     public static void UpdateConnectionString(
@@ -16,12 +15,10 @@ public static class AppConfigManager
         string username = null,
         string password = null)
     {
-        // Формируем строку подключения
         string connectionString = useWindowsAuth
             ? $"Server={server};Database={database};Trusted_Connection=True;"
             : $"Server={server};Database={database};User Id={username};Password={password};";
 
-        // Создаем XML документ
         var doc = new XmlDocument();
         XmlElement root = doc.CreateElement("configuration");
         doc.AppendChild(root);
@@ -35,7 +32,6 @@ public static class AppConfigManager
         addElem.SetAttribute("providerName", "System.Data.SqlClient");
         connStrings.AppendChild(addElem);
 
-        // Сохраняем в папке AppData
         string dir = Path.GetDirectoryName(UserConfigPath);
         if (!Directory.Exists(dir))
         {
@@ -43,13 +39,11 @@ public static class AppConfigManager
         }
         doc.Save(UserConfigPath);
 
-        // Обновляем ConfigurationManager
         UpdateConfigurationManager(connectionString);
     }
 
     private static void UpdateConfigurationManager(string connectionString)
     {
-        // Обновляем ConfigurationManager, чтобы текущее приложение использовало новую строку
         var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         config.ConnectionStrings.ConnectionStrings["DefaultConnection"].ConnectionString = connectionString;
         config.ConnectionStrings.ConnectionStrings["DefaultConnection"].ProviderName = "System.Data.SqlClient";
@@ -59,7 +53,6 @@ public static class AppConfigManager
 
     public static string GetConnectionString()
     {
-        // Сначала пробуем получить из пользовательского файла в AppData
         if (File.Exists(UserConfigPath))
         {
             try
@@ -75,7 +68,6 @@ public static class AppConfigManager
             catch (Exception ex){ MessageBox.Show($"Ошибка получения пользовательского файла: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
-        // Если пользовательского файла нет или произошла ошибка, берем из стандартного конфига
         return ConfigurationManager.ConnectionStrings["DefaultConnection"]?.ConnectionString;
     }
 

@@ -1,11 +1,14 @@
 ﻿<Window x:Class="LechebnikProject.Views.ClientRegisterWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно регистрации клиента]" Style="{StaticResource Window}" Height="1200" WindowStartupLocation="CenterScreen">
+        Title="ЛЕЧЕБНИК [окно регистрации клиента]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
     <Grid Style="{StaticResource Grid}">
         <ScrollViewer>
             <StackPanel>
-                <Label Content="РЕГИСТРАЦИЯ КЛИЕНТА" Style="{StaticResource MainHeader}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="РЕГИСТРАЦИЯ КЛИЕНТА" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
                 <Label Content="Фамилия:" Style="{StaticResource MainText}"/>
                 <TextBox x:Name="LastNameTextBox" Style="{StaticResource InputText}"/>
                 <Label Content="Имя:" Style="{StaticResource MainText}"/>
@@ -33,7 +36,7 @@
                 <StackPanel HorizontalAlignment="Center" Margin="10">
                     <Button Content="ЗАРЕГИСТРИРОВАТЬ" Click="RegisterButton_Click" Style="{StaticResource Button}"/>
                     <Label Content="Если клиент зарегистрирован, нажмите кнопку:" Style="{StaticResource Text}" HorizontalAlignment="Center"/>
-                    <Button Content="АВТОРИЗИРОВАТЬ" Click="RegisterButton_Click" Style="{StaticResource Button}"/>
+                    <Button Content="АУТЕНТИФИЦИРОВАТЬ" Click="LoginButton_Click" Style="{StaticResource Button}"/>
                     <Button Content="ОТМЕНИТЬ" Click="CancelButton_Click" Style="{StaticResource Button}"/>
                 </StackPanel>
             </StackPanel>

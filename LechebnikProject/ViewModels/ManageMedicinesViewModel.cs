@@ -1,6 +1,8 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
 using LechebnikProject.Models;
+using LechebnikProject.ViewModels;
+using LechebnikProject.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,10 +15,13 @@ public class ManageMedicinesViewModel : BaseViewModel
     public ObservableCollection<Medicine> Medicines { get; set; }
     public Medicine SelectedMedicine { get; set; }
     public string SearchText { get; set; }
-    public ICommand AddCommand => new RelayCommand(o => { /* Открыть AddMedicineWindow */ });
-    public ICommand EditCommand => new RelayCommand(o => { /* Открыть окно редактирования */ });
+    public ICommand AddCommand => new RelayCommand(o => WindowManager.ShowWindow<AddMedicineWindow>());
+    public ICommand EditCommand => new RelayCommand(o => {
+        if (SelectedMedicine == null) return;
+        WindowManager.ShowWindow<EditMedicineWindow>(w => w.DataContext = new EditMedicineViewModel(SelectedMedicine));
+    });
     public ICommand DeleteCommand => new RelayCommand(Delete);
-    public ICommand GoBackCommand => new RelayCommand(o => { /* Вернуться в AdminPanel */ });
+    public ICommand GoBackCommand => new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>());
 
     public ManageMedicinesViewModel()
     {
@@ -46,7 +51,7 @@ public class ManageMedicinesViewModel : BaseViewModel
                 ManufacturerName = row["ManufacturerName"].ToString()
             });
         }
-        Medicines = new ObservableCollection<Medicine>(medicinesList); // Преобразование в ObservableCollection
+        Medicines = new ObservableCollection<Medicine>(medicinesList);
     }
 
     private void Delete(object parameter)

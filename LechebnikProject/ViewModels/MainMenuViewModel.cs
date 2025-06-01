@@ -19,6 +19,11 @@ namespace LechebnikProject.ViewModels
         public ICommand GoToAdminPanelCommand { get; }
         public ICommand ExitCommand { get; }
 
+        private bool CanGoToAdminPanel(object parameter)
+        {
+            return CurrentUser?.Role == "Admin";
+        }
+
         public MainMenuViewModel()
         {
             GoToMedicineListCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
@@ -30,11 +35,6 @@ namespace LechebnikProject.ViewModels
             GoToContactAdminCommand = new RelayCommand(o => WindowManager.ShowWindow<ContactAdminWindow>());
             GoToAdminPanelCommand = new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>(), CanGoToAdminPanel);
             ExitCommand = new RelayCommand(o => WindowManager.CloseAllWindows());
-        }
-
-        private bool CanGoToAdminPanel(object parameter)
-        {
-            return CurrentUser?.Role == "Admin";
         }
     }
 }

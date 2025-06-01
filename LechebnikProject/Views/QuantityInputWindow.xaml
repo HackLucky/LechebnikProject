@@ -7,14 +7,17 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Label Content="КОЛИЧЕСТВО ПРЕПАРАТОВ" Style="{StaticResource MainHeader}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="КОЛИЧЕСТВО ПРЕПАРАТОВ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label Content="Приобретаемый препарат:" Style="{StaticResource MainText}"/>
-            <Label Content="{Binding SelectedMedicine.Name}" Style="{StaticResource MainText}"/>
+            <Label Content="{Binding SelectedMedicine.Name}" Style="{StaticResource Text}"/>
             <Label Content="Введите количество:" Style="{StaticResource MainText}"/>
             <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Добавить в корзину" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}" Width="300"/>
+                <Button Content="Добавить в корзину" Command="{Binding ConfirmCommand}" Style="{StaticResource FuncButton}" Width="300"/>
                 <Button Content="Отменить добавление" Command="{Binding CancelCommand}" Style="{StaticResource FuncButton}" Width="300"/>
             </StackPanel>
         </StackPanel>

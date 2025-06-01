@@ -4,9 +4,6 @@ using LechebnikProject.Models;
 
 namespace LechebnikProject.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для LoginWindow.xaml
-    /// </summary>
     public partial class LoginWindow : Window
     {
         private readonly LoginViewModel _viewModel;

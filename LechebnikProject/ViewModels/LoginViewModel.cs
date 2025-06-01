@@ -7,23 +7,16 @@ using LechebnikProject.Models;
 
 namespace LechebnikProject.ViewModels
 {
-    /// <summary>
-    /// ViewModel для окна авторизации.
-    /// </summary>
     public class LoginViewModel
     {
         public string Login { get; set; }
         public string Password { get; set; }
 
-        /// <summary>
-        /// Проверяет учетные данные и возвращает пользователя при успешной авторизации.
-        /// </summary>
-        /// <returns>Объект User или null</returns>
         public User Authenticate()
         {
             if (!ValidationHelper.IsNotEmpty(Login) || !ValidationHelper.IsNotEmpty(Password))
             {
-                MessageBox.Show("Логин и пароль не могут быть пустыми.");
+                MessageBox.Show("Логин и пароль не могут быть пустыми.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return null;
             }
 
@@ -36,7 +29,7 @@ namespace LechebnikProject.ViewModels
 
                 if (dataTable.Rows.Count == 0)
                 {
-                    MessageBox.Show("Некорректный логин или пароль.");
+                    MessageBox.Show("Некорректный логин или пароль.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return null;
                 }
 
@@ -46,17 +39,16 @@ namespace LechebnikProject.ViewModels
 
                 if (status == "Blocked")
                 {
-                    MessageBox.Show("Ваш аккаунт заблокирован. Обратитесь к администратору.");
+                    MessageBox.Show($"Ваш аккаунт заблокирован. Обратитесь к администратору: andrej_sok@mail.ru", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return null;
                 }
 
                 if (!PasswordHasher.VerifyPassword(Password, hashedPassword))
                 {
-                    MessageBox.Show("Неверный логин или пароль.");
+                    MessageBox.Show("Неверный логин или пароль.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return null;
                 }
 
-                // Создание объекта пользователя
                 User user = new User
                 {
                     UserId = Convert.ToInt32(row["UserId"]),
@@ -73,13 +65,13 @@ namespace LechebnikProject.ViewModels
                     Status = row["Status"].ToString()
                 };
 
-                MessageBox.Show("Авторизация успешна!");
+                MessageBox.Show("Аутентификация успешна.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
                 return user;
             }
             catch (Exception ex)
             {
-                Logger.LogError("Ошибка при авторизации.", ex);
-                MessageBox.Show("Произошла ошибка при авторизации.");
+                Logger.LogError("Ошибка при аутентификации.", ex);
+                MessageBox.Show("Произошла ошибка при аутентификации.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }

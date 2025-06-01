@@ -5,7 +5,10 @@
     <Grid Style="{StaticResource Grid}">
         <ScrollViewer>
             <StackPanel>
-                <Label Content="ПРОФИЛЬ" Style="{StaticResource MainHeader}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="ПРОФИЛЬ" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
                 <Label Content="Фамилия:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding CurrentUser.LastName}" Style="{StaticResource InputText}"/>
                 <Label Content="Имя:" Style="{StaticResource MainText}"/>

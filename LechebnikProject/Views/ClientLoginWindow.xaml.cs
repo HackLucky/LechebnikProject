@@ -1,6 +1,7 @@
 ﻿using LechebnikProject.Helpers;
 using LechebnikProject.Models;
 using LechebnikProject.ViewModels;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
@@ -20,24 +21,28 @@ namespace LechebnikProject.Views
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.Login = LoginTextBox.Text;
-            _viewModel.Code = CodePasswordBox.Password;
-            if (_viewModel.Authenticate())
+            try
             {
-                // Получаем данные клиента
-                string query = "SELECT * FROM Clients WHERE Login = @Login";
-                var parameters = new[] { new SqlParameter("@Login", _viewModel.Login) };
-                var dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
-                var row = dataTable.Rows[0];
-                AuthenticatedClient = new Client
+                _viewModel.Login = LoginTextBox.Text;
+                _viewModel.Code = CodePasswordBox.Password;
+                if (_viewModel.Authenticate())
                 {
-                    ClientId = row.Field<int>("ClientId"),
-                    Login = row.Field<string>("Login"),
-                    Discount = row.Field<decimal>("Discount")
-                };
-                DialogResult = true;
-                Close();
+                    string query = "SELECT * FROM Clients WHERE Login = @Login";
+                    var parameters = new[] { new SqlParameter("@Login", _viewModel.Login) };
+                    var dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
+                    var row = dataTable.Rows[0];
+                    AuthenticatedClient = new Client
+                    {
+                        ClientId = row.Field<int>("ClientId"),
+                        Login = row.Field<string>("Login"),
+                        Discount = row.Field<decimal>("Discount")
+                    };
+                    DialogResult = true;
+                    Close();
+                }
+                else { MessageBox.Show("Возможно, не верный логин или код.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);  }
             }
+            catch { MessageBox.Show("Произошла ошибка при попытке аутентифицироваться.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
@@ -48,6 +53,7 @@ namespace LechebnikProject.Views
                 LoginTextBox.Text = registerWindow.RegisteredLogin;
                 CodePasswordBox.Password = registerWindow.RegisteredCode;
             }
+            this.Close();
         }
 
         private void SkipButton_Click(object sender, RoutedEventArgs e)

@@ -5,7 +5,10 @@
     <Grid Style="{StaticResource Grid}">
         <ScrollViewer>
             <StackPanel>
-                <Label Content="РЕГИСТРАЦИЯ СОТРУДНИКА" Style="{StaticResource MainHeader}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="РЕГИСТРАЦИЯ СОТРУДНИКА" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
                 <Label Content="Фамилия:" Style="{StaticResource MainText}"/>
                 <TextBox x:Name="LastNameTextBox" Style="{StaticResource InputText}"/>
                 <Label Content="Имя:" Style="{StaticResource MainText}"/>
@@ -32,7 +35,7 @@
                 <StackPanel HorizontalAlignment="Center">
                     <Button Content="ЗАРЕГИСТРИРОВАТЬСЯ" Click="RegisterButton_Click" Style="{StaticResource Button}"/>
                     <Label Content="Если зарегистрированы, нажмите кнопку:" Style="{StaticResource Text}" HorizontalAlignment="Center"/>
-                    <Button Content="АВТОРИЗИРОВАТЬСЯ" Click="LoginButton_Click" Style="{StaticResource Button}"/>
+                    <Button Content="АУТЕНТИФИЦИРОВАТЬСЯ" Click="LoginButton_Click" Style="{StaticResource Button}"/>
                     <Button Content="ЗАКРЫТЬ ПРОГРАММУ" Click="CloseButton_Click" Style="{StaticResource Button}"/>
                 </StackPanel>
             </StackPanel>

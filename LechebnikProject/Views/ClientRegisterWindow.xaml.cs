@@ -36,6 +36,13 @@ namespace LechebnikProject.Views
             }
         }
 
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            var clientLoginWindow = new ClientLoginWindow();
+            clientLoginWindow.Show();
+            this.Close();
+        }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;

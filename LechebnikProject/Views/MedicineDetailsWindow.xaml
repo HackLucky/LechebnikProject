@@ -1,11 +1,14 @@
 ﻿<Window x:Class="LechebnikProject.Views.MedicineDetailsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно деталей препарата]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+        Title="ЛЕЧЕБНИК [окно информации о препарате]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
     <Grid Style="{StaticResource Grid}">
         <ScrollViewer>
             <StackPanel>
-                <Label Content="ДЕТАЛИ ПРЕПАРАТА" Style="{StaticResource MainHeader}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="ИНФОРМАЦИЯ О ПРЕПАРАТЕ" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
                 <Label Content="ID:" Style="{StaticResource MainText}"/>
                 <TextBlock Text="{Binding SelectedMedicine.MedicineId}" Style="{StaticResource TextBlock}"/>
                 <Label Content="Название:" Style="{StaticResource MainText}"/>

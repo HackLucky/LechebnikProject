@@ -9,7 +9,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="СВЯЗЬ С АДМИНИСТРАТОРОМ" Style="{StaticResource MainHeader}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="СВЯЗЬ С АДМИНИСТРАТОРОМ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
         <ListBox Grid.Row="1" ItemsSource="{Binding Messages}" Margin="10" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBox.ItemTemplate>
                 <DataTemplate>

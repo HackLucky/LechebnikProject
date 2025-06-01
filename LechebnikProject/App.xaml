@@ -116,12 +116,10 @@
                     <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="0" ShadowDepth="2"/>
                 </Setter.Value>
             </Setter>
-            <!-- Визуальное оформление с градиентной рамкой -->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Label">
                         <Border BorderThickness="10,5,10,5" Background="{TemplateBinding Background}">
-                            <!-- Градиентная рамка -->
                             <Border.BorderBrush>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <LinearGradientBrush.RelativeTransform>
@@ -133,11 +131,9 @@
                                     <GradientStop Color="DarkGray" Offset="0.85"/>
                                 </LinearGradientBrush>
                             </Border.BorderBrush>
-                            <!-- Эффект тени для рамки -->
                             <Border.Effect>
                                 <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Opacity="1"/>
                             </Border.Effect>
-                            <!-- Контент Label -->
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}" Margin="{TemplateBinding Padding}"/>
                         </Border>
                     </ControlTemplate>
@@ -145,7 +141,7 @@
             </Setter>
         </Style>
         <Style x:Key="MainText" TargetType="Label">
-            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontWeight" Value="ExtraBold"/>
             <Setter Property="VerticalAlignment" Value="Bottom"/>
@@ -223,16 +219,13 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <!-- При наведении -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Green"/>
                             </Trigger>
-                            <!-- При нажатии -->
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="DarkGreen"/>
                                 <Setter Property="Foreground" Value="LightGray"/>
                             </Trigger>
-                            <!-- При отключении -->
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Background" Value="DarkGray"/>
                             </Trigger>
@@ -258,16 +251,13 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <!-- При наведении -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Green"/>
                             </Trigger>
-                            <!-- При нажатии -->
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="DarkGreen"/>
                                 <Setter Property="Foreground" Value="LightGray"/>
                             </Trigger>
-                            <!-- При отключении -->
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Background" Value="DarkGray"/>
                             </Trigger>
@@ -293,16 +283,13 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <!-- При наведении -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Green"/>
                             </Trigger>
-                            <!-- При нажатии -->
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="DarkGreen"/>
                                 <Setter Property="Foreground" Value="LightGray"/>
                             </Trigger>
-                            <!-- При отключении -->
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Background" Value="DarkGray"/>
                             </Trigger>

@@ -4,9 +4,6 @@ using System.Windows;
 
 namespace LechebnikProject.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для PrescriptionInputWindow.xaml
-    /// </summary>
     public partial class PrescriptionInputWindow : Window
     {
         public PrescriptionInputWindow()

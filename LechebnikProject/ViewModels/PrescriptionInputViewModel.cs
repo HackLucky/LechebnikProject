@@ -5,7 +5,6 @@ using LechebnikProject.Views;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,6 +13,11 @@ namespace LechebnikProject.ViewModels
     public class PrescriptionInputViewModel : BaseViewModel
     {
         private readonly Medicine _medicine;
+
+        public Prescription Prescription { get; set; } = new Prescription();
+        public Medicine SelectedMedicine { get; set; }
+        public string QuantityText { get; set; }
+        public string SelectedDiscountType { get; set; }
 
         public string Series { get; set; }
         public string MedicalInstitution { get; set; }
@@ -36,14 +40,21 @@ namespace LechebnikProject.ViewModels
         {
             _medicine = medicine;
             AddCommand = new RelayCommand(Add);
-            CancelCommand = new RelayCommand(Cancel);
+            CancelCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
+
         }
 
         private void Add(object parameter)
         {
-            if (string.IsNullOrWhiteSpace(Series) || Quantity <= 0 || Quantity > _medicine.StockQuantity || string.IsNullOrWhiteSpace(DoctorLastName) || string.IsNullOrWhiteSpace(DoctorFirstName))
+            if (string.IsNullOrWhiteSpace(Series) || string.IsNullOrWhiteSpace(MedicalInstitution) || string.IsNullOrWhiteSpace(PatientLastName) || string.IsNullOrWhiteSpace(PatientFirstName)
+                || string.IsNullOrWhiteSpace(ICD10Code) || Quantity <= 0 || string.IsNullOrWhiteSpace(DiscountType) || string.IsNullOrWhiteSpace(DoctorLastName) || string.IsNullOrWhiteSpace(DoctorFirstName))
             {
-                MessageBox.Show("Проверьте введенные данные.");
+                MessageBox.Show("Проверьте введенные данные. Все обязательные поля должны быть заполнены.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (Quantity > _medicine.StockQuantity)
+            {
+                MessageBox.Show("Требуемое количество препарата превышает количество имеющихся на складе.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -65,40 +76,83 @@ namespace LechebnikProject.ViewModels
                 ExpiryDate = ExpiryDate
             };
 
-            string query = "INSERT INTO Prescriptions (Series, MedicalInstitution, PatientLastName, PatientFirstName, PatientMiddleName, ICD10Code, Quantity, DiscountType, DoctorLastName, DoctorFirstName, DoctorMiddleName, MedicineId, PharmacistId, ExpiryDate) VALUES (@Series, @MedicalInstitution, @PatientLastName, @PatientFirstName, @PatientMiddleName, @ICD10Code, @Quantity, @DiscountType, @DoctorLastName, @DoctorFirstName, @DoctorMiddleName, @MedicineId, @PharmacistId, @ExpiryDate)";
-            SqlParameter[] parameters = {
-                new SqlParameter("@Series", prescription.Series),
-                new SqlParameter("@MedicalInstitution", prescription.MedicalInstitution),
-                new SqlParameter("@PatientLastName", prescription.PatientLastName),
-                new SqlParameter("@PatientFirstName", prescription.PatientFirstName),
-                new SqlParameter("@PatientMiddleName", prescription.PatientMiddleName ?? (object)DBNull.Value),
-                new SqlParameter("@ICD10Code", prescription.ICD10Code),
-                new SqlParameter("@Quantity", prescription.Quantity),
-                new SqlParameter("@DiscountType", prescription.DiscountType),
-                new SqlParameter("@DoctorLastName", prescription.DoctorLastName),
-                new SqlParameter("@DoctorFirstName", prescription.DoctorFirstName),
-                new SqlParameter("@DoctorMiddleName", prescription.DoctorMiddleName ?? (object)DBNull.Value),
-                new SqlParameter("@MedicineId", prescription.MedicineId),
-                new SqlParameter("@PharmacistId", prescription.PharmacistId),
-                new SqlParameter("@ExpiryDate", prescription.ExpiryDate)
+            const string checkSql = "SELECT COUNT(*) FROM Prescriptions WHERE Series = @Series";
+            var checkPrm = new[] { new SqlParameter("@Series", Series) };
+            int exists = Convert.ToInt32(DatabaseHelper.ExecuteScalar(checkSql, checkPrm));
+            if (exists > 0)
+            {
+                MessageBox.Show("Рецепт с такой серией уже зарегистрирован.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string insertPrescriptionQuery = @"INSERT INTO Prescriptions (Series, MedicalInstitution, PatientLastName, PatientFirstName, PatientMiddleName,
+                    ICD10Code, Quantity, DiscountType, DoctorLastName, DoctorFirstName, DoctorMiddleName, MedicineId, PharmacistId, ExpiryDate)
+                OUTPUT INSERTED.PrescriptionId
+                VALUES (@Series, @MedicalInstitution, @PatientLastName, @PatientFirstName, @PatientMiddleName, @ICD10Code, @Quantity,
+                        @DiscountType, @DoctorLastName, @DoctorFirstName, @DoctorMiddleName, @MedicineId, @PharmacistId, @ExpiryDate)";
+            var parameters = new[]
+            {
+                new SqlParameter("@Series", Prescription.Series),
+                new SqlParameter("@MedicalInstitution", Prescription.MedicalInstitution),
+                new SqlParameter("@PatientLastName", Prescription.PatientLastName),
+                new SqlParameter("@PatientFirstName", Prescription.PatientFirstName),
+                new SqlParameter("@PatientMiddleName", (object)Prescription.PatientMiddleName ?? DBNull.Value),
+                new SqlParameter("@ICD10Code", Prescription.ICD10Code),
+                new SqlParameter("@Quantity", Quantity),
+                new SqlParameter("@DiscountType", SelectedDiscountType),
+                new SqlParameter("@DoctorLastName", Prescription.DoctorLastName),
+                new SqlParameter("@DoctorFirstName", Prescription.DoctorFirstName),
+                new SqlParameter("@DoctorMiddleName", (object)Prescription.DoctorMiddleName ?? DBNull.Value),
+                new SqlParameter("@MedicineId", SelectedMedicine.MedicineId),
+                new SqlParameter("@PharmacistId", AppContext.CurrentUser.UserId),
+                new SqlParameter("@ExpiryDate", Prescription.ExpiryDate)
             };
+            try
+            {
+                int prescriptionId = Convert.ToInt32(DatabaseHelper.ExecuteScalar(insertPrescriptionQuery, parameters));
 
-            DatabaseHelper.ExecuteNonQuery(query, parameters);
-            AppContext.CartItems.Add(new CartItem { Medicine = _medicine, Quantity = Quantity, IsByPrescription = true, Prescription = prescription });
-            GoBack();
-        }
+                decimal basePrice = SelectedMedicine.Price * Quantity;
+                decimal finalPrice = basePrice;
+                bool isPaid = false;
 
-        private void Cancel(object parameter)
-        {
-            GoBack();
-        }
+                if (SelectedDiscountType == "50%")
+                {
+                    finalPrice = basePrice * 0.5m;
+                    MessageBox.Show($"Препарат с рецептом добавлен в корзину по скидке 50%. Итого: {finalPrice} руб.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (SelectedDiscountType == "Бесплатно")
+                {
+                    isPaid = true;
+                    MessageBox.Show("Препарат предоставлен бесплатно по рецепту. Заказ оформлен и занесён в отчёт.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
 
-        private void GoBack()
-        {
-            var medicineListWindow = new MedicineListWindow();
-            medicineListWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is PrescriptionInputWindow))?.Close();
-            Application.Current.MainWindow = medicineListWindow;
+                    string insertOrderSql = @"
+                    INSERT INTO Orders (UserId, OrderDate, TotalAmount, PaymentMethod, DiscountApplied, DiscountPercentage)
+                    VALUES (@UserId, GETDATE(), 0, 'Бесплатно', 1, 100)";
+                    var orderParams = new[]
+                    {
+                    new SqlParameter("@UserId", AppContext.CurrentUser.UserId)
+                };
+                    DatabaseHelper.ExecuteNonQuery(insertOrderSql, orderParams);
+
+                    WindowManager.ShowWindow<MedicineListWindow>();
+                    return;
+                }
+
+                AppContext.CartItems.Add(new CartItem
+                {
+                    Medicine = SelectedMedicine,
+                    Quantity = Quantity,
+                    IsByPrescription = true,
+                    PrescriptionId = prescriptionId
+                });
+
+                WindowManager.ShowWindow<MedicineListWindow>();
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogError("Ошибка при добавлении рецепта.", ex);
+                MessageBox.Show("Ошибка сохранения рецепта. Попробуйте ещё раз или обратитесь к администратору.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

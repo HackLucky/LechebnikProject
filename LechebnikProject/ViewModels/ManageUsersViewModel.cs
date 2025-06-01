@@ -1,6 +1,8 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
+using LechebnikProject.Models;
 using LechebnikProject.Views;
+using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,133 +14,138 @@ namespace LechebnikProject.ViewModels
 {
     public class ManageUsersViewModel : BaseViewModel
     {
-        private string _searchText;
-        public ObservableCollection<object> CombinedList { get; set; }
-        public object SelectedItem { get; set; }
-        public decimal SelectedDiscount { get; set; }
-        public ICommand AddUserCommand { get; }
+        public ObservableCollection<object> AllEntities { get; set; } = new ObservableCollection<object>();
+        public object SelectedEntity { get; set; }
+
+        public ICommand ToggleBlockCommand { get; }
         public ICommand ChangeRoleCommand { get; }
-        public ICommand BlockUserCommand { get; }
-        public ICommand GoBackCommand { get; }
         public ICommand ChangeDiscountCommand { get; }
+        public ICommand GoBackCommand { get; }
 
         public ManageUsersViewModel()
         {
-            LoadCombinedList();
-            AddUserCommand = new RelayCommand(AddUser);
-            ChangeRoleCommand = new RelayCommand(ChangeRole);
-            BlockUserCommand = new RelayCommand(BlockUser);
-            GoBackCommand = new RelayCommand(GoBack);
-            ChangeDiscountCommand = new RelayCommand(ChangeDiscount);
+            LoadAllData();
+            ToggleBlockCommand = new RelayCommand(ToggleBlock, o => SelectedEntity != null);
+            ChangeRoleCommand = new RelayCommand(ChangeRole, o => SelectedEntity is User);
+            ChangeDiscountCommand = new RelayCommand(ChangeDiscount, o => SelectedEntity is Client);
+            GoBackCommand = new RelayCommand(_ => WindowManager.ShowWindow<AdminPanelWindow>());
         }
 
-        public string SearchText
+        private void LoadAllData()
         {
-            get => _searchText;
-            set
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                LoadCombinedList(_searchText);
-            }
+            AllEntities.Clear();
+            LoadUsers();
+            LoadClients();
         }
 
-        private void LoadCombinedList(string searchText = "")
+        private void LoadUsers()
         {
-            CombinedList = new ObservableCollection<object>();
-            string userQuery = "SELECT * FROM Users WHERE Login LIKE @SearchText OR LastName LIKE @SearchText";
-            string clientQuery = "SELECT * FROM Clients WHERE Login LIKE @SearchText OR LastName LIKE @SearchText";
-
-            // Отдельные параметры для запроса пользователей
-            var userParams = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
-            DataTable userTable = DatabaseHelper.ExecuteQuery(userQuery, userParams);
-            foreach (DataRow row in userTable.Rows)
+            string query = "SELECT * FROM Users";
+            DataTable table = DatabaseHelper.ExecuteQuery(query);
+            foreach (DataRow row in table.Rows)
             {
-                CombinedList.Add(new
+                AllEntities.Add(new User
                 {
-                    Type = "User",
-                    UserId = row.Field<int>("UserId"),
-                    Login = row.Field<string>("Login"),
-                    LastName = row.Field<string>("LastName"),
-                    Role = row.Field<string>("Role"),
-                    Status = row.Field<string>("Status"),
-                    Discount = "N/A"
-                });
-            }
-
-            // Отдельные параметры для запроса клиентов
-            var clientParams = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
-            DataTable clientTable = DatabaseHelper.ExecuteQuery(clientQuery, clientParams);
-            foreach (DataRow row in clientTable.Rows)
-            {
-                CombinedList.Add(new
-                {
-                    Type = "Client",
-                    UserId = row.Field<int>("ClientId"),
-                    Login = row.Field<string>("Login"),
-                    LastName = row.Field<string>("LastName"),
-                    Role = "Client",
-                    Status = row.Field<string>("Status"), // Предполагается, что колонка Status добавлена в таблицу Clients
-                    Discount = row.Field<decimal>("Discount").ToString("F2") + "%"
+                    UserId = (int)row["UserId"],
+                    LastName = row["LastName"].ToString(),
+                    FirstName = row["FirstName"].ToString(),
+                    MiddleName = row["MiddleName"].ToString(),
+                    PhoneNumber = row["PhoneNumber"].ToString(),
+                    Email = row["Email"].ToString(),
+                    Position = row["Position"].ToString(),
+                    PharmacyAddress = row["PharmacyAddress"].ToString(),
+                    Login = row["Login"].ToString(),
+                    PasswordHash = row["PasswordHash"].ToString(),
+                    Role = row["Role"].ToString(),
+                    Status = row["Status"].ToString()
                 });
             }
         }
 
-        private void AddUser(object parameter) { /* Реализация добавления */ }
-
-        private void ChangeRole(object parameter)
+        private void LoadClients()
         {
-            if (SelectedItem == null) return;
-            var item = SelectedItem as dynamic;
-            if (item.Type == "Client")
+            string query = "SELECT * FROM Clients";
+            DataTable table = DatabaseHelper.ExecuteQuery(query);
+            foreach (DataRow row in table.Rows)
             {
-                MessageBox.Show("Нельзя изменить роль клиента!");
-                return;
+                AllEntities.Add(new Client
+                {
+                    ClientId = (int)row["ClientId"],
+                    LastName = row["LastName"].ToString(),
+                    FirstName = row["FirstName"].ToString(),
+                    MiddleName = row["MiddleName"].ToString(),
+                    Login = row["Login"].ToString(),
+                    Code = row["Code"].ToString(),
+                    Discount = (decimal)row["Discount"],
+                    Status = row["Status"].ToString()
+                });
             }
-            // Логика смены роли для пользователей
         }
 
-        private void BlockUser(object parameter)
+        private void ToggleBlock(object obj)
         {
-            if (SelectedItem == null) return;
-            var item = SelectedItem as dynamic;
-            string newStatus = item.Status == "Active" ? "Blocked" : "Active";
-            string query = item.Type == "User" ?
-                "UPDATE Users SET Status = @Status WHERE UserId = @Id" :
-                "UPDATE Clients SET Status = @Status WHERE ClientId = @Id"; // Примечание: Нужно добавить колонку Status в Clients
-            var parameters = new[]
+            if (SelectedEntity is User user)
             {
-                new SqlParameter("@Status", newStatus),
-                new SqlParameter("@Id", item.UserId)
+                string newStatus = user.Status == "Active" ? "Blocked" : "Active";
+                string query = "UPDATE Users SET Status = @Status WHERE UserId = @Id";
+                var prm = new[]
+                {
+                    new SqlParameter("@Status", newStatus),
+                    new SqlParameter("@Id", user.UserId)
+                };
+                DatabaseHelper.ExecuteNonQuery(query, prm);
+                user.Status = newStatus;
+                MessageBox.Show($"Пользователь {user.Login} теперь: {newStatus}.", "Информация");
+            }
+            else if (SelectedEntity is Client client)
+            {
+                string newStatus = client.Status == "Active" ? "Blocked" : "Active";
+                string query = "UPDATE Clients SET Status = @Status WHERE ClientId = @Id";
+                var prm = new[]
+                {
+                    new SqlParameter("@Status", newStatus),
+                    new SqlParameter("@Id", client.ClientId)
+                };
+                DatabaseHelper.ExecuteNonQuery(query, prm);
+                client.Status = newStatus;
+                MessageBox.Show($"Клиент {client.Login} теперь: {newStatus}.", "Информация");
+            }
+        }
+
+        private void ChangeRole(object obj)
+        {
+            if (!(SelectedEntity is User user)) return;
+            string newRole = user.Role == "Admin" ? "User" : "Admin";
+            string query = "UPDATE Users SET Role = @Role WHERE UserId = @Id";
+            var prm = new[]
+            {
+                new SqlParameter("@Role", newRole),
+                new SqlParameter("@Id", user.UserId)
             };
-            DatabaseHelper.ExecuteNonQuery(query, parameters);
-            LoadCombinedList();
+            DatabaseHelper.ExecuteNonQuery(query, prm);
+            user.Role = newRole;
+            MessageBox.Show($"Роль пользователя {user.Login} изменена на {newRole}.", "Информация");
         }
 
-        private void ChangeDiscount(object parameter)
+        private void ChangeDiscount(object obj)
         {
-            if (SelectedItem == null) return;
-            var item = SelectedItem as dynamic;
-            if (item.Type == "User")
+            if (!(SelectedEntity is Client client)) return;
+
+            string input = Interaction.InputBox("Введите новую скидку (15, 25, 50, 75)", "Изменение скидки", client.Discount.ToString());
+            if (!decimal.TryParse(input, out decimal discount) || !new[] { 15m, 25m, 50m, 75m }.Contains(discount))
             {
-                MessageBox.Show("Нельзя установить скидку для пользователя или администратора!");
+                MessageBox.Show("Некорректное значение скидки.", "Ошибка");
                 return;
             }
             string query = "UPDATE Clients SET Discount = @Discount WHERE ClientId = @Id";
-            var parameters = new[]
+            var prm = new[]
             {
-                new SqlParameter("@Discount", SelectedDiscount),
-                new SqlParameter("@Id", item.UserId)
+                new SqlParameter("@Discount", discount),
+                new SqlParameter("@Id", client.ClientId)
             };
-            DatabaseHelper.ExecuteNonQuery(query, parameters);
-            LoadCombinedList();
-        }
-
-        private void GoBack(object parameter)
-        {
-            var adminPanelWindow = new AdminPanelWindow();
-            adminPanelWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is ManageUsersWindow))?.Close();
+            DatabaseHelper.ExecuteNonQuery(query, prm);
+            client.Discount = discount;
+            MessageBox.Show("Скидка обновлена.", "Информация");
         }
     }
 }

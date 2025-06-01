@@ -4,8 +4,6 @@ using LechebnikProject.Views;
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace LechebnikProject.ViewModels
@@ -17,6 +15,8 @@ namespace LechebnikProject.ViewModels
 
         public MedicineDetailsViewModel(int medicineId)
         {
+            GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
+
             string query = @"
             SELECT m.*, man.Name AS ManufacturerName, man.Country AS ManufacturerCountry, 
                    sup.Name AS SupplierName, sup.Country AS SupplierCountry 
@@ -52,15 +52,7 @@ namespace LechebnikProject.ViewModels
                     Price = Convert.ToDecimal(row["Price"])
                 };
             }
-            GoBackCommand = new RelayCommand(GoBack);
-        }
-
-        private void GoBack(object parameter)
-        {
-            var medicineListWindow = new MedicineListWindow();
-            medicineListWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is MedicineDetailsWindow))?.Close();
-            Application.Current.MainWindow = medicineListWindow;
+            GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
         }
     }
 }

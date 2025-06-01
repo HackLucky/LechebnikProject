@@ -41,6 +41,7 @@
     <StartupObject>LechebnikProject.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.5.4.0\lib\net46\NLog.dll</HintPath>
     </Reference>
@@ -85,6 +86,7 @@
     <Compile Include="ViewModels\ClientLoginViewModel.cs" />
     <Compile Include="ViewModels\ClientRegisterViewModel.cs" />
     <Compile Include="ViewModels\ContactAdminViewModel.cs" />
+    <Compile Include="ViewModels\EditMedicineViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
     <Compile Include="ViewModels\ManageMedicinesViewModel.cs" />
@@ -119,6 +121,9 @@
     </Compile>
     <Compile Include="Views\ContactAdminWindow.xaml.cs">
       <DependentUpon>ContactAdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditMedicineWindow.xaml.cs">
+      <DependentUpon>EditMedicineWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -195,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ContactAdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditMedicineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

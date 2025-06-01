@@ -5,30 +5,34 @@
     <Grid Style="{StaticResource Grid}">
         <ScrollViewer>
             <StackPanel>
-                <Label Content="ПРОДАЖА ПО РЕЦЕПТУ" Style="{StaticResource MainHeader}"/>
-                <Label Content="Серия рецепта:" Style="{StaticResource MainText}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="ПРОДАЖА ПО РЕЦЕПТУ" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
+                <Label Content="Обязательные для заполнения поля помечены символом звёздочки (*)." Style="{StaticResource Text}"/>
+                <Label Content="*Серия рецепта:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding Series}" Style="{StaticResource InputText}"/>
-                <Label Content="Медицинское учреждение, выдавшее рецепт:" Style="{StaticResource MainText}"/>
+                <Label Content="*Медицинское учреждение, выдавшее рецепт:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding MedicalInstitution}" Style="{StaticResource InputText}"/>
-                <Label Content="Фамилия пациента:" Style="{StaticResource MainText}"/>
+                <Label Content="*Фамилия пациента:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding PatientLastName}" Style="{StaticResource InputText}"/>
-                <Label Content="Имя пациента:" Style="{StaticResource MainText}"/>
+                <Label Content="*Имя пациента:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding PatientFirstName}" Style="{StaticResource InputText}"/>
                 <Label Content="Отчество пациента:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding PatientMiddleName}" Style="{StaticResource InputText}"/>
-                <Label Content="Код МКБ-10:" Style="{StaticResource MainText}"/>
+                <Label Content="*Код МКБ-10:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding ICD10Code}" Style="{StaticResource InputText}"/>
-                <Label Content="Количество разрешённых для продажи препаратов:" Style="{StaticResource MainText}"/>
+                <Label Content="*Количество разрешённых для продажи препаратов:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding Quantity}" Style="{StaticResource InputText}"/>
-                <Label Content="Требуемая скидка:" Style="{StaticResource MainText}"/>
+                <Label Content="*Требуемая скидка:" Style="{StaticResource MainText}"/>
                 <ComboBox ItemsSource="{Binding DiscountTypes}" SelectedItem="{Binding DiscountType}"/>
-                <Label Content="Фамилия врача:" Style="{StaticResource MainText}"/>
+                <Label Content="*Фамилия врача:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding DoctorLastName}" Style="{StaticResource InputText}"/>
-                <Label Content="Имя врача:" Style="{StaticResource MainText}"/>
+                <Label Content="*Имя врача:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding DoctorFirstName}" Style="{StaticResource InputText}"/>
-                <Label Content="Отчество врача (при наличии):" Style="{StaticResource MainText}"/>
+                <Label Content="Отчество врача:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding DoctorMiddleName}" Style="{StaticResource InputText}"/>
-                <Label Content="Срок действия рецепта:" Style="{StaticResource MainText}"/>
+                <Label Content="*Срок действия рецепта:" Style="{StaticResource MainText}"/>
                 <DatePicker SelectedDate="{Binding ExpiryDate}" Margin="0,0,0,10"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                     <Button Content="ПОДТВЕРДИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}"/>
