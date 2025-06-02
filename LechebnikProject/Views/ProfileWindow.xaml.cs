@@ -8,6 +8,7 @@ namespace LechebnikProject.Views
         public ProfileWindow()
         {
             InitializeComponent();
+            LastNameTextBox.Focus();
             DataContext = new ProfileViewModel();
         }
     }

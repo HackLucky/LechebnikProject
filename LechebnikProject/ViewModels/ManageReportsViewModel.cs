@@ -1,6 +1,8 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
 using LechebnikProject.Views;
+using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
@@ -10,14 +12,8 @@ namespace LechebnikProject.ViewModels
 {
     public class ManageReportsViewModel : BaseViewModel
     {
-        private DataTable _reports;
         private DataRowView _selectedReport;
-
-        public DataTable Reports
-        {
-            get => _reports;
-            set => SetProperty(ref _reports, value);
-        }
+        public ObservableCollection<OrderReport> Reports { get; set; }
 
         public DataRowView SelectedReport
         {
@@ -38,14 +34,48 @@ namespace LechebnikProject.ViewModels
         private void LoadReports()
         {
             string query = @"
-                SELECT 
-                    o.OrderId AS [Номер],
-                    CONVERT(varchar(10), o.OrderDate, 104) + ' ' + CONVERT(varchar(8), o.OrderDate, 108) AS [Дата и время],
-                    o.TotalAmount AS [Сумма],
-                    u.LastName AS [Фамилия], u.FirstName AS [Имя], u.MiddleName AS [Отчество]
+                SELECT o.OrderId, 
+                       u.LastName + ' ' + u.FirstName + ' ' + ISNULL(u.MiddleName, '') AS UserFullName,
+                       ISNULL(c.LastName + ' ' + c.FirstName + ' ' + ISNULL(c.MiddleName, ''), 'Не указан') AS ClientFullName,
+                       (SELECT SUM(Quantity) FROM OrderDetails od WHERE od.OrderId = o.OrderId) AS TotalItems,
+                       o.PaymentMethod,
+                       o.TotalAmount AS TotalWithoutDiscount,
+                       ISNULL(o.DiscountPercentage, 0) AS DiscountPercentage,
+                       o.TotalAmount * (1 - ISNULL(o.DiscountPercentage, 0) / 100) AS TotalWithDiscount,
+                       CONVERT(varchar, o.OrderDate, 104) + ' ' + CONVERT(varchar, o.OrderDate, 108) AS OrderDateTime
                 FROM Orders o
-                JOIN Users u ON o.UserId = u.UserId";
-            Reports = DatabaseHelper.ExecuteQuery(query);
+                JOIN Users u ON o.UserId = u.UserId
+                LEFT JOIN Clients c ON o.ClientId = c.ClientId";
+            DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+            Reports = new ObservableCollection<OrderReport>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Reports.Add(new OrderReport
+                {
+                    OrderId = Convert.ToInt32(row["OrderId"]),
+                    UserFullName = row["UserFullName"].ToString(),
+                    ClientFullName = row["ClientFullName"].ToString(),
+                    TotalItems = Convert.ToInt32(row["TotalItems"]),
+                    PaymentMethod = row["PaymentMethod"].ToString(),
+                    TotalWithoutDiscount = Convert.ToDecimal(row["TotalWithoutDiscount"]),
+                    DiscountPercentage = Convert.ToDecimal(row["DiscountPercentage"]),
+                    TotalWithDiscount = Convert.ToDecimal(row["TotalWithDiscount"]),
+                    OrderDateTime = row["OrderDateTime"].ToString()
+                });
+            }
+        }
+
+        public class OrderReport
+        {
+            public int OrderId { get; set; }
+            public string UserFullName { get; set; }
+            public string ClientFullName { get; set; }
+            public int TotalItems { get; set; }
+            public string PaymentMethod { get; set; }
+            public decimal TotalWithoutDiscount { get; set; }
+            public decimal DiscountPercentage { get; set; }
+            public decimal TotalWithDiscount { get; set; }
+            public string OrderDateTime { get; set; }
         }
 
         private bool CanDeleteReport(object parameter) => SelectedReport != null;

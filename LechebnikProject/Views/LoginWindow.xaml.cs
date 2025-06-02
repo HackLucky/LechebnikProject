@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using LechebnikProject.ViewModels;
 using LechebnikProject.Models;
+using System.Windows.Controls;
 
 namespace LechebnikProject.Views
 {
@@ -11,6 +12,7 @@ namespace LechebnikProject.Views
         public LoginWindow()
         {
             InitializeComponent();
+            LoginTextBox.Focus();
             _viewModel = new LoginViewModel();
         }
 

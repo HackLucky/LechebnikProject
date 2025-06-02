@@ -11,7 +11,7 @@
                 </StackPanel>
                 <Label Content="Обязательные для заполнения поля помечены символом звёздочки (*)." Style="{StaticResource Text}"/>
                 <Label Content="*Серия рецепта:" Style="{StaticResource MainText}"/>
-                <TextBox Text="{Binding Series}" Style="{StaticResource InputText}"/>
+                <TextBox x:Name="SeriesTextBox" Text="{Binding Series}" Style="{StaticResource InputText}"/>
                 <Label Content="*Медицинское учреждение, выдавшее рецепт:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding MedicalInstitution}" Style="{StaticResource InputText}"/>
                 <Label Content="*Фамилия пациента:" Style="{StaticResource MainText}"/>

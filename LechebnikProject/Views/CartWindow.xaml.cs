@@ -8,6 +8,7 @@ namespace LechebnikProject.Views
         public CartWindow()
         {
             InitializeComponent();
+            SearchTextBox.Focus();
             DataContext = new CartViewModel();
         }
     }

@@ -10,7 +10,7 @@
                     <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
                 </StackPanel>
                 <Label Content="Фамилия:" Style="{StaticResource MainText}"/>
-                <TextBox Text="{Binding CurrentUser.LastName}" Style="{StaticResource InputText}"/>
+                <TextBox x:Name="LastNameTextBox" Text="{Binding CurrentUser.LastName}" Style="{StaticResource InputText}"/>
                 <Label Content="Имя:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding CurrentUser.FirstName}" Style="{StaticResource InputText}"/>
                 <Label Content="Отчество:" Style="{StaticResource MainText}"/>

@@ -8,6 +8,7 @@ namespace LechebnikProject.Views
         public EditMedicineWindow()
         {
             InitializeComponent();
+            NameTextBox.Focus();
             DataContext = new EditMedicineViewModel();
         }
     }

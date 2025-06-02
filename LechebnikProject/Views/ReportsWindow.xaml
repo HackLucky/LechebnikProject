@@ -15,9 +15,9 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
         </StackPanel>
-        <DataGrid Grid.Row="2" ItemsSource="{Binding SalesData}" AutoGenerateColumns="True" IsReadOnly="True" Margin="10,0,10,0"/>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Reports}" AutoGenerateColumns="True" IsReadOnly="True" Margin="10,0,10,0"/>
         <Button Grid.Row="3" Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

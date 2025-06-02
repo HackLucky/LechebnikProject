@@ -8,6 +8,7 @@ namespace LechebnikProject.Views
         public PrescriptionsWindow()
         {
             InitializeComponent();
+            SearchTextBox.Focus();
             DataContext = new PrescriptionsViewModel();
         }
     }

@@ -3,6 +3,7 @@ using LechebnikProject.Helpers;
 using LechebnikProject.Models;
 using LechebnikProject.Views;
 using Microsoft.VisualBasic;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,21 +15,24 @@ namespace LechebnikProject.ViewModels
 {
     public class ManageUsersViewModel : BaseViewModel
     {
-        public ObservableCollection<object> AllEntities { get; set; } = new ObservableCollection<object>();
+        public ObservableCollection<object> AllEntities { get; set; }
         public object SelectedEntity { get; set; }
 
-        public ICommand ToggleBlockCommand { get; }
+        public ICommand DelUserCommand { get; }
         public ICommand ChangeRoleCommand { get; }
         public ICommand ChangeDiscountCommand { get; }
+        public ICommand ToggleBlockCommand { get; }
         public ICommand GoBackCommand { get; }
 
         public ManageUsersViewModel()
         {
-            LoadAllData();
+            AllEntities = new ObservableCollection<object>();
+            DelUserCommand = new RelayCommand(DeleteEntity);
             ToggleBlockCommand = new RelayCommand(ToggleBlock, o => SelectedEntity != null);
             ChangeRoleCommand = new RelayCommand(ChangeRole, o => SelectedEntity is User);
             ChangeDiscountCommand = new RelayCommand(ChangeDiscount, o => SelectedEntity is Client);
             GoBackCommand = new RelayCommand(_ => WindowManager.ShowWindow<AdminPanelWindow>());
+            LoadAllData();
         }
 
         private void LoadAllData()
@@ -40,76 +44,80 @@ namespace LechebnikProject.ViewModels
 
         private void LoadUsers()
         {
-            string query = "SELECT * FROM Users";
+            string query = "SELECT UserId, LastName, FirstName, MiddleName, Login, Role, Status FROM Users";
             DataTable table = DatabaseHelper.ExecuteQuery(query);
             foreach (DataRow row in table.Rows)
             {
-                AllEntities.Add(new User
+                AllEntities.Add(new
                 {
-                    UserId = (int)row["UserId"],
-                    LastName = row["LastName"].ToString(),
-                    FirstName = row["FirstName"].ToString(),
-                    MiddleName = row["MiddleName"].ToString(),
-                    PhoneNumber = row["PhoneNumber"].ToString(),
-                    Email = row["Email"].ToString(),
-                    Position = row["Position"].ToString(),
-                    PharmacyAddress = row["PharmacyAddress"].ToString(),
-                    Login = row["Login"].ToString(),
-                    PasswordHash = row["PasswordHash"].ToString(),
-                    Role = row["Role"].ToString(),
-                    Status = row["Status"].ToString()
+                    Type = "User",
+                    Id = row["UserId"],
+                    LastName = row["LastName"]?.ToString() ?? "",
+                    FirstName = row["FirstName"]?.ToString() ?? "",
+                    MiddleName = row["MiddleName"]?.ToString(),
+                    Login = row["Login"]?.ToString() ?? "",
+                    Role = row["Role"]?.ToString() ?? "",
+                    Status = row["Status"]?.ToString() ?? "Active",
+                    Discount = (decimal?)null
                 });
             }
         }
 
         private void LoadClients()
         {
-            string query = "SELECT * FROM Clients";
+            string query = "SELECT ClientId, LastName, FirstName, MiddleName, Login, Discount, Status FROM Clients";
             DataTable table = DatabaseHelper.ExecuteQuery(query);
             foreach (DataRow row in table.Rows)
             {
-                AllEntities.Add(new Client
+                AllEntities.Add(new
                 {
-                    ClientId = (int)row["ClientId"],
-                    LastName = row["LastName"].ToString(),
-                    FirstName = row["FirstName"].ToString(),
-                    MiddleName = row["MiddleName"].ToString(),
-                    Login = row["Login"].ToString(),
-                    Code = row["Code"].ToString(),
-                    Discount = (decimal)row["Discount"],
-                    Status = row["Status"].ToString()
+                    Type = "Client",
+                    Id = row["ClientId"],
+                    LastName = row["LastName"]?.ToString() ?? "",
+                    FirstName = row["FirstName"]?.ToString() ?? "",
+                    MiddleName = row["MiddleName"]?.ToString(),
+                    Login = row["Login"]?.ToString() ?? "",
+                    Role = (string)null,
+                    Status = row["Status"]?.ToString() ?? "Active",
+                    Discount = row["Discount"] != DBNull.Value ? (decimal?)Convert.ToDecimal(row["Discount"]) : null
                 });
             }
         }
 
-        private void ToggleBlock(object obj)
+        private void DeleteEntity(object parameter)
         {
-            if (SelectedEntity is User user)
+            if (SelectedEntity == null) return;
+            string type = (string)SelectedEntity.GetType().GetProperty("Type").GetValue(SelectedEntity);
+            int id = (int)SelectedEntity.GetType().GetProperty("Id").GetValue(SelectedEntity);
+
+            string query = type == "User"
+                ? "DELETE FROM Users WHERE UserId = @Id"
+                : "DELETE FROM Clients WHERE ClientId = @Id";
+            var prm = new[] { new SqlParameter("@Id", id) };
+            DatabaseHelper.ExecuteNonQuery(query, prm);
+            MessageBox.Show($"{type} удалён.", "Информация");
+            LoadAllData();
+        }
+
+        private void ToggleBlock(object parameter)
+        {
+            if (SelectedEntity == null) return;
+            string type = (string)SelectedEntity.GetType().GetProperty("Type").GetValue(SelectedEntity);
+            int id = (int)SelectedEntity.GetType().GetProperty("Id").GetValue(SelectedEntity);
+            string currentStatus = (string)SelectedEntity.GetType().GetProperty("Status").GetValue(SelectedEntity);
+            string newStatus = currentStatus == "Active" ? "Blocked" : "Active";
+
+            string query = type == "User"
+                ? "UPDATE Users SET Status = @Status WHERE UserId = @Id"
+                : "UPDATE Clients SET Status = @Status WHERE ClientId = @Id";
+            var prm = new[]
             {
-                string newStatus = user.Status == "Active" ? "Blocked" : "Active";
-                string query = "UPDATE Users SET Status = @Status WHERE UserId = @Id";
-                var prm = new[]
-                {
-                    new SqlParameter("@Status", newStatus),
-                    new SqlParameter("@Id", user.UserId)
-                };
-                DatabaseHelper.ExecuteNonQuery(query, prm);
-                user.Status = newStatus;
-                MessageBox.Show($"Пользователь {user.Login} теперь: {newStatus}.", "Информация");
-            }
-            else if (SelectedEntity is Client client)
-            {
-                string newStatus = client.Status == "Active" ? "Blocked" : "Active";
-                string query = "UPDATE Clients SET Status = @Status WHERE ClientId = @Id";
-                var prm = new[]
-                {
-                    new SqlParameter("@Status", newStatus),
-                    new SqlParameter("@Id", client.ClientId)
-                };
-                DatabaseHelper.ExecuteNonQuery(query, prm);
-                client.Status = newStatus;
-                MessageBox.Show($"Клиент {client.Login} теперь: {newStatus}.", "Информация");
-            }
+                new SqlParameter("@Status", newStatus),
+                new SqlParameter("@Id", id)
+            };
+            DatabaseHelper.ExecuteNonQuery(query, prm);
+            MessageBox.Show($"{type} {SelectedEntity.GetType().GetProperty("Login").GetValue(SelectedEntity)} теперь: {newStatus}.", "Информация");
+            LoadAllData();
         }
 
         private void ChangeRole(object obj)
@@ -125,6 +133,7 @@ namespace LechebnikProject.ViewModels
             DatabaseHelper.ExecuteNonQuery(query, prm);
             user.Role = newRole;
             MessageBox.Show($"Роль пользователя {user.Login} изменена на {newRole}.", "Информация");
+            LoadAllData();
         }
 
         private void ChangeDiscount(object obj)
@@ -145,6 +154,7 @@ namespace LechebnikProject.ViewModels
             };
             DatabaseHelper.ExecuteNonQuery(query, prm);
             client.Discount = discount;
+            LoadAllData();
             MessageBox.Show("Скидка обновлена.", "Информация");
         }
     }

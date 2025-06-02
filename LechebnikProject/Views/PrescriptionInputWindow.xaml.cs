@@ -9,6 +9,7 @@ namespace LechebnikProject.Views
         public PrescriptionInputWindow()
         {
             InitializeComponent();
+            SeriesTextBox.Focus();
         }
 
         public PrescriptionInputWindow(Medicine medicine) : this()

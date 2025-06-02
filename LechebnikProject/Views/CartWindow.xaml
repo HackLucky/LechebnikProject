@@ -15,19 +15,21 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
         </StackPanel>
         <DataGrid Grid.Row="2" ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Medicine.MedicineId}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Препарат (название, лекарственная форма, вес/объём)" Binding="{Binding Medicine.Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Приобретаемое количество" Binding="{Binding Quantity}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="По рецепту" Binding="{Binding IsByPrescription, Converter={StaticResource BooleanToStringConverter}}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Серия рецепта" Binding="{Binding Prescription.Series, TargetNullValue='Отсутствует'}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Цена за единицу" Binding="{Binding Medicine.Price, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Итоговая сумма" Binding="{Binding TotalPrice, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding Discount, StringFormat={}{0}%}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Итоговая стоимость" Binding="{Binding TotalPrice, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Убрать" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0"/>
+                            <Button Content="УБРАТЬ" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

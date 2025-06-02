@@ -12,6 +12,7 @@ namespace LechebnikProject.Views
         public ClientRegisterWindow()
         {
             InitializeComponent();
+            LastNameTextBox.Focus();
             _viewModel = new ClientRegisterViewModel();
             DataContext = _viewModel;
         }
@@ -32,6 +33,10 @@ namespace LechebnikProject.Views
                 RegisteredLogin = _viewModel.Login;
                 RegisteredCode = _viewModel.Code;
                 DialogResult = true;
+                var clientLoginWindow = new ClientLoginWindow();
+                clientLoginWindow._viewModel.Login = RegisteredLogin;
+                clientLoginWindow._viewModel.Code = RegisteredCode;
+                clientLoginWindow.LoginButton_Click(null, null); // Автоматическая аутентификация
                 Close();
             }
         }

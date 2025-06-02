@@ -49,15 +49,28 @@ namespace LechebnikProject.ViewModels
         private void LoadCartItems()
         {
             string query = @"
-                SELECT ci.*, m.Name, m.Price 
+                SELECT ci.*, m.Name, m.Price, p.Series 
                 FROM CartItems ci 
                 JOIN Medicines m ON ci.MedicineId = m.MedicineId 
+                LEFT JOIN Prescriptions p ON ci.PrescriptionId = p.PrescriptionId 
                 WHERE ci.UserId = @UserId";
             var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
             DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
             CartItems = new ObservableCollection<CartItem>();
             foreach (DataRow row in dataTable.Rows)
             {
+                bool isByPrescription = Convert.ToBoolean(row["IsByPrescription"]);
+                decimal discount = 0m;
+                if (isByPrescription)
+                {
+                    string discountType = row["DiscountType"]?.ToString();
+                    discount = discountType == "50%" ? 50m : discountType == "Бесплатно" ? 100m : 0m;
+                }
+                else if (AppContext.CurrentClient != null)
+                {
+                    discount = AppContext.CurrentClient.Discount;
+                }
+
                 CartItems.Add(new CartItem
                 {
                     CartItemId = Convert.ToInt32(row["CartItemId"]),
@@ -68,8 +81,10 @@ namespace LechebnikProject.ViewModels
                         Price = Convert.ToDecimal(row["Price"])
                     },
                     Quantity = Convert.ToInt32(row["Quantity"]),
-                    IsByPrescription = Convert.ToBoolean(row["IsByPrescription"]),
-                    PrescriptionId = row["PrescriptionId"] != DBNull.Value ? Convert.ToInt32(row["PrescriptionId"]) : (int?)null
+                    IsByPrescription = isByPrescription,
+                    PrescriptionId = row["PrescriptionId"] != DBNull.Value ? Convert.ToInt32(row["PrescriptionId"]) : (int?)null,
+                    Prescription = isByPrescription ? new Prescription { Series = row["Series"]?.ToString() } : null,
+                    Discount = discount
                 });
             }
         }
@@ -108,14 +123,15 @@ namespace LechebnikProject.ViewModels
             try
             {
                 // Создание заказа
-                string orderQuery = @"INSERT INTO Orders (UserId, OrderDate, PaymentMethod, TotalAmount, DiscountApplied, DiscountPercentage) 
+                string orderQuery = @"INSERT INTO Orders (UserId, ClientId, OrderDate, PaymentMethod, TotalAmount, DiscountApplied, DiscountPercentage) 
                     OUTPUT INSERTED.OrderId 
-                    VALUES (@UserId, @OrderDate, @PaymentMethod, @TotalAmount, @DiscountApplied, @DiscountPercentage)";
+                    VALUES (@UserId, @ClientId, @OrderDate, @PaymentMethod, @TotalAmount, @DiscountApplied, @DiscountPercentage)";
                 var orderParams = new[]
                 {
                     new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
+                    new SqlParameter("@ClientId", AppContext.CurrentClient?.ClientId ?? (object)DBNull.Value),
                     new SqlParameter("@OrderDate", DateTime.Now),
-                    new SqlParameter("@PaymentMethod", "QR-код"), // Пример, можно сделать выбор
+                    new SqlParameter("@PaymentMethod", "QR-код"),
                     new SqlParameter("@TotalAmount", TotalAmount),
                     new SqlParameter("@DiscountApplied", AppContext.CurrentClient != null && AppContext.CurrentClient.Discount > 0),
                     new SqlParameter("@DiscountPercentage", AppContext.CurrentClient?.Discount ?? (object)DBNull.Value)

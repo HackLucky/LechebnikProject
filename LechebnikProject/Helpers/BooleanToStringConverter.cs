@@ -8,11 +8,7 @@ namespace LechebnikProject.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool boolValue)
-            {
-                return boolValue ? "Да" : "Нет";
-            }
-            return "Неизвестно";
+            return (bool)value ? "Да" : "Нет";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

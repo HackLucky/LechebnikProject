@@ -15,7 +15,6 @@ namespace LechebnikProject.ViewModels
     {
         private ObservableCollection<Medicine> _medicines;
         private string _searchText;
-        private readonly Medicine selectedMedicine;
 
         public ObservableCollection<Medicine> Medicines
         {
@@ -81,8 +80,7 @@ namespace LechebnikProject.ViewModels
         {
             if (parameter is Medicine med)
             {
-                WindowManager.ShowWindow<MedicineDetailsWindow>(w =>
-                    w.DataContext = new MedicineDetailsViewModel(med.MedicineId));
+                WindowManager.ShowWindow<MedicineDetailsWindow>(w =>w.DataContext = new MedicineDetailsViewModel(med.MedicineId));
             }
         }
 
@@ -95,7 +93,19 @@ namespace LechebnikProject.ViewModels
                     MessageBox.Show("Этот препарат требует рецепт. Используйте кнопку 'Добавить в корзину по рецепту'.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                WindowManager.ShowWindow<QuantityInputWindow>(win => win.DataContext = new QuantityInputViewModel(medicine));
+
+                var clientLoginWindow = new ClientLoginWindow();
+                if (clientLoginWindow.ShowDialog() == true)
+                {
+                    // Клиент аутентифицирован, скидка уже в AppContext.CurrentClient
+                    WindowManager.ShowWindow<QuantityInputWindow>(win => win.DataContext = new QuantityInputViewModel(medicine));
+                }
+                else
+                {
+                    // Пропуск аутентификации, скидка не применяется
+                    AppContext.CurrentClient = null;
+                    WindowManager.ShowWindow<QuantityInputWindow>(win => win.DataContext = new QuantityInputViewModel(medicine));
+                }
             }
         }
 

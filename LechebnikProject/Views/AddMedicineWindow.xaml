@@ -11,7 +11,7 @@
                     <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
                 </StackPanel>
                 <Label Content="Препарат (название, лекарственная форма, вес/объём):" Style="{StaticResource MainText}"/>
-                <TextBox Text="{Binding Name}" Style="{StaticResource InputText}"/>
+                <TextBox x:Name="NameTextBox" Text="{Binding Name}" Style="{StaticResource InputText}"/>
                 <Label Content="Лекарственная форма:" Style="{StaticResource MainText}"/>
                 <ComboBox ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm}" Style="{StaticResource ComboBox}"/>
                 <Label Content="Вес/объем (введите в миллиграммах/миллилитрах):" Style="{StaticResource MainText}"/>

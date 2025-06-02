@@ -10,7 +10,7 @@
                     <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
                 </StackPanel>
                 <Label Content="ID:" Style="{StaticResource MainText}"/>
-                <TextBlock Text="{Binding SelectedMedicine.MedicineId}" Style="{StaticResource TextBlock}"/>
+                <TextBlock Name="MedicineIdTextBox" Text="{Binding SelectedMedicine.MedicineId}" Style="{StaticResource TextBlock}"/>
                 <Label Content="Название:" Style="{StaticResource MainText}"/>
                 <TextBlock Text="{Binding SelectedMedicine.Name}" Style="{StaticResource TextBlock}"/>
                 <Label Content="Форма:" Style="{StaticResource MainText}"/>

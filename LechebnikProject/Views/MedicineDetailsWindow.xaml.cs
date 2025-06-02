@@ -9,6 +9,7 @@ namespace LechebnikProject.Views
         public MedicineDetailsWindow()
         {
             InitializeComponent();
+            MedicineIdTextBox.Focus();
         }
 
         public MedicineDetailsWindow(int medicineId) : this()

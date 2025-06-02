@@ -7,6 +7,7 @@ namespace LechebnikProject.Views
         public ManageMedicinesWindow()
         {
             InitializeComponent();
+            SearchTextBox.Focus();
             DataContext = new ManageMedicinesViewModel();
         }
     }

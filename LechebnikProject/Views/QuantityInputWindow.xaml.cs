@@ -9,6 +9,7 @@ namespace LechebnikProject.Views
         public QuantityInputWindow()
         {
             InitializeComponent();
+            QuantityTextBox.Focus();
         }
 
         public QuantityInputWindow(Medicine medicine) : this()

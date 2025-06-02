@@ -10,6 +10,7 @@ namespace LechebnikProject.Views
         public RegistrationWindow()
         {
             InitializeComponent();
+            LastNameTextBox.Focus();
             _viewModel = new RegistrationViewModel();
             DataContext = _viewModel;
         }

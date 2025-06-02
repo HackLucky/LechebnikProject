@@ -16,20 +16,22 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="Поиск:" VerticalAlignment="Center" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
         </StackPanel>
-        <DataGrid Grid.Row="2" ItemsSource="{Binding CombinedList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedItem}" IsReadOnly="True" Margin="10,0,10,0">
+        <DataGrid Grid.Row="2" ItemsSource="{Binding AllEntities}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedEntity}" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Тип" Binding="{Binding Type}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Логин" Binding="{Binding Login}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding MiddleName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Роль" Binding="{Binding Role}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Статус" Binding="{Binding Status}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Скидка" Binding="{Binding Discount}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding Discount, StringFormat={}{0}%}" HeaderStyle="{StaticResource ColumnHeader}"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="УДАЛИТЬ" Command="{Binding AddUserCommand}" Style="{StaticResource FuncButton}" Width="150"/>
+            <Button Content="УДАЛИТЬ" Command="{Binding DelUserCommand}" Style="{StaticResource FuncButton}" Width="150"/>
             <Button Content="СМЕНИТЬ РОЛЬ" Command="{Binding ChangeRoleCommand}" Style="{StaticResource FuncButton}" Width="200"/>
             <ComboBox Width="80" Margin="5"
           ItemsSource="{Binding DiscountOptions}"

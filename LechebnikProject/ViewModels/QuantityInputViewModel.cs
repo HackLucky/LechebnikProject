@@ -1,8 +1,8 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
-using LechebnikProject.Models;
 using LechebnikProject.Views;
 using System;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 
@@ -10,26 +10,24 @@ namespace LechebnikProject.ViewModels
 {
     public class QuantityInputViewModel : BaseViewModel
     {
-        public Medicine SelectedMedicine { get; set; }
-        private string _quantity;
-        public string Quantity
+        public Models.Medicine SelectedMedicine { get; set; }
+        public string Quantity { get; set; }
+
+        public class Medicine
         {
-            get => _quantity;
-            set { _quantity = value; OnPropertyChanged(); }
+            public int MedicineId { get; set; }
+            public string Name { get; set; }
+            public int StockQuantity { get; set; }
+            public decimal Price { get; set; }
         }
 
         public ICommand ConfirmCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public QuantityInputViewModel(Medicine medicine)
+        public QuantityInputViewModel(Models.Medicine medicine)
         {
-            if (medicine == null)
-            {
-                MessageBox.Show("Препарат не выбран.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                WindowManager.ShowWindow<MedicineListWindow>();
-                return;
-            }
             SelectedMedicine = medicine;
+            Quantity = "1";
 
             ConfirmCommand = new RelayCommand(Confirm);
             CancelCommand = new RelayCommand(_ => WindowManager.ShowWindow<MedicineListWindow>());
@@ -49,12 +47,20 @@ namespace LechebnikProject.ViewModels
                 return;
             }
 
-            AppContext.CartItems.Add(new CartItem
+            decimal discount = AppContext.CurrentClient?.Discount ?? 0m;
+
+            string query = @"INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription, PrescriptionId, Discount)
+                         VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription, @PrescriptionId, @Discount)";
+            var parameters = new[]
             {
-                Medicine = SelectedMedicine,
-                Quantity = quantity,
-                IsByPrescription = false
-            });
+                new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
+                new SqlParameter("@MedicineId", SelectedMedicine.MedicineId),
+                new SqlParameter("@Quantity", quantity),
+                new SqlParameter("@IsByPrescription", false),
+                new SqlParameter("@PrescriptionId", DBNull.Value),
+                new SqlParameter("@Discount", discount)
+            };
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
 
             MessageBox.Show("Препарат добавлен в корзину.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             WindowManager.ShowWindow<MedicineListWindow>();

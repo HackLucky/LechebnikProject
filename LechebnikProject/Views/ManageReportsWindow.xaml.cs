@@ -8,6 +8,7 @@ namespace LechebnikProject.Views
         public ManageReportsWindow()
         {
             InitializeComponent();
+            SearchTextBox.Focus();
             DataContext = new ManageReportsViewModel();
         }
     }
