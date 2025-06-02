@@ -15,6 +15,7 @@ namespace LechebnikProject.ViewModels
     {
         private ObservableCollection<Medicine> _medicines;
         private string _searchText;
+        private readonly Medicine selectedMedicine;
 
         public ObservableCollection<Medicine> Medicines
         {
@@ -87,28 +88,22 @@ namespace LechebnikProject.ViewModels
 
         private void AddToCart(object parameter)
         {
-            if (!(parameter is Medicine med)) return;
-
-            if (AppContext.CurrentClient == null)
+            if (parameter is Medicine medicine)
             {
-                WindowManager.ShowWindow<ClientLoginWindow>(w => w.DataContext = new ClientLoginViewModel());
-            }
-            else
-            {
-                WindowManager.ShowWindow<QuantityInputWindow>(w => w.DataContext = new QuantityInputViewModel(med));
+                if (medicine.RequiresPrescription)
+                {
+                    MessageBox.Show("Этот препарат требует рецепт. Используйте кнопку 'Добавить в корзину по рецепту'.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                WindowManager.ShowWindow<QuantityInputWindow>(win => win.DataContext = new QuantityInputViewModel(medicine));
             }
         }
 
         private void AddToCartByPrescription(object parameter)
         {
-            if (parameter is Medicine med && med.RequiresPrescription)
+            if (parameter is Medicine medicine)
             {
-                WindowManager.ShowWindow<PrescriptionInputWindow>(w =>
-                    w.DataContext = new PrescriptionInputViewModel(med));
-            }
-            else
-            {
-                MessageBox.Show("Данный препарат не требует рецепта.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                WindowManager.ShowWindow<PrescriptionInputWindow>(win => win.DataContext = new PrescriptionInputViewModel(medicine));
             }
         }
 

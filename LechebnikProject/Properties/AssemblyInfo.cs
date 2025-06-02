@@ -1,19 +1,17 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
 // Общие сведения об этой сборке предоставляются следующим набором
 // набор атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("LechebnikProject")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LechebnikProject")]
-[assembly: AssemblyCopyright("Copyright ©  2025")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTitle("Проект ЛЕЧЕБНИК (LechebnikProject)")]
+[assembly: AssemblyDescription("Дипломная работа, программа ЛЕЧЕБНИК - управление электронной аптекой.")]
+[assembly: AssemblyConfiguration("Debug")]
+[assembly: AssemblyCompany("Соколов Андрей Сергеевич")]
+[assembly: AssemblyProduct("ЛЕЧЕБНИК")]
+[assembly: AssemblyCopyright("SOKOLOV AS. Copyright ©  2025")]
+[assembly: AssemblyTrademark("ЛЕЧЕБНИК является торговой маркой компании ЛЕЧЕБНИК, принадлежащей Соколову Андрею Сергеевичу")]
 [assembly: AssemblyCulture("")]
 
 // Установка значения False для параметра ComVisible делает типы в этой сборке невидимыми

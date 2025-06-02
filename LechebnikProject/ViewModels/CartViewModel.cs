@@ -40,7 +40,7 @@ namespace LechebnikProject.ViewModels
             CartItems.CollectionChanged += (s, e) => OnPropertyChanged(nameof(TotalAmount));
             RemoveCommand = new RelayCommand(Remove);
             ClearCommand = new RelayCommand(Clear);
-            CheckoutCommand = new RelayCommand(Checkout);
+            CheckoutCommand = new RelayCommand(ConfirmPayment);
             OnPropertyChanged(nameof(CanCheckout));
             CartItems.CollectionChanged += (s, e) => OnPropertyChanged(nameof(TotalAmount));
             GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
@@ -94,49 +94,70 @@ namespace LechebnikProject.ViewModels
             AppContext.CurrentClient = null;
         }
 
-        private void Checkout(object parameter)
+        private void ConfirmPayment(object parameter)
         {
+            if (CartItems.Count == 0)
+            {
+                MessageBox.Show("Корзина пуста.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (MessageBox.Show("Подтвердить оплату?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+
             try
             {
-                var result = MessageBox.Show("Подтверждаете успешную оплату?", "Окно подтверждения оплаты.", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result != MessageBoxResult.Yes) return;
-
-                const string orderSql = "INSERT INTO Orders (UserId, OrderDate, TotalAmount) OUTPUT INSERTED.OrderId VALUES (@UserId, GETDATE(), @Total)";
-                var orderPrms = new[]
+                // Создание заказа
+                string orderQuery = @"INSERT INTO Orders (UserId, OrderDate, PaymentMethod, TotalAmount, DiscountApplied, DiscountPercentage) 
+                    OUTPUT INSERTED.OrderId 
+                    VALUES (@UserId, @OrderDate, @PaymentMethod, @TotalAmount, @DiscountApplied, @DiscountPercentage)";
+                var orderParams = new[]
                 {
                     new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
-                    new SqlParameter("@Total", TotalAmount)
+                    new SqlParameter("@OrderDate", DateTime.Now),
+                    new SqlParameter("@PaymentMethod", "QR-код"), // Пример, можно сделать выбор
+                    new SqlParameter("@TotalAmount", TotalAmount),
+                    new SqlParameter("@DiscountApplied", AppContext.CurrentClient != null && AppContext.CurrentClient.Discount > 0),
+                    new SqlParameter("@DiscountPercentage", AppContext.CurrentClient?.Discount ?? (object)DBNull.Value)
                 };
-                int orderId = Convert.ToInt32(DatabaseHelper.ExecuteScalar(orderSql, orderPrms));
+                int orderId = (int)DatabaseHelper.ExecuteScalar(orderQuery, orderParams);
 
+                // Обновление склада и добавление деталей заказа
                 foreach (var item in CartItems)
                 {
-                    const string detailSql = "INSERT INTO OrderDetails (OrderId, MedicineId, Quantity, Price) VALUES (@OrderId, @MedId, @Qty, @Price)";
-                    var detPrms = new[]
+                    string updateStockQuery = "UPDATE Medicines SET StockQuantity = StockQuantity - @Quantity WHERE MedicineId = @MedicineId";
+                    var stockParams = new[]
+                    {
+                        new SqlParameter("@Quantity", item.Quantity),
+                        new SqlParameter("@MedicineId", item.Medicine.MedicineId)
+                    };
+                    DatabaseHelper.ExecuteNonQuery(updateStockQuery, stockParams);
+
+                    string detailQuery = @"INSERT INTO OrderDetails (OrderId, MedicineId, Quantity, PricePerUnit, DiscountApplied, DiscountedPricePerUnit) 
+                        VALUES (@OrderId, @MedicineId, @Quantity, @PricePerUnit, @DiscountApplied, @DiscountedPricePerUnit)";
+                    var detailParams = new[]
                     {
                         new SqlParameter("@OrderId", orderId),
-                        new SqlParameter("@MedId", item.Medicine.MedicineId),
-                        new SqlParameter("@Qty", item.Quantity),
-                        new SqlParameter("@Price", item.Medicine.Price)
+                        new SqlParameter("@MedicineId", item.Medicine.MedicineId),
+                        new SqlParameter("@Quantity", item.Quantity),
+                        new SqlParameter("@PricePerUnit", item.Medicine.Price),
+                        new SqlParameter("@DiscountApplied", item.IsByPrescription || (AppContext.CurrentClient?.Discount > 0)),
+                        new SqlParameter("@DiscountedPricePerUnit", item.IsByPrescription ? item.Medicine.Price * 0.5m : item.Medicine.Price * (1 - (AppContext.CurrentClient?.Discount ?? 0) / 100m))
                     };
-                    DatabaseHelper.ExecuteNonQuery(detailSql, detPrms);
-
-                    const string stockSql = "UPDATE Medicines SET StockQuantity = StockQuantity - @Qty WHERE MedicineId = @MedId";
-                    var stockPrms = new[]
-                    {
-                        new SqlParameter("@Qty", item.Quantity),
-                        new SqlParameter("@MedId", item.Medicine.MedicineId)
-                    };
-                    DatabaseHelper.ExecuteNonQuery(stockSql, stockPrms);
+                    DatabaseHelper.ExecuteNonQuery(detailQuery, detailParams);
                 }
 
-                MessageBox.Show("Оплата подтверждена.", "Информирование", MessageBoxButton.OK, MessageBoxImage.Information);
-                WindowManager.ShowWindow<MedicineListWindow>();
+                string query = "DELETE FROM CartItems WHERE UserId = @UserId";
+                var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
+                DatabaseHelper.ExecuteNonQuery(query, parameters);
+                CartItems.Clear();
+                AppContext.CurrentClient = null;
+                MessageBox.Show("Оплата успешно подтверждена!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                WindowManager.ShowWindow<MainMenuWindow>();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
-                Logger.LogError("Ошибка при оформлении заказа.", ex);
-                MessageBox.Show("Не удалось оформить заказ.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка при оплате: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

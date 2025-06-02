@@ -10,17 +10,26 @@ namespace LechebnikProject.ViewModels
 {
     public class QuantityInputViewModel : BaseViewModel
     {
-        public string QuantityText { get; set; }
-        public int Quantity { get; set; }
-
-        private readonly Medicine _selectedMedicine;
+        public Medicine SelectedMedicine { get; set; }
+        private string _quantity;
+        public string Quantity
+        {
+            get => _quantity;
+            set { _quantity = value; OnPropertyChanged(); }
+        }
 
         public ICommand ConfirmCommand { get; }
         public ICommand CancelCommand { get; }
 
         public QuantityInputViewModel(Medicine medicine)
         {
-            _selectedMedicine = medicine ?? throw new ArgumentNullException(nameof(medicine));
+            if (medicine == null)
+            {
+                MessageBox.Show("Препарат не выбран.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                WindowManager.ShowWindow<MedicineListWindow>();
+                return;
+            }
+            SelectedMedicine = medicine;
 
             ConfirmCommand = new RelayCommand(Confirm);
             CancelCommand = new RelayCommand(_ => WindowManager.ShowWindow<MedicineListWindow>());
@@ -28,32 +37,26 @@ namespace LechebnikProject.ViewModels
 
         private void Confirm(object obj)
         {
-            if (!int.TryParse(QuantityText, out int quantity) || quantity <= 0)
+            if (!int.TryParse(Quantity, out int quantity) || quantity <= 0)
             {
-                MessageBox.Show("Введите корректное количество.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Введите корректное количество.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            Quantity = quantity;
-
-            var cartItem = new CartItem
+            if (quantity > SelectedMedicine.StockQuantity)
             {
-                Medicine = _selectedMedicine,
+                MessageBox.Show("Недостаточно товара на складе.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            AppContext.CartItems.Add(new CartItem
+            {
+                Medicine = SelectedMedicine,
                 Quantity = quantity,
                 IsByPrescription = false
-            };
+            });
 
-            AppContext.CartItems.Add(cartItem);
-
-            decimal price = _selectedMedicine.Price;
-            decimal discount = AppContext.CurrentClient?.Discount ?? 0;
-            decimal total = price * quantity * (1 - discount / 100);
-
-            MessageBox.Show(AppContext.CurrentClient != null
-                ? $"Добавлено в корзину со скидкой {discount}%: {total} руб."
-                : $"Добавлено в корзину без скидки: {price * quantity} руб.",
-                "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
-
+            MessageBox.Show("Препарат добавлен в корзину.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             WindowManager.ShowWindow<MedicineListWindow>();
         }
     }

@@ -25,8 +25,8 @@
                 <TextBox Text="{Binding CurrentUser.PharmacyAddress}" Style="{StaticResource InputText}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="СОХРАНИТЬ" Command="{Binding SaveCommand}" Style="{StaticResource FuncButton}"/>
-                    <Button Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
                     <Button Content="ВЫЙТИ ИЗ ПРОФИЛЯ" Command="{Binding ExitProfile}" Style="{StaticResource FuncButton}"/>
+                    <Button Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

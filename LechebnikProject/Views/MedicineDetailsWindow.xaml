@@ -43,7 +43,7 @@
                 <TextBlock Text="{Binding SelectedMedicine.RequiresPrescription, Converter={StaticResource BooleanToStringConverter}}" Style="{StaticResource TextBlock}"/>
                 <Label Content="Цена:" Style="{StaticResource MainText}"/>
                 <TextBlock Text="{Binding SelectedMedicine.Price, StringFormat={}{0:N2} ₽}" Style="{StaticResource TextBlock}"/>
-                <Button Content="Вернуться к списку препаратов" Command="{Binding GoBackCommand}" Style="{StaticResource Button}"/>
+                <Button Content="Вернуться к списку препаратов" Command="{Binding GoBackCommand}" Style="{StaticResource Button}" Margin="10"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -28,7 +28,7 @@ namespace LechebnikProject.ViewModels
         {
             LoadMessages();
             SendCommand = new RelayCommand(Send);
-            GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
+            GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
         private void LoadMessages()

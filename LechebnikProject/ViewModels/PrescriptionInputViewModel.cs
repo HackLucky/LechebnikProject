@@ -46,10 +46,13 @@ namespace LechebnikProject.ViewModels
 
         private void Add(object parameter)
         {
-            if (string.IsNullOrWhiteSpace(Series) || string.IsNullOrWhiteSpace(MedicalInstitution) || string.IsNullOrWhiteSpace(PatientLastName) || string.IsNullOrWhiteSpace(PatientFirstName)
-                || string.IsNullOrWhiteSpace(ICD10Code) || Quantity <= 0 || string.IsNullOrWhiteSpace(DiscountType) || string.IsNullOrWhiteSpace(DoctorLastName) || string.IsNullOrWhiteSpace(DoctorFirstName))
+            if (string.IsNullOrWhiteSpace(Prescription.Series) || string.IsNullOrWhiteSpace(Prescription.MedicalInstitution) ||
+                string.IsNullOrWhiteSpace(Prescription.PatientLastName) || string.IsNullOrWhiteSpace(Prescription.PatientFirstName) ||
+                string.IsNullOrWhiteSpace(Prescription.ICD10Code) || Quantity <= 0 || string.IsNullOrWhiteSpace(SelectedDiscountType) ||
+                string.IsNullOrWhiteSpace(Prescription.DoctorLastName) || string.IsNullOrWhiteSpace(Prescription.DoctorFirstName) ||
+                Prescription.ExpiryDate == default)
             {
-                MessageBox.Show("Проверьте введенные данные. Все обязательные поля должны быть заполнены.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Заполните все обязательные поля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             if (Quantity > _medicine.StockQuantity)
@@ -92,16 +95,16 @@ namespace LechebnikProject.ViewModels
                         @DiscountType, @DoctorLastName, @DoctorFirstName, @DoctorMiddleName, @MedicineId, @PharmacistId, @ExpiryDate)";
             var parameters = new[]
             {
-                new SqlParameter("@Series", Prescription.Series),
-                new SqlParameter("@MedicalInstitution", Prescription.MedicalInstitution),
-                new SqlParameter("@PatientLastName", Prescription.PatientLastName),
-                new SqlParameter("@PatientFirstName", Prescription.PatientFirstName),
+                new SqlParameter("@Series", Prescription.Series ?? (object)DBNull.Value),
+                new SqlParameter("@MedicalInstitution", Prescription.MedicalInstitution ?? (object)DBNull.Value),
+                new SqlParameter("@PatientLastName", Prescription.PatientLastName ?? (object)DBNull.Value),
+                new SqlParameter("@PatientFirstName", Prescription.PatientFirstName ?? (object)DBNull.Value),
                 new SqlParameter("@PatientMiddleName", (object)Prescription.PatientMiddleName ?? DBNull.Value),
-                new SqlParameter("@ICD10Code", Prescription.ICD10Code),
+                new SqlParameter("@ICD10Code", Prescription.ICD10Code ?? (object)DBNull.Value),
                 new SqlParameter("@Quantity", Quantity),
-                new SqlParameter("@DiscountType", SelectedDiscountType),
-                new SqlParameter("@DoctorLastName", Prescription.DoctorLastName),
-                new SqlParameter("@DoctorFirstName", Prescription.DoctorFirstName),
+                new SqlParameter("@DiscountType", SelectedDiscountType ?? (object)DBNull.Value),
+                new SqlParameter("@DoctorLastName", Prescription.DoctorLastName ?? (object)DBNull.Value),
+                new SqlParameter("@DoctorFirstName", Prescription.DoctorFirstName ?? (object)DBNull.Value),
                 new SqlParameter("@DoctorMiddleName", (object)Prescription.DoctorMiddleName ?? DBNull.Value),
                 new SqlParameter("@MedicineId", SelectedMedicine.MedicineId),
                 new SqlParameter("@PharmacistId", AppContext.CurrentUser.UserId),

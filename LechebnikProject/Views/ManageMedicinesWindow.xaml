@@ -32,7 +32,7 @@
             <Button Content="ДОБАВИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}"/>
             <Button Content="РЕДАКТИРОВАТЬ" Command="{Binding EditCommand}" Style="{StaticResource FuncButton}"/>
             <Button Content="УДАЛИТЬ" Command="{Binding DeleteCommand}" Style="{StaticResource FuncButton}" Width="150"/>
-            <Button Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
+            <Button Content="АДМИН-ПАНЕЛЬ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
         </StackPanel>
     </Grid>
 </Window>

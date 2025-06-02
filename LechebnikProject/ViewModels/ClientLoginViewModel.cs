@@ -32,7 +32,7 @@ namespace LechebnikProject.ViewModels
                         ClientId = (int)row["ClientId"],
                         LastName = row["LastName"].ToString(),
                         FirstName = row["FirstName"].ToString(),
-                        MiddleName = row["MiddleName"].ToString(),
+                        MiddleName = row["MiddleName"]?.ToString(),
                         Login = row["Login"].ToString(),
                         Code = row["Code"].ToString(),
                         Discount = (decimal)row["Discount"],
@@ -40,7 +40,6 @@ namespace LechebnikProject.ViewModels
                     };
 
                     MessageBox.Show("Клиент аутентифицирован.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
-                    WindowManager.ShowWindow<QuantityInputWindow>();
                     return true;
                 }
                 else { MessageBox.Show("Возможно, неверный логин или код.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning); return false; }

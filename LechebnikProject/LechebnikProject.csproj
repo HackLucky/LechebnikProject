@@ -75,7 +75,6 @@
     <Compile Include="Helpers\RoleToVisibilityConverter.cs" />
     <Compile Include="Helpers\SenderRoleToColorConverter.cs" />
     <Compile Include="Helpers\WindowManager.cs" />
-    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
