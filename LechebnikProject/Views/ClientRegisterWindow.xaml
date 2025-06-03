@@ -1,0 +1,45 @@
+﻿<Window x:Class="LechebnikProject.Views.ClientRegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ЛЕЧЕБНИК [окно регистрации клиента]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
+        <ScrollViewer>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="РЕГИСТРАЦИЯ КЛИЕНТА" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
+                <Label Content="Фамилия:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="LastNameTextBox" Style="{StaticResource InputText}"/>
+                <Label Content="Имя:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="FirstNameTextBox" Style="{StaticResource InputText}"/>
+                <Label Content="Отчество (опционально):" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="MiddleNameTextBox" Style="{StaticResource InputText}"/>
+                <Label Content="Номер телефона:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="PhoneNumberTextBox" Style="{StaticResource InputText}"/>
+                <Label Content="Email:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="EmailTextBox" Style="{StaticResource InputText}"/>
+                <Label Content="Логин:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="LoginTextBox" Style="{StaticResource InputText}"/>
+                <Label Content="Код (6 символов):" Style="{StaticResource MainText}"/>
+                <PasswordBox x:Name="CodePasswordBox" Style="{StaticResource InputPassword}"/>
+                <Label Content="Скидка:" Style="{StaticResource MainText}"/>
+                <ComboBox x:Name="DiscountComboBox" SelectedValue="{Binding SelectedDiscount}" Style="{StaticResource ComboBox}" SelectedValuePath="Tag">
+                    <ComboBoxItem Content="15%" Tag="15.00"/>
+                    <ComboBoxItem Content="25%" Tag="25.00"/>
+                    <ComboBoxItem Content="50%" Tag="50.00"/>
+                    <ComboBoxItem Content="75%" Tag="75.00"/>
+                </ComboBox>
+                <Label Content="Введите код с изображения:" Style="{StaticResource MainText}"/>
+                <Image Source="{Binding CaptchaImage}" Margin="10,5,0,10"/>
+                <TextBox x:Name="CaptchaTextBox" Style="{StaticResource InputText}"/>
+                <StackPanel HorizontalAlignment="Center" Margin="10">
+                    <Button Content="ЗАРЕГИСТРИРОВАТЬ" Click="RegisterButton_Click" Style="{StaticResource Button}"/>
+                    <Label Content="Если клиент зарегистрирован, нажмите кнопку:" Style="{StaticResource Text}" HorizontalAlignment="Center"/>
+                    <Button Content="АУТЕНТИФИЦИРОВАТЬ" Click="LoginButton_Click" Style="{StaticResource Button}"/>
+                    <Button Content="ОТМЕНИТЬ" Click="CancelButton_Click" Style="{StaticResource Button}"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

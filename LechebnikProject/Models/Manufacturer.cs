@@ -1,12 +1,9 @@
 ﻿namespace LechebnikProject.Models
 {
-    /// <summary>
-    /// Модель производителя.
-    /// </summary>
     public class Manufacturer
     {
-        public int ManufacturerId { get; set; }     // Уникальный идентификатор
-        public string Name { get; set; }            // Название
-        public string Country { get; set; }         // Страна
+        public int ManufacturerId { get; set; }
+        public string Name { get; set; }
+        public string Country { get; set; }
     }
 }

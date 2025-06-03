@@ -1,6 +1,7 @@
 ﻿using Lechebnik.ViewModels;
+using LechebnikProject.Helpers;
 using LechebnikProject.Views;
-using System.Linq;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,39 +16,14 @@ namespace LechebnikProject.ViewModels
 
         public AdminPanelViewModel()
         {
-            ManageUsersCommand = new RelayCommand(ManageUsers);
-            ManageMedicinesCommand = new RelayCommand(ManageMedicines);
-            ManageReportsCommand = new RelayCommand(ManageReports);
-            GoBackCommand = new RelayCommand(GoBack);
-        }
-
-        private void ManageUsers(object parameter)
-        {
-            var manageUsersWindow = new ManageUsersWindow();
-            manageUsersWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
-        }
-
-        private void ManageMedicines(object parameter)
-        {
-            var addMedicineWindow = new AddMedicineWindow();
-            addMedicineWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
-        }
-
-        private void ManageReports(object parameter)
-        {
-            var reportsWindow = new ReportsWindow();
-            reportsWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
-        }
-
-        private void GoBack(object parameter)
-        {
-            var mainMenuWindow = new MainMenuWindow();
-            mainMenuWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AdminPanelWindow))?.Close();
-            Application.Current.MainWindow = mainMenuWindow;
+            try
+            {
+                ManageUsersCommand = new RelayCommand(o => WindowManager.ShowWindow<ManageUsersWindow>());
+                ManageMedicinesCommand = new RelayCommand(o => WindowManager.ShowWindow<ManageMedicinesWindow>());
+                ManageReportsCommand = new RelayCommand(o => WindowManager.ShowWindow<ManageReportsWindow>());
+                GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
     }
 }

@@ -1,0 +1,34 @@
+﻿<Window x:Class="LechebnikProject.Views.ConnectionSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Настройки подключения" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="НАСТРОЙКА ПОДКЛЮЧЕНИЯ К БАЗЕ ДАННЫХ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Label Content="Имя сервера:" Style="{StaticResource MainText}"/>
+            <TextBox x:Name="ServerTextBox" Grid.Row="1" Style="{StaticResource InputText}"/>
+            <Label Content="Имя базы данных:" Style="{StaticResource MainText}"/>
+            <TextBox x:Name="DatabaseTextBox" Grid.Row="3" Style="{StaticResource InputText}"/>
+            <RadioButton x:Name="WindowsAuthRadio" Content="Аутентификация Windows" GroupName="AuthType" Checked="AuthRadioButton_Checked" Margin="10,5,0,5" />
+            <RadioButton x:Name="SqlAuthRadio" Content="Аутентификация SQL Server" GroupName="AuthType" Checked="AuthRadioButton_Checked" Margin="10,0,0,10"/>
+            <StackPanel x:Name="SqlAuthPanel" Visibility="Collapsed">
+                <Label Content="Логин:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="UsernameTextBox" Style="{StaticResource InputText}"/>
+                <Label Content="Пароль:" Style="{StaticResource MainText}"/>
+                <PasswordBox x:Name="PasswordBox" Style="{StaticResource InputPassword}"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="СОХРАНИТЬ" Click="SaveButton_Click" Style="{StaticResource FuncButton}"/>
+            <Button Content="ОТМЕНИТЬ" Click="Cancel_Click" Style="{StaticResource FuncButton}"/>
+        </StackPanel>
+    </Grid>
+</Window>

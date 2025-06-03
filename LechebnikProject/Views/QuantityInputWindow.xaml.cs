@@ -4,14 +4,16 @@ using System.Windows;
 
 namespace LechebnikProject.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для QuantityInputWindow.xaml
-    /// </summary>
     public partial class QuantityInputWindow : Window
     {
-        public QuantityInputWindow(Medicine medicine)
+        public QuantityInputWindow()
         {
             InitializeComponent();
+            QuantityTextBox.Focus();
+        }
+
+        public QuantityInputWindow(Medicine medicine) : this()
+        {
             DataContext = new QuantityInputViewModel(medicine);
         }
     }

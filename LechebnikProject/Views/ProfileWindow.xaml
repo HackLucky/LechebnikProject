@@ -1,25 +1,34 @@
 ﻿<Window x:Class="LechebnikProject.Views.ProfileWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно профиля]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
-        <StackPanel>
-            <TextBlock Text="Фамилия:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding CurrentUser.LastName}" Margin="0,0,0,10"/>
-            <TextBlock Text="Имя:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding CurrentUser.FirstName}" Margin="0,0,0,10"/>
-            <TextBlock Text="Отчество:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding CurrentUser.MiddleName}" Margin="0,0,0,10"/>
-            <TextBlock Text="Телефон:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding CurrentUser.PhoneNumber}" Margin="0,0,0,10"/>
-            <TextBlock Text="Email:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding CurrentUser.Email}" Margin="0,0,0,10"/>
-            <TextBlock Text="Должность:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding CurrentUser.Position}" Margin="0,0,0,10"/>
-            <TextBlock Text="Адрес аптеки:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding CurrentUser.PharmacyAddress}" Margin="0,0,0,10"/>
-            <Button Content="Сохранить изменения" Command="{Binding SaveCommand}" Width="200" Height="30" Margin="0,10"/>
-            <Button Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="200" Height="30" Margin="0,10"/>
-        </StackPanel>
+        Title="ЛЕЧЕБНИК [окно профиля]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
+        <ScrollViewer>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="ПРОФИЛЬ" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
+                <Label Content="Фамилия:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="LastNameTextBox" Text="{Binding CurrentUser.LastName}" Style="{StaticResource InputText}"/>
+                <Label Content="Имя:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding CurrentUser.FirstName}" Style="{StaticResource InputText}"/>
+                <Label Content="Отчество:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding CurrentUser.MiddleName}" Style="{StaticResource InputText}"/>
+                <Label Content="Телефон:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding CurrentUser.PhoneNumber}" Style="{StaticResource InputText}"/>
+                <Label Content="Email:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding CurrentUser.Email}" Style="{StaticResource InputText}"/>
+                <Label Content="Должность:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding CurrentUser.Position}" Style="{StaticResource InputText}"/>
+                <Label Content="Адрес аптеки:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding CurrentUser.PharmacyAddress}" Style="{StaticResource InputText}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="СОХРАНИТЬ" Command="{Binding SaveCommand}" Style="{StaticResource FuncButton}"/>
+                    <Button Content="ВЫЙТИ ИЗ ПРОФИЛЯ" Command="{Binding ExitProfile}" Style="{StaticResource FuncButton}"/>
+                    <Button Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -3,14 +3,12 @@ using System.Windows;
 
 namespace LechebnikProject.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для ProfileWindow.xaml
-    /// </summary>
     public partial class ProfileWindow : Window
     {
         public ProfileWindow()
         {
             InitializeComponent();
+            LastNameTextBox.Focus();
             DataContext = new ProfileViewModel();
         }
     }

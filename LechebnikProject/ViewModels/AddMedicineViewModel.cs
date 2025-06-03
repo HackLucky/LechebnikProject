@@ -29,53 +29,69 @@ namespace LechebnikProject.ViewModels
         public bool RequiresPrescription { get; set; }
         public string Price { get; set; }
 
-        public List<string> Forms { get; } = new List<string> { "Таблетки", "Сироп", "Мазь", "Капли" };
-        public List<string> ApplicationMethods { get; } = new List<string> { "Inhalation", "Nasal", "Ophthalmic", "Parenteral", "Oral", "Sublingual", "Rectal", "Topical", "Otic" };
-        public List<string> AggregateStates { get; } = new List<string> { "Gas", "Liquid", "Soft", "Solid" };
-        public List<string> Types { get; } = new List<string> { "Pathogenetic", "Prophylactic", "Symptomatic", "Stimulating", "Etiotropic" };
+        public List<string> ApplicationMethods { get; } = new List<string> { "Ингаляционный", "Носовой", "Офтальмологический", "Парентеральный", "Пероральный", "Подъязычный", "Ректальный", "Топический", "Ушной" };
+        public List<string> AggregateStates { get; } = new List<string> { "Газообразное", "Жидкое", "Мягкое", "Твёрдое" };
+        public List<string> Types { get; } = new List<string> { "Патогенетическое", "Профилактическое", "Симптоматическое", "Стимулирующее", "Этиотропное" };
+        public List<string> Forms { get; } = new List<string> { "Таблетки", "Сироп", "Мазь", "Капли", "Инъекции", "Капсулы", "Гель" };
         public List<Manufacturer> Manufacturers { get; set; }
         public List<Supplier> Suppliers { get; set; }
 
         public ICommand AddCommand { get; }
-        public ICommand CancelCommand { get; }
+        public ICommand GoToMainMenuCommand { get; }
 
         public AddMedicineViewModel()
         {
             LoadManufacturers();
             LoadSuppliers();
             AddCommand = new RelayCommand(Add);
-            CancelCommand = new RelayCommand(Cancel);
+            GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
         private void LoadManufacturers()
         {
-            string query = "SELECT * FROM Manufacturers";
-            DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
-            Manufacturers = dataTable.AsEnumerable().Select(row => new Manufacturer
+            try
             {
-                ManufacturerId = row.Field<int>("ManufacturerId"),
-                Name = row.Field<string>("Name"),
-                Country = row.Field<string>("Country")
-            }).ToList();
+                string query = "SELECT * FROM Manufacturers";
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+                Manufacturers = dataTable.AsEnumerable().Select(row => new Manufacturer
+                {
+                    ManufacturerId = row.Field<int>("ManufacturerId"),
+                    Name = row.Field<string>("Name"),
+                    Country = row.Field<string>("Country")
+                }).ToList();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void LoadSuppliers()
         {
-            string query = "SELECT * FROM Suppliers";
-            DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
-            Suppliers = dataTable.AsEnumerable().Select(row => new Supplier
+            try
             {
-                SupplierId = row.Field<int>("SupplierId"),
-                Name = row.Field<string>("Name"),
-                Country = row.Field<string>("Country")
-            }).ToList();
+                string query = "SELECT * FROM Suppliers";
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+                Suppliers = dataTable.AsEnumerable().Select(row => new Supplier
+                {
+                    SupplierId = row.Field<int>("SupplierId"),
+                    Name = row.Field<string>("Name"),
+                    Country = row.Field<string>("Country")
+                }).ToList();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void Add(object parameter)
         {
+            const string checkSql = "SELECT COUNT(*) FROM Medicines WHERE SerialNumber = @Serial";
+            var checkPrm = new[] { new SqlParameter("@Serial", SerialNumber) };
+            int exist = Convert.ToInt32(DatabaseHelper.ExecuteScalar(checkSql, checkPrm));
+            if (exist > 0)
+            {
+                MessageBox.Show("Препарат с таким серийным номером уже существует.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             if (string.IsNullOrWhiteSpace(Name) || SelectedForm == null || SelectedManufacturer == null || SelectedSupplier == null)
             {
-                MessageBox.Show("Пожалуйста, заполните все обязательные поля.");
+                MessageBox.Show("Пожалуйста, заполните все поля.");
                 return;
             }
 
@@ -91,7 +107,8 @@ namespace LechebnikProject.ViewModels
                 return;
             }
 
-            string query = "INSERT INTO Medicines (Name, Form, WeightVolume, SerialNumber, Usage, ActiveIngredient, ApplicationMethod, AggregateState, Type, ManufacturerId, SupplierId, StockQuantity, RequiresPrescription, Price) VALUES (@Name, @Form, @WeightVolume, @SerialNumber, @Usage, @ActiveIngredient, @ApplicationMethod, @AggregateState, @Type, @ManufacturerId, @SupplierId, @StockQuantity, @RequiresPrescription, @Price)";
+            string query = @"INSERT INTO Medicines (Name, Form, WeightVolume, SerialNumber, Usage, ActiveIngredient, ApplicationMethod, AggregateState, Type, ManufacturerId, SupplierId, StockQuantity, RequiresPrescription, Price) 
+                VALUES (@Name, @Form, @WeightVolume, @SerialNumber, @Usage, @ActiveIngredient, @ApplicationMethod, @AggregateState, @Type, @ManufacturerId, @SupplierId, @StockQuantity, @RequiresPrescription, @Price)";
             SqlParameter[] parameters = {
                 new SqlParameter("@Name", Name),
                 new SqlParameter("@Form", SelectedForm),
@@ -112,20 +129,12 @@ namespace LechebnikProject.ViewModels
             try
             {
                 DatabaseHelper.ExecuteNonQuery(query, parameters);
-                MessageBox.Show("Препарат добавлен успешно!");
+                MessageBox.Show("Препарат добавлен успешно!", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Произошла ошибка при добавлении препарата. {ex}");
+                MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void Cancel(object parameter)
-        {
-            var mainMenuWindow = new MainMenuWindow();
-            mainMenuWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is AddMedicineWindow))?.Close();
-            Application.Current.MainWindow = mainMenuWindow;
         }
     }
 }

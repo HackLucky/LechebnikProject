@@ -1,12 +1,10 @@
 ﻿using System.Windows;
 using LechebnikProject.ViewModels;
 using LechebnikProject.Models;
+using System.Windows.Controls;
 
 namespace LechebnikProject.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для LoginWindow.xaml
-    /// </summary>
     public partial class LoginWindow : Window
     {
         private readonly LoginViewModel _viewModel;
@@ -14,6 +12,7 @@ namespace LechebnikProject.Views
         public LoginWindow()
         {
             InitializeComponent();
+            LoginTextBox.Focus();
             _viewModel = new LoginViewModel();
         }
 
@@ -42,6 +41,13 @@ namespace LechebnikProject.Views
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            var connectionWindow = new ConnectionSettingsWindow();
+            connectionWindow.Show();
+            this.Close();
         }
     }
 }

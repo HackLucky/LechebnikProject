@@ -1,30 +1,44 @@
 ﻿<Window x:Class="LechebnikProject.Views.CartWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно корзины]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
+        Title="ЛЕЧЕБНИК [окно корзины]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="True">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="КОРЗИНА" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Препарат (название, лекарственная форма, вес/объём)" Binding="{Binding Medicine.Name}"/>
-                <DataGridTextColumn Header="Приобретаемое количество" Binding="{Binding Quantity}"/>
-                <DataGridTextColumn Header="Цена в рублях" Binding="{Binding Medicine.Price, StringFormat={}{0:C}}"/>
+                <DataGridTextColumn Header="Препарат" Binding="{Binding Medicine.Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Приобретаемое количество" Binding="{Binding Quantity}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="По рецепту" Binding="{Binding IsByPrescription, Converter={StaticResource BooleanToStringConverter}}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Серия рецепта" Binding="{Binding Prescription.Series, TargetNullValue='Отсутствует'}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Цена за единицу" Binding="{Binding Medicine.Price, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding Discount, StringFormat={}{0}%}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Итоговая стоимость" Binding="{Binding TotalPrice, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Убрать" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5"/>
+                            <Button Content="УБРАТЬ" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Очистить список" Command="{Binding ClearCommand}" Width="200" Height="30" Margin="5"/>
-            <Button Content="Перейти к оплате" Command="{Binding CheckoutCommand}" Width="300" Height="30" Margin="5"/>
-            <Button Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="200" Height="30" Margin="5"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="ОЧИСТИТЬ СПИСОК" Command="{Binding ClearCommand}" Style="{StaticResource FuncButton}"/>
+            <Button Content="ПЕРЕЙТИ К ОПЛАТЕ" Command="{Binding CheckoutCommand}" IsEnabled="{Binding CanCheckout}" Style="{StaticResource FuncButton}"/>
+            <Button Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoToMainMenuCommand}" Style="{StaticResource FuncButton}"/>
         </StackPanel>
     </Grid>
 </Window>

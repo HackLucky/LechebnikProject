@@ -14,6 +14,21 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,18 +50,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Favicons\favicon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Favicons\LechebnikLogo-Mini.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>LechebnikProject.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.5.4.0\lib\net46\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,7 +83,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\AppConfigManager.cs" />
+    <Compile Include="Helpers\BooleanToStringConverter.cs" />
+    <Compile Include="Helpers\CaptchaHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\RoleToVisibilityConverter.cs" />
+    <Compile Include="Helpers\SenderRoleToColorConverter.cs" />
+    <Compile Include="Helpers\WindowManager.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
@@ -74,9 +97,14 @@
     <Compile Include="ViewModels\AdminPanelViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
+    <Compile Include="ViewModels\ClientLoginViewModel.cs" />
+    <Compile Include="ViewModels\ClientRegisterViewModel.cs" />
     <Compile Include="ViewModels\ContactAdminViewModel.cs" />
+    <Compile Include="ViewModels\EditMedicineViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
+    <Compile Include="ViewModels\ManageMedicinesViewModel.cs" />
+    <Compile Include="ViewModels\ManageReportsViewModel.cs" />
     <Compile Include="ViewModels\ManageUsersViewModel.cs" />
     <Compile Include="ViewModels\MedicineDetailsViewModel.cs" />
     <Compile Include="ViewModels\MedicineListViewModel.cs" />
@@ -96,14 +124,32 @@
     <Compile Include="Views\CartWindow.xaml.cs">
       <DependentUpon>CartWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ClientLoginWindow.xaml.cs">
+      <DependentUpon>ClientLoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientRegisterWindow.xaml.cs">
+      <DependentUpon>ClientRegisterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectionSettingsWindow.xaml.cs">
+      <DependentUpon>ConnectionSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ContactAdminWindow.xaml.cs">
       <DependentUpon>ContactAdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditMedicineWindow.xaml.cs">
+      <DependentUpon>EditMedicineWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainMenuWindow.xaml.cs">
       <DependentUpon>MainMenuWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageMedicinesWindow.xaml.cs">
+      <DependentUpon>ManageMedicinesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageReportsWindow.xaml.cs">
+      <DependentUpon>ManageReportsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ManageUsersWindow.xaml.cs">
       <DependentUpon>ManageUsersWindow.xaml</DependentUpon>
@@ -155,7 +201,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ClientLoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientRegisterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectionSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ContactAdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditMedicineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -164,6 +226,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainMenuWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManageMedicinesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManageReportsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -247,16 +317,59 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Packages\" />
+    <Resource Include="Resources\Pictures\Settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\LechebnikLogo.png" />
-    <Resource Include="Resources\LechebnikLogoMain.png" />
-    <Resource Include="Resources\LechebnikLogoMainX.png" />
-    <Resource Include="Resources\LechebnikBackground.png" />
+    <Resource Include="Resources\Pictures\Medicines.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Favicons\favicon.ico" />
+    <Resource Include="Resources\Pictures\Cart.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Order.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Prescription.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Admin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\User.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\Power_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Own\LechebnikLogo-Full.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Own\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Own\LechebnikLogo-Mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Favicons\LechebnikLogo-Mini.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

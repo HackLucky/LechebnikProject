@@ -1,0 +1,27 @@
+﻿<Window x:Class="LechebnikProject.Views.ClientLoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ЛЕЧЕБНИК [окно аутентификации клиента]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="АУТЕНТИФИКАЦИЯ КЛИЕНТА" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Label Content="Логин клиента:" Style="{StaticResource MainText}"/>
+            <TextBox x:Name="LoginTextBox" Style="{StaticResource InputText}"/>
+            <Label Content="Код клиента:" Style="{StaticResource MainText}"/>
+            <PasswordBox x:Name="CodePasswordBox" Style="{StaticResource InputPassword}"/>
+            <StackPanel>
+                <Button Content="АУТЕНТИФИЦИРОВАТЬ" Click="LoginButton_Click" Style="{StaticResource Button}"/>
+                <Label Content="Если клиент не зарегистрирован, нажмите кнопку:" Style="{StaticResource Text}" HorizontalAlignment="Center"/>
+                <Button Content="ЗАРЕГИСТРИРОВАТЬ" Click="RegisterButton_Click" Style="{StaticResource Button}"/>
+                <Button Content="ПРОПУСТИТЬ АУТЕНТИФИКАЦИЮ" Click="SkipButton_Click" Style="{StaticResource Button}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

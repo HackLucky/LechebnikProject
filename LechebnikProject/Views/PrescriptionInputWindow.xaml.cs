@@ -4,14 +4,16 @@ using System.Windows;
 
 namespace LechebnikProject.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для PrescriptionInputWindow.xaml
-    /// </summary>
     public partial class PrescriptionInputWindow : Window
     {
-        public PrescriptionInputWindow(Medicine medicine)
+        public PrescriptionInputWindow()
         {
             InitializeComponent();
+            SeriesTextBox.Focus();
+        }
+
+        public PrescriptionInputWindow(Medicine medicine) : this()
+        {
             DataContext = new PrescriptionInputViewModel(medicine);
         }
     }

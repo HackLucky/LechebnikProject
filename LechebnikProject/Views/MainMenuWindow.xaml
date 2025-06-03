@@ -1,18 +1,64 @@
 ﻿<Window x:Class="LechebnikProject.Views.MainMenuWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно главного меню]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Открыть список препаратов" Command="{Binding GoToMedicineListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5"/>
-            <Button Content="Открыть корзину" Command="{Binding GoToCartCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5"/>
-            <Button Content="Добавить препарат" Command="{Binding GoToAddMedicineCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5"/>
-            <Button Content="Просмотреть отчёты" Command="{Binding GoToReportsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5"/>
-            <Button Content="Открыть список зарегистрированных рецептов" Command="{Binding GoToPrescriptionsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5"/>
-            <Button Content="Открыть профиль" Command="{Binding GoToProfileCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5"/>
-            <Button Content="Связаться с администратором" Command="{Binding GoToContactAdminCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5"/>
-            <Button Content="Переход к панели администратора" Command="{Binding GoToAdminPanelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="300" Height="30" Margin="0,5" Visibility="{Binding CurrentUser.Role, Converter={StaticResource RoleToVisibilityConverter}}"/>
-            <Button Content="Закрыть программу" Command="{Binding ExitCommand}" Width="300" Height="30" Margin="0,5"/>
+        Title="ЛЕЧЕБНИК [окно главного меню]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="ГЛАВНОЕ МЕНЮ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
         </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ОТКРЫТЬ СПИСОК ПРЕПАРАТОВ" Command="{Binding GoToMedicineListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/Medicines.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ОТКРЫТЬ КОРЗИНУ" Command="{Binding GoToCartCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/Cart.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ДОБАВИТЬ ПРЕПАПАРТ" Command="{Binding GoToAddMedicineCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/Cross.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ПРОСМОТРЕТЬ ОТЧЁТЫ" Command="{Binding GoToReportsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/Order.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ОТКРЫТЬ СПИСОК РЕЦЕПТОВ" Command="{Binding GoToPrescriptionsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/Prescription.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ОТКРЫТЬ ПРОФИЛЬ" Command="{Binding GoToProfileCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/User.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="СВЯЗАТЬСЯ С АДМИНИСТРАТОРОМ" Command="{Binding GoToContactAdminCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/Question.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ПЕРЕЙТИ К ПАНЕЛИ АДМИНИСТРАТОРА" Command="{Binding GoToAdminPanelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource MenuButtons}" Visibility="{Binding CurrentUser.Role, Converter={StaticResource RoleToVisibilityConverter}}"/>
+                <Image Source="/Resources/Pictures/Admin.png" Style="{StaticResource Image}" Visibility="{Binding CurrentUser.Role, Converter={StaticResource RoleToVisibilityConverter}}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="ЗАКРЫТЬ ПРОГРАММУ" Command="{Binding ExitCommand}" Style="{StaticResource MenuButtons}"/>
+                <Image Source="/Resources/Pictures/Power_off.png" Style="{StaticResource Image}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

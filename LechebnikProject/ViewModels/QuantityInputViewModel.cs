@@ -1,53 +1,73 @@
-﻿using LechebnikProject.Helpers;
-using LechebnikProject.Models;
+﻿using Lechebnik.ViewModels;
+using LechebnikProject.Helpers;
 using LechebnikProject.Views;
 using System;
-using System.Linq;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 
 namespace LechebnikProject.ViewModels
 {
-    public class QuantityInputViewModel
+    public class QuantityInputViewModel : BaseViewModel
     {
-        public Medicine SelectedMedicine { get; set; }
-        public int Quantity { get; set; }
-        public ICommand AddCommand { get; }
+        public Models.Medicine SelectedMedicine { get; set; }
+        public string Quantity { get; set; }
+
+        public class Medicine
+        {
+            public int MedicineId { get; set; }
+            public string Name { get; set; }
+            public int StockQuantity { get; set; }
+            public decimal Price { get; set; }
+        }
+
+        public ICommand ConfirmCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public QuantityInputViewModel(Medicine medicine)
+        public QuantityInputViewModel(Models.Medicine medicine)
         {
             SelectedMedicine = medicine;
-            AddCommand = new RelayCommand(Add);
-            CancelCommand = new RelayCommand(Cancel);
+            Quantity = "1";
+
+            ConfirmCommand = new RelayCommand(Confirm);
+            CancelCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
         }
 
-        private void Add(object parameter)
+        private void Confirm(object obj)
         {
-            if (Quantity <= 0 || Quantity > SelectedMedicine.StockQuantity)
+            try
             {
-                MessageBox.Show("Некорректное количество или отсутствие товара на складе.");
-                return;
+                if (!int.TryParse(Quantity, out int quantity) || quantity <= 0)
+                {
+                    MessageBox.Show("Введите корректное количество.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (quantity > SelectedMedicine.StockQuantity)
+                {
+                    MessageBox.Show("Недостаточно товара на складе.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                decimal discount = AppContext.CurrentClient?.Discount ?? 0m;
+
+                string query = @"INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription, PrescriptionId, Discount)
+                             VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription, @PrescriptionId, @Discount)";
+                var parameters = new[]
+                {
+                    new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
+                    new SqlParameter("@MedicineId", SelectedMedicine.MedicineId),
+                    new SqlParameter("@Quantity", quantity),
+                    new SqlParameter("@IsByPrescription", false),
+                    new SqlParameter("@PrescriptionId", DBNull.Value),
+                    new SqlParameter("@Discount", discount)
+                };
+                DatabaseHelper.ExecuteNonQuery(query, parameters);
+
+                MessageBox.Show("Препарат добавлен в корзину.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                WindowManager.ShowWindow<MedicineListWindow>();
             }
-            var cartItem = AppContext.CartItems.Find(c => c.Medicine.MedicineId == SelectedMedicine.MedicineId);
-            if (cartItem != null)
-                cartItem.Quantity += Quantity;
-            else
-                AppContext.CartItems.Add(new CartItem { Medicine = SelectedMedicine, Quantity = Quantity });
-            GoToMedicineList(parameter);
-        }
-
-        private void Cancel(object parameter)
-        {
-            GoToMedicineList(parameter);
-        }
-
-        private void GoToMedicineList(object parameter)
-        {
-            var medicineListWindow = new MedicineListWindow();
-            medicineListWindow.Show();
-            (Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w is QuantityInputWindow))?.Close();
-            Application.Current.MainWindow = medicineListWindow;
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
     }
 }

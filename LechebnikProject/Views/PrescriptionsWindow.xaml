@@ -1,17 +1,40 @@
 ﻿<Window x:Class="LechebnikProject.Views.PrescriptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно списка зарегистрированных рецептов]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="ЛЕЧЕБНИК [окно списка зарегистрированных рецептов]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Prescriptions}" AutoGenerateColumns="True" IsReadOnly="True" SelectedItem="{Binding SelectedPrescription}"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Зарегистрировать новый рецепт" Command="{Binding AddPrescriptionCommand}" Width="300" Margin="0,0,10,0"/>
-            <Button Content="Редактировать" Command="{Binding EditPrescriptionCommand}" Width="300" Margin="0,0,10,0"/>
-            <Button Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="300"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="СПИСОК РЕЦЕПТОВ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
         </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Поиск:" VerticalAlignment="Center" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Prescriptions}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Серия" Binding="{Binding Series}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Учреждение" Binding="{Binding MedicalInstitution}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Фамилия пациента" Binding="{Binding PatientLastName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Имя пациента" Binding="{Binding PatientFirstName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Отчество пациента" Binding="{Binding PatientMiddleName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Код МКБ-10" Binding="{Binding ICD10Code}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Тип скидки" Binding="{Binding DiscountType}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Фамилия врача" Binding="{Binding DoctorLastName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Имя врача" Binding="{Binding DoctorFirstName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Отчество врача" Binding="{Binding DoctorMiddleName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Препарат" Binding="{Binding MedicineId}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Фармацевт" Binding="{Binding PharmacistId}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Срок действия" Binding="{Binding ExpiryDate, StringFormat=dd.MM.yyyy}" HeaderStyle="{StaticResource ColumnHeader}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="3" Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
     </Grid>
 </Window>

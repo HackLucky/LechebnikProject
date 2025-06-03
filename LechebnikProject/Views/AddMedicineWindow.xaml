@@ -2,44 +2,47 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:LechebnikProject.Helpers"
-        Title="ЛЕЧЕБНИК [окно добавления препарата]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <local:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
-    </Window.Resources>
-    <ScrollViewer>
-        <StackPanel Margin="10">
-            <Label Content="Препарат (название, лекарственная форма, вес/объём):"/>
-            <TextBox Text="{Binding Name}"/>
-            <Label Content="Лекарственная форма:"/>
-            <ComboBox ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm}"/>
-            <Label Content="Вес/объем (введите в миллиграммах/миллилитрах):"/>
-            <TextBox Text="{Binding WeightVolume}"/>
-            <Label Content="Серийный номер:"/>
-            <TextBox Text="{Binding SerialNumber}"/>
-            <Label Content="Применение при болезнях (названия болезней, через запятую):"/>
-            <TextBox Text="{Binding Usage}"/>
-            <Label Content="Действующее вещество (через запятую):"/>
-            <TextBox Text="{Binding ActiveIngredient}"/>
-            <Label Content="Способ применения:"/>
-            <ComboBox ItemsSource="{Binding ApplicationMethods}" SelectedItem="{Binding SelectedApplicationMethod}"/>
-            <Label Content="Агрегатное состояние:"/>
-            <ComboBox ItemsSource="{Binding AggregateStates}" SelectedItem="{Binding SelectedAggregateState}"/>
-            <Label Content="Тип препарата:"/>
-            <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}"/>
-            <Label Content="Производитель:"/>
-            <ComboBox ItemsSource="{Binding Manufacturers}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedManufacturer}"/>
-            <Label Content="Поставщик:"/>
-            <ComboBox ItemsSource="{Binding Suppliers}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSupplier}"/>
-            <Label Content="Количество на складе (введите целое число):"/>
-            <TextBox Text="{Binding StockQuantity}"/>
-            <Label Content="Требуется рецепт (если требуется, поставьте отметку):"/>
-            <CheckBox IsChecked="{Binding RequiresPrescription}"/>
-            <Label Content="Цена в рублях (отделите копейки запятой):"/>
-            <TextBox Text="{Binding Price}"/>
-            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <Button Content="Добавить препарат" Command="{Binding AddCommand}" Width="300" Margin="0,0,10,0"/>
-                <Button Content="Отменить добавление препарата" Command="{Binding CancelCommand}" Width="300"/>
+        Title="ЛЕЧЕБНИК [окно добавления препарата]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
+        <ScrollViewer>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="ДОБАВЛЕНИЕ ПРЕПАРАТА" Style="{StaticResource MainHeader}"/>
+                    <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+                </StackPanel>
+                <Label Content="Название:" Style="{StaticResource MainText}"/>
+                <TextBox x:Name="NameTextBox" Text="{Binding Name}" Style="{StaticResource InputText}"/>
+                <Label Content="Лекарственная форма:" Style="{StaticResource MainText}"/>
+                <ComboBox ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm}" Style="{StaticResource ComboBox}"/>
+                <Label Content="Вес/объем (введите в миллиграммах/миллилитрах):" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding WeightVolume}" Style="{StaticResource InputText}"/>
+                <Label Content="Серийный номер:" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding SerialNumber}" Style="{StaticResource InputText}"/>
+                <Label Content="Применение при болезнях (названия болезней, через запятую):" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding Usage}" Style="{StaticResource InputText}"/>
+                <Label Content="Действующее вещество (через запятую):" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding ActiveIngredient}" Style="{StaticResource InputText}"/>
+                <Label Content="Способ применения:" Style="{StaticResource MainText}"/>
+                <ComboBox ItemsSource="{Binding ApplicationMethods}" SelectedItem="{Binding SelectedApplicationMethod}" Style="{StaticResource ComboBox}"/>
+                <Label Content="Агрегатное состояние:" Style="{StaticResource MainText}"/>
+                <ComboBox ItemsSource="{Binding AggregateStates}" SelectedItem="{Binding SelectedAggregateState}" Style="{StaticResource ComboBox}"/>
+                <Label Content="Тип препарата:" Style="{StaticResource MainText}"/>
+                <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" Style="{StaticResource ComboBox}"/>
+                <Label Content="Производитель:" Style="{StaticResource MainText}"/>
+                <ComboBox ItemsSource="{Binding Manufacturers}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedManufacturer}" Style="{StaticResource ComboBox}"/>
+                <Label Content="Поставщик:" Style="{StaticResource MainText}"/>
+                <ComboBox ItemsSource="{Binding Suppliers}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSupplier}" Style="{StaticResource ComboBox}"/>
+                <Label Content="Количество на складе (введите целое число):" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding StockQuantity}" Style="{StaticResource InputText}"/>
+                <Label Content="Требуется рецепт (если требуется, поставьте отметку):" Style="{StaticResource MainText}"/>
+                <CheckBox IsChecked="{Binding RequiresPrescription}" Style="{StaticResource CheckBox}"/>
+                <Label Content="Цена в рублях (отделите копейки запятой):" Style="{StaticResource MainText}"/>
+                <TextBox Text="{Binding Price}" Style="{StaticResource InputText}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="ДОБАВИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}"/>
+                    <Button Content="ОТМЕНИТЬ" Command="{Binding GoToMainMenuCommand}" Style="{StaticResource FuncButton}"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </Window>

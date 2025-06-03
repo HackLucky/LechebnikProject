@@ -1,13 +1,35 @@
 ﻿<Window x:Class="LechebnikProject.Views.ReportsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно списка отчётов]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="ЛЕЧЕБНИК [окно списка отчётов]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding SalesData}" AutoGenerateColumns="True" IsReadOnly="True"/>
-        <Button Grid.Row="1" Content="Вернуться к главному меню" Command="{Binding GoBackCommand}" Width="200" Margin="10"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="СПИСОК ОТЧЁТОВ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Reports}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id отчёта" Binding="{Binding OrderId}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="ФИО сотрудника" Binding="{Binding UserFullName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="ФИО клиента" Binding="{Binding ClientFullName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Кол-во товаров" Binding="{Binding TotalItems}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Способ оплаты" Binding="{Binding PaymentMethod}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Сумма без скидки" Binding="{Binding TotalWithoutDiscount, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding DiscountPercentage, StringFormat={}{0}%}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Сумма со скидкой" Binding="{Binding TotalWithDiscount, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Дата и время операции" Binding="{Binding OrderDateTime}" HeaderStyle="{StaticResource ColumnHeader}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="3" Content="ГЛАВНОЕ МЕНЮ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

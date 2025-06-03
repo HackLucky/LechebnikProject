@@ -1,18 +1,63 @@
 ﻿<Window x:Class="LechebnikProject.Views.ManageUsersWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛЕЧЕБНИК [окно управления пользователями]" Height="540" Width="960" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="ЛЕЧЕБНИК [окно управления пользователями]" Style="{StaticResource Window}" WindowStartupLocation="CenterScreen">
+    <Grid Style="{StaticResource Grid}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Users}" AutoGenerateColumns="True" SelectedItem="{Binding SelectedUser}" IsReadOnly="True"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Добавить" Command="{Binding AddUserCommand}" Width="100" Margin="5"/>
-            <Button Content="Редактировать" Command="{Binding EditUserCommand}" Width="100" Margin="5"/>
-            <Button Content="Блокировать/Разблокировать" Command="{Binding BlockUserCommand}" Width="200" Margin="5"/>
-            <Button Content="Вернуться к панели администратора" Command="{Binding GoBackCommand}" Width="250" Margin="5"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ" Style="{StaticResource MainHeader}"/>
+            <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Поиск:" VerticalAlignment="Center" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding AllEntities}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedEntity}" IsReadOnly="True" Margin="10,0,10,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Тип" Binding="{Binding Type}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Логин" Binding="{Binding Login}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding MiddleName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Роль" Binding="{Binding Role}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Status}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding Discount, StringFormat={}{0}%}" HeaderStyle="{StaticResource ColumnHeader}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="УДАЛИТЬ" Command="{Binding DelUserCommand}" Style="{StaticResource FuncButton}" Width="150"/>
+            <Button Content="СМЕНИТЬ РОЛЬ" Command="{Binding ChangeRoleCommand}" Style="{StaticResource FuncButton}" Width="200"/>
+            <ComboBox Width="80" Margin="5"
+          ItemsSource="{Binding DiscountOptions}"
+          SelectedItem="{Binding SelectedDiscount, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat={}{0}%}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Content="ИЗМЕНИТЬ СКИДКУ" Command="{Binding ChangeDiscountCommand}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource FuncButton}">
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedItem.Type}" Value="Client">
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="БЛОКИРОВАТЬ/РАЗБЛОКИРОВАТЬ" Command="{Binding ToggleBlockCommand}" Style="{StaticResource FuncButton}" Width="430"/>
+            <Button Content="АДМИН-ПАНЕЛЬ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
         </StackPanel>
     </Grid>
 </Window>
