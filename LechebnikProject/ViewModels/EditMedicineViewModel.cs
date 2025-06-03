@@ -51,26 +51,34 @@ namespace LechebnikProject.ViewModels
 
         private void LoadManufacturers()
         {
-            var dt = DatabaseHelper.ExecuteQuery("SELECT * FROM Manufacturers");
-            Manufacturers = dt.AsEnumerable()
-                .Select(r => new Manufacturer
-                {
-                    ManufacturerId = r.Field<int>("ManufacturerId"),
-                    Name = r.Field<string>("Name"),
-                    Country = r.Field<string>("Country")
-                }).ToList();
+            try
+            {
+                var dt = DatabaseHelper.ExecuteQuery("SELECT * FROM Manufacturers");
+                Manufacturers = dt.AsEnumerable()
+                    .Select(r => new Manufacturer
+                    {
+                        ManufacturerId = r.Field<int>("ManufacturerId"),
+                        Name = r.Field<string>("Name"),
+                        Country = r.Field<string>("Country")
+                    }).ToList();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void LoadSuppliers()
         {
-            var dt = DatabaseHelper.ExecuteQuery("SELECT * FROM Suppliers");
-            Suppliers = dt.AsEnumerable()
-                .Select(r => new Supplier
-                {
-                    SupplierId = r.Field<int>("SupplierId"),
-                    Name = r.Field<string>("Name"),
-                    Country = r.Field<string>("Country")
-                }).ToList();
+            try
+            {
+                var dt = DatabaseHelper.ExecuteQuery("SELECT * FROM Suppliers");
+                Suppliers = dt.AsEnumerable()
+                    .Select(r => new Supplier
+                    {
+                        SupplierId = r.Field<int>("SupplierId"),
+                        Name = r.Field<string>("Name"),
+                        Country = r.Field<string>("Country")
+                    }).ToList();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         public EditMedicineViewModel(Medicine medicine)
@@ -94,27 +102,26 @@ namespace LechebnikProject.ViewModels
             LoadSuppliers();
 
             SaveCommand = new RelayCommand(Save);
-            GoToMainMenuCommand = new RelayCommand(_ =>
-                WindowManager.ShowWindow<MainMenuWindow>());
+            GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
         private void Save(object parameter)
         {
             if (string.IsNullOrWhiteSpace(Name) || SelectedForm == null || SelectedManufacturer == null || SelectedSupplier == null)
             {
-                MessageBox.Show("Пожалуйста, заполните все поля.");
+                MessageBox.Show("Пожалуйста, заполните все поля.", "предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (!int.TryParse(StockQuantity, out int stock) || stock < 0)
             {
-                MessageBox.Show("Некорректное количество на складе.");
+                MessageBox.Show("Некорректное количество на складе.", "предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (!decimal.TryParse(Price, out decimal price) || price < 0)
             {
-                MessageBox.Show("Некорректная цена.");
+                MessageBox.Show("Некорректная цена.", "предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -148,13 +155,13 @@ namespace LechebnikProject.ViewModels
             try
             {
                 DatabaseHelper.ExecuteNonQuery(sql, prms);
-                MessageBox.Show("Данные препарата обновлены.", "Успешно.", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Данные препарата обновлены.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
                 WindowManager.ShowWindow<ManageMedicinesWindow>();
             }
             catch (SqlException ex)
             {
                 Logger.LogError("Ошибка при обновлении препарата", ex);
-                MessageBox.Show("Не удалось сохранить изменения. Проверьте данные или обратитесь к администратору.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Не удалось сохранить изменения. Проверьте данные или обратитесь к администратору: andrej_sok@mail.ru.", "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

@@ -167,7 +167,13 @@
             <Setter Property="Background" Value="DarkGray"/>
             <Setter Property="Foreground" Value="Green"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3"/>
             <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="InputText" TargetType="TextBox">
             <Setter Property="FontSize" Value="20"/>
@@ -175,7 +181,28 @@
             <Setter Property="Background" Value="DarkGray"/>
             <Setter Property="Foreground" Value="Green"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3"/>
             <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CaretBrush">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="Black" Offset="0.25"/>
+                        <GradientStop Color="LightGray" Offset="0.25"/>
+                        <GradientStop Color="LightGray" Offset="0.75"/>
+                        <GradientStop Color="Black" Offset="0.75"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="SelectionBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="Black" Opacity="0.8"/>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="InputPassword" TargetType="PasswordBox">
             <Setter Property="FontSize" Value="20"/>
@@ -184,6 +211,26 @@
             <Setter Property="Foreground" Value="Green"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,0,10,10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CaretBrush">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="Black" Offset="0.25"/>
+                        <GradientStop Color="LightGray" Offset="0.25"/>
+                        <GradientStop Color="LightGray" Offset="0.75"/>
+                        <GradientStop Color="Black" Offset="0.75"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="SelectionBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="Black" Opacity="0.8"/>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="ComboBox" TargetType="ComboBox">
             <Setter Property="FontSize" Value="20"/>
@@ -191,11 +238,34 @@
             <Setter Property="Foreground" Value="Green"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DatePicker" TargetType="DatePicker">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Foreground" Value="Green"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="CheckBox" TargetType="CheckBox">
             <Setter Property="Background" Value="DarkGray"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="LayoutTransform">
                 <Setter.Value>
                     <ScaleTransform ScaleX="2" ScaleY="2"/>
@@ -212,6 +282,11 @@
             <Setter Property="Height" Value="50"/>
             <Setter Property="Margin" Value="0,5,0,0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -219,6 +294,9 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="ForestGreen"/>
+                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Green"/>
                             </Trigger>
@@ -244,6 +322,11 @@
             <Setter Property="Height" Value="40"/>
             <Setter Property="Margin" Value="0,5,0,0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -251,6 +334,9 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="ForestGreen"/>
+                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Green"/>
                             </Trigger>
@@ -276,6 +362,11 @@
             <Setter Property="Height" Value="40"/>
             <Setter Property="Margin" Value="5,5,5,5"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="1" Opacity="0.9" Direction="315" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -283,6 +374,9 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="ForestGreen"/>
+                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Green"/>
                             </Trigger>
@@ -300,7 +394,7 @@
         </Style>
         <Style x:Key="Image" TargetType="Image">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Margin" Value="0,5,0,0"/>
+            <Setter Property="Margin" Value="5,5,0,0"/>
         </Style>
     </Application.Resources>
 </Application>

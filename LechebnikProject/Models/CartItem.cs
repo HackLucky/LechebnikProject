@@ -3,6 +3,7 @@
     public class CartItem
     {
         public int CartItemId { get; set; }
+        public int UserId { get; set; }
         public Medicine Medicine { get; set; }
         public int Quantity { get; set; }
         public bool IsByPrescription { get; set; }

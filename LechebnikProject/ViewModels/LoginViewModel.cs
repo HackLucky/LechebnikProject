@@ -71,7 +71,7 @@ namespace LechebnikProject.ViewModels
             catch (Exception ex)
             {
                 Logger.LogError("Ошибка при аутентификации.", ex);
-                MessageBox.Show("Произошла ошибка при аутентификации.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Произошла ошибка при аутентификации.", "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }

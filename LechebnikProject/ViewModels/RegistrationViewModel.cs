@@ -20,14 +20,14 @@ namespace LechebnikProject.ViewModels
         public string ConfirmPassword { get; set; }
         public string CaptchaInput { get; set; }
 
+        private readonly string _captchaCode;
+
         private BitmapImage _captchaImage;
         public BitmapImage CaptchaImage
         {
             get => _captchaImage;
             set => _captchaImage = value;
         }
-
-        private readonly string _captchaCode;
 
         public RegistrationViewModel()
         {
@@ -117,7 +117,7 @@ namespace LechebnikProject.ViewModels
             catch (Exception ex)
             {
                 Logger.LogError("Ошибка при регистрации пользователя.", ex);
-                MessageBox.Show("Ошибка при регистрации. Возможно, логин уже занят.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ошибка при регистрации. Возможно, логин уже занят.", "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
         }

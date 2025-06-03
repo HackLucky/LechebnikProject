@@ -30,40 +30,44 @@ namespace LechebnikProject.ViewModels
             Quantity = "1";
 
             ConfirmCommand = new RelayCommand(Confirm);
-            CancelCommand = new RelayCommand(_ => WindowManager.ShowWindow<MedicineListWindow>());
+            CancelCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
         }
 
         private void Confirm(object obj)
         {
-            if (!int.TryParse(Quantity, out int quantity) || quantity <= 0)
+            try
             {
-                MessageBox.Show("Введите корректное количество.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                if (!int.TryParse(Quantity, out int quantity) || quantity <= 0)
+                {
+                    MessageBox.Show("Введите корректное количество.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (quantity > SelectedMedicine.StockQuantity)
+                {
+                    MessageBox.Show("Недостаточно товара на складе.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                decimal discount = AppContext.CurrentClient?.Discount ?? 0m;
+
+                string query = @"INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription, PrescriptionId, Discount)
+                             VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription, @PrescriptionId, @Discount)";
+                var parameters = new[]
+                {
+                    new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
+                    new SqlParameter("@MedicineId", SelectedMedicine.MedicineId),
+                    new SqlParameter("@Quantity", quantity),
+                    new SqlParameter("@IsByPrescription", false),
+                    new SqlParameter("@PrescriptionId", DBNull.Value),
+                    new SqlParameter("@Discount", discount)
+                };
+                DatabaseHelper.ExecuteNonQuery(query, parameters);
+
+                MessageBox.Show("Препарат добавлен в корзину.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                WindowManager.ShowWindow<MedicineListWindow>();
             }
-
-            if (quantity > SelectedMedicine.StockQuantity)
-            {
-                MessageBox.Show("Недостаточно товара на складе.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            decimal discount = AppContext.CurrentClient?.Discount ?? 0m;
-
-            string query = @"INSERT INTO CartItems (UserId, MedicineId, Quantity, IsByPrescription, PrescriptionId, Discount)
-                         VALUES (@UserId, @MedicineId, @Quantity, @IsByPrescription, @PrescriptionId, @Discount)";
-            var parameters = new[]
-            {
-                new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
-                new SqlParameter("@MedicineId", SelectedMedicine.MedicineId),
-                new SqlParameter("@Quantity", quantity),
-                new SqlParameter("@IsByPrescription", false),
-                new SqlParameter("@PrescriptionId", DBNull.Value),
-                new SqlParameter("@Discount", discount)
-            };
-            DatabaseHelper.ExecuteNonQuery(query, parameters);
-
-            MessageBox.Show("Препарат добавлен в корзину.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-            WindowManager.ShowWindow<MedicineListWindow>();
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
     }
 }

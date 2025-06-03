@@ -19,7 +19,7 @@
         </StackPanel>
         <DataGrid Grid.Row="2" ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Препарат (название, лекарственная форма, вес/объём)" Binding="{Binding Medicine.Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Препарат" Binding="{Binding Medicine.Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Приобретаемое количество" Binding="{Binding Quantity}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="По рецепту" Binding="{Binding IsByPrescription, Converter={StaticResource BooleanToStringConverter}}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Серия рецепта" Binding="{Binding Prescription.Series, TargetNullValue='Отсутствует'}" HeaderStyle="{StaticResource ColumnHeader}"/>

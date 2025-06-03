@@ -75,7 +75,7 @@ namespace LechebnikProject.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Произошла ошибка при отправке сообщения. {ex}", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             LoadMessages();
         }

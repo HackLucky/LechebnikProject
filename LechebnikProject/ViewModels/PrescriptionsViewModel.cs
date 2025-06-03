@@ -1,7 +1,9 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
 using LechebnikProject.Views;
+using System;
 using System.Data;
+using System.Windows;
 using System.Windows.Input;
 
 namespace LechebnikProject.ViewModels
@@ -26,8 +28,12 @@ namespace LechebnikProject.ViewModels
 
         private void LoadPrescriptions()
         {
-            string query = "SELECT * FROM Prescriptions";
-            Prescriptions = DatabaseHelper.ExecuteQuery(query);
+            try
+            {
+                string query = "SELECT * FROM Prescriptions";
+                Prescriptions = DatabaseHelper.ExecuteQuery(query);
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
     }
 }

@@ -11,6 +11,7 @@ namespace LechebnikProject.ViewModels
     public class ProfileViewModel
     {
         public User CurrentUser => AppContext.CurrentUser;
+
         public ICommand SaveCommand { get; }
         public ICommand GoBackCommand { get; }
         public ICommand ExitProfile {  get; }
@@ -59,13 +60,13 @@ namespace LechebnikProject.ViewModels
             try
             {
                 DatabaseHelper.ExecuteQuery(query, parameters);
-                MessageBox.Show("Профиль обновлен!");
+                MessageBox.Show("Профиль обновлен!", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             catch (Exception ex)
             {
                 Logger.LogError("Ошибка при обновлении профиля.", ex);
-                MessageBox.Show("Ошибка при обновлении профиля.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ошибка при обновлении профиля.", "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }

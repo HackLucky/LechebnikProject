@@ -25,7 +25,7 @@
                 <Label Content="*Количество разрешённых для продажи препаратов:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding Quantity}" Style="{StaticResource InputText}"/>
                 <Label Content="*Требуемая скидка:" Style="{StaticResource MainText}"/>
-                <ComboBox ItemsSource="{Binding DiscountTypes}" SelectedItem="{Binding DiscountType}"/>
+                <ComboBox ItemsSource="{Binding DiscountTypes}" SelectedItem="{Binding DiscountType}" Style="{StaticResource ComboBox}"/>
                 <Label Content="*Фамилия врача:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding DoctorLastName}" Style="{StaticResource InputText}"/>
                 <Label Content="*Имя врача:" Style="{StaticResource MainText}"/>
@@ -33,7 +33,7 @@
                 <Label Content="Отчество врача:" Style="{StaticResource MainText}"/>
                 <TextBox Text="{Binding DoctorMiddleName}" Style="{StaticResource InputText}"/>
                 <Label Content="*Срок действия рецепта:" Style="{StaticResource MainText}"/>
-                <DatePicker SelectedDate="{Binding ExpiryDate}" Margin="0,0,0,10"/>
+                <DatePicker SelectedDate="{Binding ExpiryDate}" Style="{StaticResource DatePicker}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                     <Button Content="ПОДТВЕРДИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}"/>
                     <Button Content="ОТМЕНИТЬ" Command="{Binding CancelCommand}" Style="{StaticResource FuncButton}"/>

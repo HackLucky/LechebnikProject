@@ -10,7 +10,7 @@
                     <Label Content="ДОБАВЛЕНИЕ ПРЕПАРАТА" Style="{StaticResource MainHeader}"/>
                     <Image Source="/Resources/Own/LechebnikLogo-Mini.png" Height="50"/>
                 </StackPanel>
-                <Label Content="Препарат (название, лекарственная форма, вес/объём):" Style="{StaticResource MainText}"/>
+                <Label Content="Название:" Style="{StaticResource MainText}"/>
                 <TextBox x:Name="NameTextBox" Text="{Binding Name}" Style="{StaticResource InputText}"/>
                 <Label Content="Лекарственная форма:" Style="{StaticResource MainText}"/>
                 <ComboBox ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm}" Style="{StaticResource ComboBox}"/>

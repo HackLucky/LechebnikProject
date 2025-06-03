@@ -98,7 +98,7 @@ namespace LechebnikProject.ViewModels
                 WindowManager.ShowWindow<ClientLoginWindow>();
                 return true;
             }
-            catch { MessageBox.Show("Ошибка регистрации. Возможно, логин уже занят.", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
+            catch { MessageBox.Show("Ошибка регистрации. Возможно, логин уже занят.", "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
         }
     }
 }

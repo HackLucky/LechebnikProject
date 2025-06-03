@@ -33,36 +33,40 @@ namespace LechebnikProject.ViewModels
 
         private void LoadReports()
         {
-            string query = @"
-                SELECT o.OrderId, 
-                       u.LastName + ' ' + u.FirstName + ' ' + ISNULL(u.MiddleName, '') AS UserFullName,
-                       ISNULL(c.LastName + ' ' + c.FirstName + ' ' + ISNULL(c.MiddleName, ''), 'Не указан') AS ClientFullName,
-                       (SELECT SUM(Quantity) FROM OrderDetails od WHERE od.OrderId = o.OrderId) AS TotalItems,
-                       o.PaymentMethod,
-                       o.TotalAmount AS TotalWithoutDiscount,
-                       ISNULL(o.DiscountPercentage, 0) AS DiscountPercentage,
-                       o.TotalAmount * (1 - ISNULL(o.DiscountPercentage, 0) / 100) AS TotalWithDiscount,
-                       CONVERT(varchar, o.OrderDate, 104) + ' ' + CONVERT(varchar, o.OrderDate, 108) AS OrderDateTime
-                FROM Orders o
-                JOIN Users u ON o.UserId = u.UserId
-                LEFT JOIN Clients c ON o.ClientId = c.ClientId";
-            DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
-            Reports = new ObservableCollection<OrderReport>();
-            foreach (DataRow row in dataTable.Rows)
+            try
             {
-                Reports.Add(new OrderReport
+                string query = @"
+                    SELECT o.OrderId, 
+                           u.LastName + ' ' + u.FirstName + ' ' + ISNULL(u.MiddleName, '') AS UserFullName,
+                           ISNULL(c.LastName + ' ' + c.FirstName + ' ' + ISNULL(c.MiddleName, ''), 'Не указан') AS ClientFullName,
+                           (SELECT SUM(Quantity) FROM OrderDetails od WHERE od.OrderId = o.OrderId) AS TotalItems,
+                           o.PaymentMethod,
+                           o.TotalAmount AS TotalWithoutDiscount,
+                           ISNULL(o.DiscountPercentage, 0) AS DiscountPercentage,
+                           o.TotalAmount * (1 - ISNULL(o.DiscountPercentage, 0) / 100) AS TotalWithDiscount,
+                           CONVERT(varchar, o.OrderDate, 104) + ' ' + CONVERT(varchar, o.OrderDate, 108) AS OrderDateTime
+                    FROM Orders o
+                    JOIN Users u ON o.UserId = u.UserId
+                    LEFT JOIN Clients c ON o.ClientId = c.ClientId";
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+                Reports = new ObservableCollection<OrderReport>();
+                foreach (DataRow row in dataTable.Rows)
                 {
-                    OrderId = Convert.ToInt32(row["OrderId"]),
-                    UserFullName = row["UserFullName"].ToString(),
-                    ClientFullName = row["ClientFullName"].ToString(),
-                    TotalItems = Convert.ToInt32(row["TotalItems"]),
-                    PaymentMethod = row["PaymentMethod"].ToString(),
-                    TotalWithoutDiscount = Convert.ToDecimal(row["TotalWithoutDiscount"]),
-                    DiscountPercentage = Convert.ToDecimal(row["DiscountPercentage"]),
-                    TotalWithDiscount = Convert.ToDecimal(row["TotalWithDiscount"]),
-                    OrderDateTime = row["OrderDateTime"].ToString()
-                });
+                    Reports.Add(new OrderReport
+                    {
+                        OrderId = Convert.ToInt32(row["OrderId"]),
+                        UserFullName = row["UserFullName"].ToString(),
+                        ClientFullName = row["ClientFullName"].ToString(),
+                        TotalItems = Convert.ToInt32(row["TotalItems"]),
+                        PaymentMethod = row["PaymentMethod"].ToString(),
+                        TotalWithoutDiscount = Convert.ToDecimal(row["TotalWithoutDiscount"]),
+                        DiscountPercentage = Convert.ToDecimal(row["DiscountPercentage"]),
+                        TotalWithDiscount = Convert.ToDecimal(row["TotalWithDiscount"]),
+                        OrderDateTime = row["OrderDateTime"].ToString()
+                    });
+                }
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         public class OrderReport
@@ -82,15 +86,19 @@ namespace LechebnikProject.ViewModels
 
         private void DeleteReport(object parameter)
         {
-            if (SelectedReport != null)
+            try
             {
-                int orderId = (int)SelectedReport["Номер"];
-                string query = "DELETE FROM Orders WHERE OrderId = @OrderId";
-                var parameters = new[] { new SqlParameter("@OrderId", orderId) };
-                DatabaseHelper.ExecuteNonQuery(query, parameters);
-                LoadReports();
-                MessageBox.Show("Отчёт успешно удалён.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (SelectedReport != null)
+                {
+                    int orderId = (int)SelectedReport["Номер"];
+                    string query = "DELETE FROM Orders WHERE OrderId = @OrderId";
+                    var parameters = new[] { new SqlParameter("@OrderId", orderId) };
+                    DatabaseHelper.ExecuteNonQuery(query, parameters);
+                    LoadReports();
+                    MessageBox.Show("Отчёт успешно удалён.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
     }
 }

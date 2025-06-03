@@ -1,6 +1,8 @@
 ﻿using LechebnikProject.Helpers;
 using LechebnikProject.Models;
 using LechebnikProject.Views;
+using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace LechebnikProject.ViewModels
@@ -26,15 +28,19 @@ namespace LechebnikProject.ViewModels
 
         public MainMenuViewModel()
         {
-            GoToMedicineListCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
-            GoToCartCommand = new RelayCommand(o => WindowManager.ShowWindow<CartWindow>());
-            GoToAddMedicineCommand = new RelayCommand(o => WindowManager.ShowWindow<AddMedicineWindow>());
-            GoToReportsCommand = new RelayCommand(o => WindowManager.ShowWindow<ReportsWindow>());
-            GoToPrescriptionsCommand = new RelayCommand(o => WindowManager.ShowWindow<PrescriptionsWindow>());
-            GoToProfileCommand = new RelayCommand(o => WindowManager.ShowWindow<ProfileWindow>());
-            GoToContactAdminCommand = new RelayCommand(o => WindowManager.ShowWindow<ContactAdminWindow>());
-            GoToAdminPanelCommand = new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>(), CanGoToAdminPanel);
-            ExitCommand = new RelayCommand(o => WindowManager.CloseAllWindows());
+            try
+            {
+                GoToMedicineListCommand = new RelayCommand(o => WindowManager.ShowWindow<MedicineListWindow>());
+                GoToCartCommand = new RelayCommand(o => WindowManager.ShowWindow<CartWindow>());
+                GoToAddMedicineCommand = new RelayCommand(o => WindowManager.ShowWindow<AddMedicineWindow>());
+                GoToReportsCommand = new RelayCommand(o => WindowManager.ShowWindow<ReportsWindow>());
+                GoToPrescriptionsCommand = new RelayCommand(o => WindowManager.ShowWindow<PrescriptionsWindow>());
+                GoToProfileCommand = new RelayCommand(o => WindowManager.ShowWindow<ProfileWindow>());
+                GoToContactAdminCommand = new RelayCommand(o => WindowManager.ShowWindow<ContactAdminWindow>());
+                GoToAdminPanelCommand = new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>(), CanGoToAdminPanel);
+                ExitCommand = new RelayCommand(o => WindowManager.CloseAllWindows());
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
     }
 }

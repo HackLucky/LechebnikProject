@@ -48,7 +48,7 @@ namespace LechebnikProject.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Prescription.Series) || string.IsNullOrWhiteSpace(Prescription.MedicalInstitution) ||
                 string.IsNullOrWhiteSpace(Prescription.PatientLastName) || string.IsNullOrWhiteSpace(Prescription.PatientFirstName) ||
-                string.IsNullOrWhiteSpace(Prescription.ICD10Code) || Quantity <= 0 || string.IsNullOrWhiteSpace(SelectedDiscountType) ||
+                string.IsNullOrWhiteSpace(Prescription.ICD10Code) || Quantity <= 0 || string.IsNullOrWhiteSpace(Prescription.DiscountType) ||
                 string.IsNullOrWhiteSpace(Prescription.DoctorLastName) || string.IsNullOrWhiteSpace(Prescription.DoctorFirstName) ||
                 Prescription.ExpiryDate == default)
             {
@@ -58,6 +58,11 @@ namespace LechebnikProject.ViewModels
             if (Quantity > _medicine.StockQuantity)
             {
                 MessageBox.Show("Требуемое количество препарата превышает количество имеющихся на складе.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (Quantity > 100)
+            {
+                MessageBox.Show("Нельзя приобрести больше 100 препаратов.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -70,7 +75,7 @@ namespace LechebnikProject.ViewModels
                 PatientMiddleName = PatientMiddleName,
                 ICD10Code = ICD10Code,
                 Quantity = Quantity,
-                DiscountType = SelectedDiscountType,
+                DiscountType = DiscountType,
                 DoctorLastName = DoctorLastName,
                 DoctorFirstName = DoctorFirstName,
                 DoctorMiddleName = DoctorMiddleName,
@@ -102,7 +107,7 @@ namespace LechebnikProject.ViewModels
                 new SqlParameter("@PatientMiddleName", (object)Prescription.PatientMiddleName ?? DBNull.Value),
                 new SqlParameter("@ICD10Code", Prescription.ICD10Code ?? (object)DBNull.Value),
                 new SqlParameter("@Quantity", Quantity),
-                new SqlParameter("@DiscountType", SelectedDiscountType ?? (object)DBNull.Value),
+                new SqlParameter("@DiscountType", Prescription.DiscountType ?? (object)DBNull.Value),
                 new SqlParameter("@DoctorLastName", Prescription.DoctorLastName ?? (object)DBNull.Value),
                 new SqlParameter("@DoctorFirstName", Prescription.DoctorFirstName ?? (object)DBNull.Value),
                 new SqlParameter("@DoctorMiddleName", (object)Prescription.DoctorMiddleName ?? DBNull.Value),
@@ -110,22 +115,21 @@ namespace LechebnikProject.ViewModels
                 new SqlParameter("@PharmacistId", AppContext.CurrentUser.UserId),
                 new SqlParameter("@ExpiryDate", Prescription.ExpiryDate)
             };
+
             try
             {
                 int prescriptionId = Convert.ToInt32(DatabaseHelper.ExecuteScalar(insertPrescriptionQuery, parameters));
 
                 decimal basePrice = SelectedMedicine.Price * Quantity;
                 decimal finalPrice = basePrice;
-                bool isPaid = false;
 
-                if (SelectedDiscountType == "50%")
+                if (DiscountType == "50%")
                 {
                     finalPrice = basePrice * 0.5m;
                     MessageBox.Show($"Препарат с рецептом добавлен в корзину по скидке 50%. Итого: {finalPrice} руб.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                else if (SelectedDiscountType == "Бесплатно")
+                else if (DiscountType == "Бесплатно")
                 {
-                    isPaid = true;
                     MessageBox.Show("Препарат предоставлен бесплатно по рецепту. Заказ оформлен и занесён в отчёт.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     string insertOrderSql = @"

@@ -20,6 +20,7 @@ namespace LechebnikProject.ViewModels
             get => _cartItems;
             set => SetProperty(ref _cartItems, value);
         }
+
         public decimal TotalAmount => CartItems?.Sum(item => item.Medicine.Price * item.Quantity * (1 - (AppContext.CurrentClient?.Discount ?? 0) / 100)) ?? 0;
         public bool CanCheckout => CartItems?.Any() == true;
 
@@ -48,81 +49,86 @@ namespace LechebnikProject.ViewModels
 
         private void LoadCartItems()
         {
-            string query = @"
-                SELECT ci.*, m.Name, m.Price, p.Series 
-                FROM CartItems ci 
-                JOIN Medicines m ON ci.MedicineId = m.MedicineId 
-                LEFT JOIN Prescriptions p ON ci.PrescriptionId = p.PrescriptionId 
-                WHERE ci.UserId = @UserId";
-            var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
-            DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
-            CartItems = new ObservableCollection<CartItem>();
-            foreach (DataRow row in dataTable.Rows)
+            try
             {
-                bool isByPrescription = Convert.ToBoolean(row["IsByPrescription"]);
-                decimal discount = 0m;
-                if (isByPrescription)
+                string query = @"
+                    SELECT ci.*, m.Name, m.Price, p.Series 
+                    FROM CartItems ci 
+                    JOIN Medicines m ON ci.MedicineId = m.MedicineId 
+                    LEFT JOIN Prescriptions p ON ci.PrescriptionId = p.PrescriptionId 
+                    WHERE ci.UserId = @UserId";
+                var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
+                CartItems = new ObservableCollection<CartItem>();
+                foreach (DataRow row in dataTable.Rows)
                 {
-                    string discountType = row["DiscountType"]?.ToString();
-                    discount = discountType == "50%" ? 50m : discountType == "Бесплатно" ? 100m : 0m;
-                }
-                else if (AppContext.CurrentClient != null)
-                {
-                    discount = AppContext.CurrentClient.Discount;
-                }
-
-                CartItems.Add(new CartItem
-                {
-                    CartItemId = Convert.ToInt32(row["CartItemId"]),
-                    Medicine = new Medicine
+                    bool isByPrescription = Convert.ToBoolean(row["IsByPrescription"]);
+                    decimal discount = 0m;
+                    if (isByPrescription)
                     {
-                        MedicineId = Convert.ToInt32(row["MedicineId"]),
-                        Name = row["Name"].ToString(),
-                        Price = Convert.ToDecimal(row["Price"])
-                    },
-                    Quantity = Convert.ToInt32(row["Quantity"]),
-                    IsByPrescription = isByPrescription,
-                    PrescriptionId = row["PrescriptionId"] != DBNull.Value ? Convert.ToInt32(row["PrescriptionId"]) : (int?)null,
-                    Prescription = isByPrescription ? new Prescription { Series = row["Series"]?.ToString() } : null,
-                    Discount = discount
-                });
+                        string discountType = row["DiscountType"]?.ToString();
+                        discount = discountType == "50%" ? 50m : discountType == "Бесплатно" ? 100m : 0m;
+                    }
+                    else if (AppContext.CurrentClient != null)
+                    {
+                        discount = AppContext.CurrentClient.Discount;
+                    }
+
+                    CartItems.Add(new CartItem
+                    {
+                        CartItemId = Convert.ToInt32(row["CartItemId"]),
+                        Medicine = new Medicine
+                        {
+                            MedicineId = Convert.ToInt32(row["MedicineId"]),
+                            Name = row["Name"].ToString(),
+                            Price = Convert.ToDecimal(row["Price"])
+                        },
+                        Quantity = Convert.ToInt32(row["Quantity"]),
+                        IsByPrescription = isByPrescription,
+                        PrescriptionId = row["PrescriptionId"] != DBNull.Value ? Convert.ToInt32(row["PrescriptionId"]) : (int?)null,
+                        Prescription = isByPrescription ? new Prescription { Series = row["Series"]?.ToString() } : null,
+                        Discount = discount
+                    });
+                }
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void Remove(object parameter)
         {
-            if (parameter is CartItem item)
+            try
             {
-                string query = "DELETE FROM CartItems WHERE CartItemId = @CartItemId";
-                var parameters = new[] { new SqlParameter("@CartItemId", item.CartItemId) };
-                DatabaseHelper.ExecuteNonQuery(query, parameters);
-                CartItems.Remove(item);
+                if (parameter is CartItem item)
+                {
+                    string query = "DELETE FROM CartItems WHERE CartItemId = @CartItemId";
+                    var parameters = new[] { new SqlParameter("@CartItemId", item.CartItemId) };
+                    DatabaseHelper.ExecuteNonQuery(query, parameters);
+                    CartItems.Remove(item);
+                }
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void Clear(object parameter)
         {
-            string query = "DELETE FROM CartItems WHERE UserId = @UserId";
-            var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
-            DatabaseHelper.ExecuteNonQuery(query, parameters);
-            CartItems.Clear();
-            AppContext.CurrentClient = null;
+            try
+            {
+                string query = "DELETE FROM CartItems WHERE UserId = @UserId";
+                var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
+                DatabaseHelper.ExecuteNonQuery(query, parameters);
+                CartItems.Clear();
+                AppContext.CurrentClient = null;
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void ConfirmPayment(object parameter)
         {
-            if (CartItems.Count == 0)
-            {
-                MessageBox.Show("Корзина пуста.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (MessageBox.Show("Подтвердить оплату?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
-                return;
+            if (CartItems.Count == 0) { MessageBox.Show("Корзина пуста.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (MessageBox.Show("Оплата подтверждена?", "Подтверждение.", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
 
             try
             {
-                // Создание заказа
                 string orderQuery = @"INSERT INTO Orders (UserId, ClientId, OrderDate, PaymentMethod, TotalAmount, DiscountApplied, DiscountPercentage) 
                     OUTPUT INSERTED.OrderId 
                     VALUES (@UserId, @ClientId, @OrderDate, @PaymentMethod, @TotalAmount, @DiscountApplied, @DiscountPercentage)";
@@ -138,7 +144,6 @@ namespace LechebnikProject.ViewModels
                 };
                 int orderId = (int)DatabaseHelper.ExecuteScalar(orderQuery, orderParams);
 
-                // Обновление склада и добавление деталей заказа
                 foreach (var item in CartItems)
                 {
                     string updateStockQuery = "UPDATE Medicines SET StockQuantity = StockQuantity - @Quantity WHERE MedicineId = @MedicineId";
@@ -173,7 +178,7 @@ namespace LechebnikProject.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при оплате: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

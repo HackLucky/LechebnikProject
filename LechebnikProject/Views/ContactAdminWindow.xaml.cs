@@ -8,6 +8,7 @@ namespace LechebnikProject.Views
         public ContactAdminWindow()
         {
             InitializeComponent();
+            MessageTextBox.Focus();
             DataContext = new ContactAdminViewModel();
         }
     }

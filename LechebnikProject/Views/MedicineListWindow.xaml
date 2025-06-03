@@ -20,16 +20,17 @@
         <DataGrid Grid.Row="2" ItemsSource="{Binding Medicines}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
         <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding MedicineId}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Препарат (название, лекарственная форма, вес/объём)" Binding="{Binding Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Препарат" Binding="{Binding Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Производитель" Binding="{Binding ManufacturerName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Требование рецепта" Binding="{Binding RequiresPrescription, Converter={StaticResource BooleanToStringConverter}}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Цена в рублях" Binding="{Binding Price, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content=" ПОДРОБНЕЕ " Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0,0,5,0"/>
-                                <Button Content=" ДОБАВИТЬ В КОРЗИНУ " Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0,0,5,0"/>
-                                <Button Content=" ДОБАВИТЬ ПО РЕЦЕПТУ " Command="{Binding DataContext.AddToCartByPrescriptionCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0,0,5,0"/>
+                                <Button Content=" ПОДРОБНЕЕ " Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0,0,5,3"/>
+                                <Button Content=" ДОБАВИТЬ В КОРЗИНУ " Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0,0,5,3"/>
+                                <Button Content=" ДОБАВИТЬ ПО РЕЦЕПТУ " Command="{Binding DataContext.AddToCartByPrescriptionCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0,0,5,3"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

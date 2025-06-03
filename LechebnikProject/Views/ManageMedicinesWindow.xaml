@@ -25,14 +25,17 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding MedicineId}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Название" Binding="{Binding Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Производитель" Binding="{Binding ManufacturerName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Требует рецепт" Binding="{Binding RequiresPrescription, Converter={StaticResource BooleanToStringConverter}}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="На складе" Binding="{Binding StockQuantity}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Content="ДОБАВИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}"/>
-            <Button Content="РЕДАКТИРОВАТЬ" Command="{Binding EditCommand}" Style="{StaticResource FuncButton}"/>
-            <Button Content="УДАЛИТЬ" Command="{Binding DeleteCommand}" Style="{StaticResource FuncButton}" Width="150"/>
-            <Button Content="АДМИН-ПАНЕЛЬ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
+            <Button Content="ДОБАВИТЬ" Command="{Binding AddCommand}" Style="{StaticResource FuncButton}" Width="220"/>
+            <Button Content="РЕДАКТИРОВАТЬ" Command="{Binding EditCommand}" Style="{StaticResource FuncButton}" Width="220"/>
+            <Button Content="УДАЛИТЬ" Command="{Binding DeleteCommand}" Style="{StaticResource FuncButton}" Width="220"/>
+            <Button Content="АДМИН-ПАНЕЛЬ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}" Width="220"/>
         </StackPanel>
     </Grid>
 </Window>

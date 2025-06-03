@@ -49,26 +49,34 @@ namespace LechebnikProject.ViewModels
 
         private void LoadManufacturers()
         {
-            string query = "SELECT * FROM Manufacturers";
-            DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
-            Manufacturers = dataTable.AsEnumerable().Select(row => new Manufacturer
+            try
             {
-                ManufacturerId = row.Field<int>("ManufacturerId"),
-                Name = row.Field<string>("Name"),
-                Country = row.Field<string>("Country")
-            }).ToList();
+                string query = "SELECT * FROM Manufacturers";
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+                Manufacturers = dataTable.AsEnumerable().Select(row => new Manufacturer
+                {
+                    ManufacturerId = row.Field<int>("ManufacturerId"),
+                    Name = row.Field<string>("Name"),
+                    Country = row.Field<string>("Country")
+                }).ToList();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void LoadSuppliers()
         {
-            string query = "SELECT * FROM Suppliers";
-            DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
-            Suppliers = dataTable.AsEnumerable().Select(row => new Supplier
+            try
             {
-                SupplierId = row.Field<int>("SupplierId"),
-                Name = row.Field<string>("Name"),
-                Country = row.Field<string>("Country")
-            }).ToList();
+                string query = "SELECT * FROM Suppliers";
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+                Suppliers = dataTable.AsEnumerable().Select(row => new Supplier
+                {
+                    SupplierId = row.Field<int>("SupplierId"),
+                    Name = row.Field<string>("Name"),
+                    Country = row.Field<string>("Country")
+                }).ToList();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void Add(object parameter)
@@ -125,7 +133,7 @@ namespace LechebnikProject.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Произошла ошибка при добавлении препарата. {ex}", "Ошибка.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

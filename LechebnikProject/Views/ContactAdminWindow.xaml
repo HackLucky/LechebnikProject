@@ -26,7 +26,7 @@
         </ListBox>
         <StackPanel Grid.Row="2">
             <Label Content="Введите текст сообщения:" Style="{StaticResource MainText}"/>
-            <TextBox Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}" Height="80" AcceptsReturn="True" Margin="10,0,10,0" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+            <TextBox x:Name="MessageTextBox" Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}" Height="80" AcceptsReturn="True" Margin="10,0,10,0" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <Button Content="ОТПРАВИТЬ" Command="{Binding SendCommand}" Style="{StaticResource FuncButton}"/>

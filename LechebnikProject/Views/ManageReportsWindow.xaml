@@ -17,17 +17,17 @@
             <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
             <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
         </StackPanel>
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Reports}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedReport}" IsReadOnly="True" Margin="10,0,10,0">
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Reports}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id отчёта" Binding="{Binding OrderId}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="ФИО пользователя" Binding="{Binding UserFullName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="ФИО сотрудника" Binding="{Binding UserFullName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="ФИО клиента" Binding="{Binding ClientFullName}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Количество товаров" Binding="{Binding TotalItems}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Кол-во товаров" Binding="{Binding TotalItems}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Способ оплаты" Binding="{Binding PaymentMethod}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Сумма без скидки" Binding="{Binding TotalWithoutDiscount, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Процент скидки" Binding="{Binding DiscountPercentage, StringFormat={}{0}%}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding DiscountPercentage, StringFormat={}{0}%}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Сумма со скидкой" Binding="{Binding TotalWithDiscount, StringFormat={}{0:N2} ₽}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Дата и время" Binding="{Binding OrderDateTime}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Дата и время операции" Binding="{Binding OrderDateTime}" HeaderStyle="{StaticResource ColumnHeader}"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">

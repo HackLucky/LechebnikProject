@@ -36,7 +36,7 @@ namespace LechebnikProject.Views
                 var clientLoginWindow = new ClientLoginWindow();
                 clientLoginWindow._viewModel.Login = RegisteredLogin;
                 clientLoginWindow._viewModel.Code = RegisteredCode;
-                clientLoginWindow.LoginButton_Click(null, null); // Автоматическая аутентификация
+                clientLoginWindow.LoginButton_Click(null, null);
                 Close();
             }
         }
