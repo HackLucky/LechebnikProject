@@ -158,7 +158,7 @@ namespace LechebnikProject.ViewModels
                     new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
                     new SqlParameter("@ClientId", AppContext.CurrentClient?.ClientId ?? (object)DBNull.Value),
                     new SqlParameter("@OrderDate", DateTime.Now),
-                    new SqlParameter("@PaymentMethod", "QR-код"),
+                    new SqlParameter("@PaymentMethod", "Перевод"),
                     new SqlParameter("@TotalAmount", TotalAmount),
                     new SqlParameter("@DiscountApplied", AppContext.CurrentClient != null && AppContext.CurrentClient.Discount > 0),
                     new SqlParameter("@DiscountPercentage", AppContext.CurrentClient?.Discount ?? (object)DBNull.Value)

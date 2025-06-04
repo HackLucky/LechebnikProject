@@ -7,6 +7,8 @@ namespace LechebnikProject.Views
     public partial class ClientLoginWindow : Window
     {
         public readonly ClientLoginViewModel _viewModel;
+        public string AuthLogin { get; private set; }
+        public string AuthCode { get; private set; }
 
         public ClientLoginWindow()
         {
@@ -20,8 +22,12 @@ namespace LechebnikProject.Views
         {
             try
             {
+                _viewModel.Login = LoginTextBox.Text;
+                _viewModel.Code = CodePasswordBox.Password;
                 if (_viewModel.Authenticate())
                 {
+                    AuthLogin = _viewModel.Login;
+                    AuthCode = _viewModel.Code;
                     DialogResult = true;
                     Close();
                 }
@@ -34,10 +40,12 @@ namespace LechebnikProject.Views
             try
             {
                 var clientRegisterWindow = new ClientRegisterWindow();
-                if (clientRegisterWindow.ShowDialog() == true)
+                bool? result = clientRegisterWindow.ShowDialog();
+                if (result == true)
                 {
                     _viewModel.Login = clientRegisterWindow.RegisteredLogin;
                     _viewModel.Code = clientRegisterWindow.RegisteredCode;
+
                     if (_viewModel.Authenticate())
                     {
                         DialogResult = true;
@@ -51,6 +59,7 @@ namespace LechebnikProject.Views
         private void SkipButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+            Close();
         }
     }
 }

@@ -29,9 +29,17 @@ namespace LechebnikProject.ViewModels
                     new SqlParameter("@Code", Code)
                 };
                 DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
+                DataRow row = dataTable.Rows[0];
+                string status = row["Status"].ToString();
+
+                if (status == "Blocked")
+                {
+                    MessageBox.Show($"Ваш аккаунт заблокирован. Обратитесь к администратору: andrej_sok@mail.ru", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
                 if (dataTable.Rows.Count > 0)
                 {
-                    var row = dataTable.Rows[0];
                     AppContext.CurrentClient = new Client
                     {
                         ClientId = (int)row["ClientId"],
@@ -52,7 +60,7 @@ namespace LechebnikProject.ViewModels
                     return false;
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
+            catch { MessageBox.Show("Неверный логин или код", "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
         }
     }
 }

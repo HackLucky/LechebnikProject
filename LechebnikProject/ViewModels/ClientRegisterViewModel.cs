@@ -95,7 +95,6 @@ namespace LechebnikProject.ViewModels
 
                 DatabaseHelper.ExecuteNonQuery(query, parameters2);
                 MessageBox.Show($"Клиент успешно зарегистрирован! Код клиента: {Code}", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
-                WindowManager.ShowWindow<ClientLoginWindow>();
                 return true;
             }
             catch { MessageBox.Show("Ошибка регистрации. Возможно, логин уже занят.", "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); return false; }

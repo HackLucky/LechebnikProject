@@ -36,10 +36,6 @@ namespace LechebnikProject.Views
                     RegisteredLogin = _viewModel.Login;
                     RegisteredCode = _viewModel.Code;
                     DialogResult = true;
-                    var clientLoginWindow = new ClientLoginWindow();
-                    clientLoginWindow._viewModel.Login = RegisteredLogin;
-                    clientLoginWindow._viewModel.Code = RegisteredCode;
-                    clientLoginWindow.LoginButton_Click(null, null);
                     Close();
                 }
             }
@@ -48,9 +44,8 @@ namespace LechebnikProject.Views
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            var clientLoginWindow = new ClientLoginWindow();
-            clientLoginWindow.Show();
-            this.Close();
+            DialogResult = false;
+            Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

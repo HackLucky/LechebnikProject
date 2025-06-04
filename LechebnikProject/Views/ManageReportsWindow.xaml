@@ -17,7 +17,7 @@
             <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
             <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
         </StackPanel>
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Reports}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Reports}" SelectedItem="{Binding SelectedReport}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id отчёта" Binding="{Binding OrderId}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="ФИО сотрудника" Binding="{Binding UserFullName}" HeaderStyle="{StaticResource ColumnHeader}"/>

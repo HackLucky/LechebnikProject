@@ -1,8 +1,6 @@
 ﻿using Lechebnik.ViewModels;
 using LechebnikProject.Helpers;
-using LechebnikProject.Models;
 using LechebnikProject.Views;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -15,8 +13,18 @@ namespace LechebnikProject.ViewModels
 {
     public class ManageUsersViewModel : BaseViewModel
     {
-        public ObservableCollection<object> AllEntities { get; set; }
-        public object SelectedEntity { get; set; }
+        public ObservableCollection<BaseUser> AllEntities { get; set; } = new ObservableCollection<BaseUser>();
+
+        private BaseUser _selectedEntity;
+        public BaseUser SelectedEntity
+        {
+            get => _selectedEntity;
+            set
+            {
+                SetProperty(ref _selectedEntity, value);
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
 
         public ICommand DelUserCommand { get; }
         public ICommand ChangeRoleCommand { get; }
@@ -26,7 +34,6 @@ namespace LechebnikProject.ViewModels
 
         public ManageUsersViewModel()
         {
-            AllEntities = new ObservableCollection<object>();
             DelUserCommand = new RelayCommand(DeleteEntity);
             ToggleBlockCommand = new RelayCommand(ToggleBlock, o => SelectedEntity != null);
             ChangeRoleCommand = new RelayCommand(ChangeRole, o => SelectedEntity is User);
@@ -40,6 +47,7 @@ namespace LechebnikProject.ViewModels
             AllEntities.Clear();
             LoadUsers();
             LoadClients();
+            OnPropertyChanged(nameof(AllEntities));
         }
 
         private void LoadUsers()
@@ -50,18 +58,17 @@ namespace LechebnikProject.ViewModels
                 DataTable table = DatabaseHelper.ExecuteQuery(query);
                 foreach (DataRow row in table.Rows)
                 {
-                    AllEntities.Add(new
+                    var u = new User
                     {
-                        Type = "User",
-                        Id = row["UserId"],
-                        LastName = row["LastName"]?.ToString() ?? "",
-                        FirstName = row["FirstName"]?.ToString() ?? "",
-                        MiddleName = row["MiddleName"]?.ToString(),
-                        Login = row["Login"]?.ToString() ?? "",
-                        Role = row["Role"]?.ToString() ?? "",
-                        Status = row["Status"]?.ToString() ?? "Active",
-                        Discount = (decimal?)null
-                    });
+                        UserId = Convert.ToInt32(row["UserId"]),
+                        LastName = row["LastName"].ToString(),
+                        FirstName = row["FirstName"].ToString(),
+                        MiddleName = row["MiddleName"] != DBNull.Value ? row["MiddleName"].ToString() : null,
+                        Login = row["Login"].ToString(),
+                        Role = row["Role"].ToString(),
+                        Status = row["Status"].ToString()
+                    };
+                    AllEntities.Add(u);
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -75,18 +82,17 @@ namespace LechebnikProject.ViewModels
                 DataTable table = DatabaseHelper.ExecuteQuery(query);
                 foreach (DataRow row in table.Rows)
                 {
-                    AllEntities.Add(new
+                    var c = new Client
                     {
-                        Type = "Client",
-                        Id = row["ClientId"],
-                        LastName = row["LastName"]?.ToString() ?? "",
-                        FirstName = row["FirstName"]?.ToString() ?? "",
-                        MiddleName = row["MiddleName"]?.ToString(),
-                        Login = row["Login"]?.ToString() ?? "",
-                        Role = (string)null,
-                        Status = row["Status"]?.ToString() ?? "Active",
-                        Discount = row["Discount"] != DBNull.Value ? (decimal?)Convert.ToDecimal(row["Discount"]) : null
-                    });
+                        ClientId = Convert.ToInt32(row["ClientId"]),
+                        LastName = row["LastName"].ToString(),
+                        FirstName = row["FirstName"].ToString(),
+                        MiddleName = row["MiddleName"] != DBNull.Value ? row["MiddleName"].ToString() : null,
+                        Login = row["Login"].ToString(),
+                        Discount = Convert.ToDecimal(row["Discount"]),
+                        Status = row["Status"].ToString()
+                    };
+                    AllEntities.Add(c);
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -97,15 +103,22 @@ namespace LechebnikProject.ViewModels
             try
             {
                 if (SelectedEntity == null) return;
-                string login = (string)SelectedEntity.GetType().GetProperty("Login").GetValue(SelectedEntity);
-                int id = (int)SelectedEntity.GetType().GetProperty("Id").GetValue(SelectedEntity);
 
-                string query = login == "User"
-                    ? "DELETE FROM Users WHERE UserId = @Id"
-                    : "DELETE FROM Clients WHERE ClientId = @Id";
-                var prm = new[] { new SqlParameter("@Id", id) };
-                DatabaseHelper.ExecuteNonQuery(query, prm);
-                MessageBox.Show($"Аккаунт '{login}' удалён.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (SelectedEntity is User pu)
+                {
+                    string query = "DELETE FROM Users WHERE UserId = @Id";
+                    var prm = new[] { new SqlParameter("@Id", pu.UserId) };
+                    DatabaseHelper.ExecuteNonQuery(query, prm);
+                    MessageBox.Show($"Пользователь '{pu.Login}' удалён.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (SelectedEntity is Client cu)
+                {
+                    string query = "DELETE FROM Clients WHERE ClientId = @Id";
+                    var prm = new[] { new SqlParameter("@Id", cu.ClientId) };
+                    DatabaseHelper.ExecuteNonQuery(query, prm);
+                    MessageBox.Show($"Клиент '{cu.Login}' удалён.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
                 LoadAllData();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -116,21 +129,34 @@ namespace LechebnikProject.ViewModels
             try
             {
                 if (SelectedEntity == null) return;
-                string login = (string)SelectedEntity.GetType().GetProperty("Login").GetValue(SelectedEntity);
-                int id = (int)SelectedEntity.GetType().GetProperty("Id").GetValue(SelectedEntity);
-                string currentStatus = (string)SelectedEntity.GetType().GetProperty("Status").GetValue(SelectedEntity);
-                string newStatus = currentStatus == "Active" ? "Blocked" : "Active";
 
-                string query = login == "User"
-                    ? "UPDATE Users SET Status = @Status WHERE UserId = @Id"
-                    : "UPDATE Clients SET Status = @Status WHERE ClientId = @Id";
-                var prm = new[]
+                if (SelectedEntity is User pu)
                 {
-                    new SqlParameter("@Status", newStatus),
-                    new SqlParameter("@Id", id)
-                };
-                DatabaseHelper.ExecuteNonQuery(query, prm);
-                MessageBox.Show($"Новый статус для аккаунта: {login}\nАккаунт: {SelectedEntity.GetType().GetProperty("Login").GetValue(SelectedEntity)} теперь: {newStatus}.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    var newStatus = pu.Status == "Active" ? "Blocked" : "Active";
+                    string query = "UPDATE Users SET Status = @Status WHERE UserId = @Id";
+                    var prm = new[]
+                    {
+                        new SqlParameter("@Status", newStatus),
+                        new SqlParameter("@Id", pu.UserId)
+                    };
+                    DatabaseHelper.ExecuteNonQuery(query, prm);
+                    pu.Status = newStatus;
+                    MessageBox.Show($"Статус пользователя '{pu.Login}' теперь: {newStatus}.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (SelectedEntity is Client cu)
+                {
+                    var newStatus = cu.Status == "Active" ? "Blocked" : "Active";
+                    string query = "UPDATE Clients SET Status = @Status WHERE ClientId = @Id";
+                    var prm = new[]
+                    {
+                        new SqlParameter("@Status", newStatus),
+                        new SqlParameter("@Id", cu.ClientId)
+                    };
+                    DatabaseHelper.ExecuteNonQuery(query, prm);
+                    cu.Status = newStatus;
+                    MessageBox.Show($"Статус клиента '{cu.Login}' теперь: {newStatus}.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
                 LoadAllData();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -140,17 +166,19 @@ namespace LechebnikProject.ViewModels
         {
             try
             {
-                if (!(SelectedEntity is User user)) return;
-                string newRole = user.Role == "Admin" ? "User" : "Admin";
-                string query = "UPDATE Users SET Role = @Role WHERE UserId = @Id";
-                var prm = new[]
+                if (SelectedEntity is User pu)
                 {
-                    new SqlParameter("@Role", newRole),
-                    new SqlParameter("@Id", user.UserId)
-                };
-                DatabaseHelper.ExecuteNonQuery(query, prm);
-                user.Role = newRole;
-                MessageBox.Show($"Роль пользователя {user.Login} изменена на {newRole}.", "Информирование", MessageBoxButton.OK, MessageBoxImage.Information);
+                    var newRole = pu.Role == "Admin" ? "User" : "Admin";
+                    string query = "UPDATE Users SET Role = @Role WHERE UserId = @Id";
+                    var prm = new[]
+                    {
+                        new SqlParameter("@Role", newRole),
+                        new SqlParameter("@Id", pu.UserId)
+                    };
+                    DatabaseHelper.ExecuteNonQuery(query, prm);
+                    pu.Role = newRole;
+                    MessageBox.Show($"Роль пользователя '{pu.Login}' изменена на {newRole}.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
                 LoadAllData();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -160,26 +188,50 @@ namespace LechebnikProject.ViewModels
         {
             try
             {
-                if (!(SelectedEntity is Client client)) return;
+                if (SelectedEntity is Client cu)
+                {
+                    string input = Microsoft.VisualBasic.Interaction.InputBox("Введите новую скидку (15, 25, 50, 75)", "Изменение скидки", cu.Discount.ToString());
+                    if (!decimal.TryParse(input, out decimal discount) || !new[] { 15m, 25m, 50m, 75m }.Contains(discount))
+                    {
+                        MessageBox.Show("Некорректное значение скидки.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
 
-                string input = Interaction.InputBox("Введите новую скидку (15, 25, 50, 75)", "Изменение скидки", client.Discount.ToString());
-                if (!decimal.TryParse(input, out decimal discount) || !new[] { 15m, 25m, 50m, 75m }.Contains(discount))
-                {
-                    MessageBox.Show("Некорректное значение скидки.", "Предупреждение.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    string query = "UPDATE Clients SET Discount = @Discount WHERE ClientId = @Id";
+                    var prm = new[]
+                    {
+                        new SqlParameter("@Discount", discount),
+                        new SqlParameter("@Id", cu.ClientId)
+                    };
+                    DatabaseHelper.ExecuteNonQuery(query, prm);
+                    cu.Discount = discount;
+                    LoadAllData();
+                    MessageBox.Show("Скидка для клиента обновлена.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                string query = "UPDATE Clients SET Discount = @Discount WHERE ClientId = @Id";
-                var prm = new[]
-                {
-                    new SqlParameter("@Discount", discount),
-                    new SqlParameter("@Id", client.ClientId)
-                };
-                DatabaseHelper.ExecuteNonQuery(query, prm);
-                client.Discount = discount;
-                LoadAllData();
-                MessageBox.Show("Скидка для клиента обновлена.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
+        }
+
+        public abstract class BaseUser
+        {
+            public int  UserId { get; set; }
+            public int ClientId { get; set; }
+            public string LastName { get; set; }
+            public string FirstName { get; set; }
+            public string MiddleName { get; set; }
+            public string Login { get; set; }
+            public string Status { get; set; }
+            public string Type { get; set; }
+        }
+
+        public class User : BaseUser
+        {
+            public string Role { get; set; }
+        }
+
+        public class Client : BaseUser
+        {
+            public decimal Discount { get; set; }
         }
     }
 }
