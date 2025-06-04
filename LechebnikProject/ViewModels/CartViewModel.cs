@@ -20,9 +20,21 @@ namespace LechebnikProject.ViewModels
             get => _cartItems;
             set => SetProperty(ref _cartItems, value);
         }
+        private string _searchText;
 
         public decimal TotalAmount => CartItems?.Sum(item => item.Medicine.Price * item.Quantity * (1 - (AppContext.CurrentClient?.Discount ?? 0) / 100)) ?? 0;
         public bool CanCheckout => CartItems?.Any() == true;
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                LoadCartItems(_searchText);
+            }
+        }
 
         public ICommand RemoveCommand { get; }
         public ICommand ClearCommand { get; }
@@ -47,17 +59,25 @@ namespace LechebnikProject.ViewModels
             GoToMainMenuCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
-        private void LoadCartItems()
+        private void LoadCartItems(string searchText = "")
         {
             try
             {
                 string query = @"
-                    SELECT ci.*, m.Name, m.Price, p.Series 
+                    SELECT ci.*, m.Name, m.SerialNumber, m.Price, p.Series 
                     FROM CartItems ci 
                     JOIN Medicines m ON ci.MedicineId = m.MedicineId 
                     LEFT JOIN Prescriptions p ON ci.PrescriptionId = p.PrescriptionId 
-                    WHERE ci.UserId = @UserId";
-                var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
+                    WHERE ci.UserId = @UserId AND
+                        (m.Name LIKE @SearchText OR
+                        m.SerialNumber LIKE @SearchText OR
+                        m.Price LIKE @SearchText OR
+                        ci.Quantity LIKE @SearchText OR
+                        p.Series LIKE @SearchText)";
+                var parameters = new[] { 
+                    new SqlParameter("@UserId", AppContext.CurrentUser.UserId),
+                    new SqlParameter("@SearchText", $"%{searchText}%")
+                };
                 DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
                 CartItems = new ObservableCollection<CartItem>();
                 foreach (DataRow row in dataTable.Rows)
@@ -81,6 +101,7 @@ namespace LechebnikProject.ViewModels
                         {
                             MedicineId = Convert.ToInt32(row["MedicineId"]),
                             Name = row["Name"].ToString(),
+                            SerialNumber = row["SerialNumber"].ToString(),
                             Price = Convert.ToDecimal(row["Price"])
                         },
                         Quantity = Convert.ToInt32(row["Quantity"]),

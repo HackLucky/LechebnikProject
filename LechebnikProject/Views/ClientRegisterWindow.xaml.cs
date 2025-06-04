@@ -1,4 +1,5 @@
 ﻿using LechebnikProject.ViewModels;
+using System;
 using System.Windows;
 
 namespace LechebnikProject.Views
@@ -19,26 +20,30 @@ namespace LechebnikProject.Views
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.LastName = LastNameTextBox.Text;
-            _viewModel.FirstName = FirstNameTextBox.Text;
-            _viewModel.MiddleName = MiddleNameTextBox.Text;
-            _viewModel.PhoneNumber = PhoneNumberTextBox.Text;
-            _viewModel.Email = EmailTextBox.Text;
-            _viewModel.Login = LoginTextBox.Text;
-            _viewModel.Code = CodePasswordBox.Password;
-            _viewModel.CaptchaInput = CaptchaTextBox.Text;
-
-            if (_viewModel.Register())
+            try
             {
-                RegisteredLogin = _viewModel.Login;
-                RegisteredCode = _viewModel.Code;
-                DialogResult = true;
-                var clientLoginWindow = new ClientLoginWindow();
-                clientLoginWindow._viewModel.Login = RegisteredLogin;
-                clientLoginWindow._viewModel.Code = RegisteredCode;
-                clientLoginWindow.LoginButton_Click(null, null);
-                Close();
+                _viewModel.LastName = LastNameTextBox.Text;
+                _viewModel.FirstName = FirstNameTextBox.Text;
+                _viewModel.MiddleName = MiddleNameTextBox.Text;
+                _viewModel.PhoneNumber = PhoneNumberTextBox.Text;
+                _viewModel.Email = EmailTextBox.Text;
+                _viewModel.Login = LoginTextBox.Text;
+                _viewModel.Code = CodePasswordBox.Password;
+                _viewModel.CaptchaInput = CaptchaTextBox.Text;
+
+                if (_viewModel.Register())
+                {
+                    RegisteredLogin = _viewModel.Login;
+                    RegisteredCode = _viewModel.Code;
+                    DialogResult = true;
+                    var clientLoginWindow = new ClientLoginWindow();
+                    clientLoginWindow._viewModel.Login = RegisteredLogin;
+                    clientLoginWindow._viewModel.Code = RegisteredCode;
+                    clientLoginWindow.LoginButton_Click(null, null);
+                    Close();
+                }
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)

@@ -15,11 +15,12 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="Поиск:" Style="{StaticResource MainText}" Margin="10,5,5,5"/>
-            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1800" Margin="5"/>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputText}" Width="1780" Margin="5"/>
         </StackPanel>
         <DataGrid Grid.Row="2" ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Препарат" Binding="{Binding Medicine.Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Серийный номер" Binding="{Binding Medicine.SerialNumber}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Приобретаемое количество" Binding="{Binding Quantity}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="По рецепту" Binding="{Binding IsByPrescription, Converter={StaticResource BooleanToStringConverter}}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Серия рецепта" Binding="{Binding Prescription.Series, TargetNullValue='Отсутствует'}" HeaderStyle="{StaticResource ColumnHeader}"/>
@@ -29,7 +30,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="УБРАТЬ" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0"/>
+                            <Button Content=" УБРАТЬ " Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource FuncButton}" Width="auto" Height="30" FontSize="15" Margin="0,0,3,3"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

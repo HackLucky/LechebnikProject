@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,25 +15,29 @@ namespace LechebnikProject.Views
 
         private void LoadCurrentSettings()
         {
-            string connectionString = AppConfigManager.GetConnectionString();
-            if (string.IsNullOrEmpty(connectionString)) return;
-
-            var builder = new SqlConnectionStringBuilder(connectionString);
-
-            ServerTextBox.Text = builder.DataSource;
-            DatabaseTextBox.Text = builder.InitialCatalog;
-
-            if (builder.IntegratedSecurity)
+            try
             {
-                WindowsAuthRadio.IsChecked = true;
-                SqlAuthPanel.Visibility = Visibility.Collapsed;
+                string connectionString = AppConfigManager.GetConnectionString();
+                if (string.IsNullOrEmpty(connectionString)) return;
+
+                var builder = new SqlConnectionStringBuilder(connectionString);
+
+                ServerTextBox.Text = builder.DataSource;
+                DatabaseTextBox.Text = builder.InitialCatalog;
+
+                if (builder.IntegratedSecurity)
+                {
+                    WindowsAuthRadio.IsChecked = true;
+                    SqlAuthPanel.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    SqlAuthRadio.IsChecked = true;
+                    SqlAuthPanel.Visibility = Visibility.Visible;
+                    UsernameTextBox.Text = builder.UserID;
+                }
             }
-            else
-            {
-                SqlAuthRadio.IsChecked = true;
-                SqlAuthPanel.Visibility = Visibility.Visible;
-                UsernameTextBox.Text = builder.UserID;
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void AuthRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -62,10 +67,7 @@ namespace LechebnikProject.Views
                 MessageBox.Show("Настройки подключения изменены. Перезапустите программу для применения изменений.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.Close();
             }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show($"Ошибка сохранения настроек:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

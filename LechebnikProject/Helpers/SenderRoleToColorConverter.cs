@@ -15,7 +15,7 @@ namespace LechebnikProject.Helpers
                 string query = "SELECT Role FROM Users WHERE UserId = @UserId";
                 var param = new[] { new SqlParameter("@UserId", senderId) };
                 string role = DatabaseHelper.ExecuteScalar(query, param)?.ToString();
-                return role == "Admin" ? Brushes.Red : Brushes.Black;
+                return role == "Admin" ? Brushes.Green : Brushes.Black;
             }
             return Brushes.Black;
         }

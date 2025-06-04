@@ -31,7 +31,7 @@
                 <PasswordBox x:Name="ConfirmPasswordBox" Style="{StaticResource InputPassword}"/>
                 <Label Content="Введите код с изображения:" Style="{StaticResource MainText}"/>
                 <TextBox x:Name="CaptchaTextBox" Style="{StaticResource InputText}"/>
-                <Image Source="{Binding CaptchaImage}" Margin="10,5,0,10"/>
+                <Image Source="{Binding CaptchaImage}" Margin="10,5,8,0"/>
                 <StackPanel HorizontalAlignment="Center" Margin="10">
                     <Button Content="ЗАРЕГИСТРИРОВАТЬСЯ" Click="RegisterButton_Click" Style="{StaticResource Button}"/>
                     <Label Content="Если зарегистрированы, нажмите кнопку:" Style="{StaticResource Text}" HorizontalAlignment="Center"/>

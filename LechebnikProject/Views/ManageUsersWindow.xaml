@@ -31,33 +31,13 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="УДАЛИТЬ" Command="{Binding DelUserCommand}" Style="{StaticResource FuncButton}" Width="150"/>
-            <Button Content="СМЕНИТЬ РОЛЬ" Command="{Binding ChangeRoleCommand}" Style="{StaticResource FuncButton}" Width="200"/>
-            <ComboBox Width="80" Margin="5"
-          ItemsSource="{Binding DiscountOptions}"
-          SelectedItem="{Binding SelectedDiscount, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding StringFormat={}{0}%}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button Content="ИЗМЕНИТЬ СКИДКУ" Command="{Binding ChangeDiscountCommand}">
-                <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource FuncButton}">
-                        <Setter Property="IsEnabled" Value="False"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedItem.Type}" Value="Client">
-                                <Setter Property="IsEnabled" Value="True"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+            <Button Content=" УДАЛИТЬ " Command="{Binding DelUserCommand}" Style="{StaticResource FuncButton}" Width="auto"/>
+            <Button Content=" СМЕНИТЬ РОЛЬ " Command="{Binding ChangeRoleCommand}" Style="{StaticResource FuncButton}" Width="auto"/>
+            <Button Content=" ИЗМЕНИТЬ СКИДКУ " Command="{Binding ChangeDiscountCommand}" Style="{StaticResource FuncButton}" Width="auto"/>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="БЛОКИРОВАТЬ/РАЗБЛОКИРОВАТЬ" Command="{Binding ToggleBlockCommand}" Style="{StaticResource FuncButton}" Width="430"/>
-            <Button Content="АДМИН-ПАНЕЛЬ" Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}"/>
+            <Button Content=" БЛОКИРОВАТЬ/РАЗБЛОКИРОВАТЬ " Command="{Binding ToggleBlockCommand}" Style="{StaticResource FuncButton}" Width="auto"/>
+            <Button Content=" АДМИН-ПАНЕЛЬ " Command="{Binding GoBackCommand}" Style="{StaticResource FuncButton}" Width="auto"/>
         </StackPanel>
     </Grid>
 </Window>

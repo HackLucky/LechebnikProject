@@ -15,13 +15,25 @@ public class ManageMedicinesViewModel : BaseViewModel
 {
     public ObservableCollection<Medicine> Medicines { get; set; }
     public Medicine SelectedMedicine { get; set; }
-    public string SearchText { get; set; }
+    private string _searchText;
+
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            _searchText = value;
+            OnPropertyChanged();
+            LoadMedicines(_searchText);
+        }
+    }
+
     public ICommand AddCommand => new RelayCommand(o => WindowManager.ShowWindow<AddMedicineWindow>());
+    public ICommand DeleteCommand => new RelayCommand(Delete);
+    public ICommand GoBackCommand => new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>());
     public ICommand EditCommand => new RelayCommand(o => { if (SelectedMedicine == null) return;
         WindowManager.ShowWindow<EditMedicineWindow>(w => w.DataContext = new EditMedicineViewModel(SelectedMedicine));
     });
-    public ICommand DeleteCommand => new RelayCommand(Delete);
-    public ICommand GoBackCommand => new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>());
 
     public ManageMedicinesViewModel()
     {
@@ -33,10 +45,12 @@ public class ManageMedicinesViewModel : BaseViewModel
         try
         {
             string query = @"
-            SELECT m.*, man.Name AS ManufacturerName 
-            FROM Medicines m 
-            JOIN Manufacturers man ON m.ManufacturerId = man.ManufacturerId 
-            WHERE m.Name LIKE @SearchText OR m.SerialNumber LIKE @SearchText";
+                SELECT m.*, man.Name AS ManufacturerName 
+                FROM Medicines m 
+                JOIN Manufacturers man ON m.ManufacturerId = man.ManufacturerId 
+                WHERE m.Name LIKE @SearchText OR m.SerialNumber LIKE @SearchText OR
+                    m.Price LIKE @SearchText  OR m.StockQuantity LIKE @SearchText OR
+                    man.Name LIKE @SearchText";
             var parameters = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
             DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
             var medicinesList = new List<Medicine>();

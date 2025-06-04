@@ -31,8 +31,8 @@
                     <ComboBoxItem Content="75%" Tag="75.00"/>
                 </ComboBox>
                 <Label Content="Введите код с изображения:" Style="{StaticResource MainText}"/>
-                <Image Source="{Binding CaptchaImage}" Margin="10,5,0,10"/>
                 <TextBox x:Name="CaptchaTextBox" Style="{StaticResource InputText}"/>
+                <Image Source="{Binding CaptchaImage}" Margin="10,5,10,0"/>
                 <StackPanel HorizontalAlignment="Center" Margin="10">
                     <Button Content="ЗАРЕГИСТРИРОВАТЬ" Click="RegisterButton_Click" Style="{StaticResource Button}"/>
                     <Label Content="Если клиент зарегистрирован, нажмите кнопку:" Style="{StaticResource Text}" HorizontalAlignment="Center"/>
