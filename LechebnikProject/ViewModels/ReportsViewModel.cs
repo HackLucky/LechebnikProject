@@ -4,6 +4,7 @@ using LechebnikProject.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 using static LechebnikProject.ViewModels.ManageReportsViewModel;
@@ -13,6 +14,17 @@ namespace LechebnikProject.ViewModels
     public class ReportsViewModel : BaseViewModel
     {
         public ObservableCollection<OrderReport> Reports { get; set; }
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                LoadReports(_searchText);
+            }
+        }
 
         public ICommand GoBackCommand { get; }
 
@@ -22,7 +34,7 @@ namespace LechebnikProject.ViewModels
             GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
         }
 
-        private void LoadReports()
+        private void LoadReports(string searchText = "")
         {
             try
             {
@@ -39,12 +51,18 @@ namespace LechebnikProject.ViewModels
                         CONVERT(varchar, o.OrderDate, 104) + ' ' + CONVERT(varchar, o.OrderDate, 108) AS OrderDateTime
                     FROM Orders o
                     JOIN Users u ON o.UserId = u.UserId
-                    LEFT JOIN Clients c ON o.ClientId = c.ClientId";
-                DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+                    LEFT JOIN Clients c ON o.ClientId = c.ClientId
+                    WHERE o.OrderId LIKE @SearchText
+                       OR u.LastName LIKE @SearchText
+                       OR u.FirstName LIKE @SearchText
+                       OR u.MiddleName LIKE @SearchText
+                       OR o.TotalAmount LIKE @SearchText
+                       OR o.DiscountPercentage LIKE @SearchText";
+                var parameters = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
                 Reports = new ObservableCollection<OrderReport>();
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    // Безопасное приведение DBNull -> 0 или ""
                     var totalItems = row["TotalItems"] != DBNull.Value
                         ? Convert.ToInt32(row["TotalItems"])
                         : 0;

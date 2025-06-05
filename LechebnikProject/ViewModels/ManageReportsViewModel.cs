@@ -24,6 +24,17 @@ namespace LechebnikProject.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             }
         }
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                LoadReports(_searchText);
+            }
+        }
 
         public ICommand DeleteReportCommand { get; }
         public ICommand GoBackCommand { get; }
@@ -35,7 +46,7 @@ namespace LechebnikProject.ViewModels
             GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<AdminPanelWindow>());
         }
 
-        private void LoadReports()
+        private void LoadReports(string searchText = "")
         {
             try
             {
@@ -52,12 +63,18 @@ namespace LechebnikProject.ViewModels
                         CONVERT(varchar, o.OrderDate, 104) + ' ' + CONVERT(varchar, o.OrderDate, 108) AS OrderDateTime
                     FROM Orders o
                     JOIN Users u ON o.UserId = u.UserId
-                    LEFT JOIN Clients c ON o.ClientId = c.ClientId";
-                DataTable dataTable = DatabaseHelper.ExecuteQuery(query);
+                    LEFT JOIN Clients c ON o.ClientId = c.ClientId
+                    WHERE o.OrderId LIKE @SearchText
+                       OR u.LastName LIKE @SearchText
+                       OR u.FirstName LIKE @SearchText
+                       OR u.MiddleName LIKE @SearchText
+                       OR o.TotalAmount LIKE @SearchText
+                       OR o.DiscountPercentage LIKE @SearchText";
+                var parameters = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };
+                DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
                 Reports = new ObservableCollection<OrderReport>();
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    // Безопасное приведение DBNull -> 0 или ""
                     var totalItems = row["TotalItems"] != DBNull.Value
                         ? Convert.ToInt32(row["TotalItems"])
                         : 0;
@@ -112,9 +129,13 @@ namespace LechebnikProject.ViewModels
 
                 int orderId = SelectedReport.OrderId;
 
-                string query = "DELETE FROM Orders WHERE OrderId = @OrderId";
+                string query = "DELETE FROM OrderDetails WHERE OrderId = @OrderId";
                 var parameters = new[] { new SqlParameter("@OrderId", orderId) };
                 DatabaseHelper.ExecuteNonQuery(query, parameters);
+
+                string query1 = "DELETE FROM Orders WHERE OrderId = @OrderId";
+                var parameters1 = new[] { new SqlParameter("@OrderId", orderId) };
+                DatabaseHelper.ExecuteNonQuery(query1, parameters1);
                 Reports.Remove(SelectedReport);
                 LoadReports();
                 MessageBox.Show("Отчёт успешно удалён.", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);

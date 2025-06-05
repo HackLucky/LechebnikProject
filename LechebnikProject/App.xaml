@@ -210,6 +210,7 @@
             <Setter Property="Background" Value="DarkGray"/>
             <Setter Property="Foreground" Value="Green"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3"/>
             <Setter Property="Margin" Value="10,0,10,10"/>
             <Setter Property="Effect">
                 <Setter.Value>

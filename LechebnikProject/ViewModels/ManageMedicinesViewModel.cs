@@ -4,7 +4,6 @@ using LechebnikProject.Models;
 using LechebnikProject.ViewModels;
 using LechebnikProject.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -48,10 +47,11 @@ public class ManageMedicinesViewModel : BaseViewModel
                     FROM Medicines m
                     JOIN Manufacturers man ON m.ManufacturerId = man.ManufacturerId
                     JOIN Suppliers sup ON m.SupplierId = sup.SupplierId
-                WHERE m.Name LIKE @SearchText 
-                       OR m.SerialNumber LIKE @SearchText 
-                       OR m.Price LIKE @SearchText  
-                       OR m.StockQuantity LIKE @SearchText 
+                WHERE m.Name LIKE @SearchText
+                       OR m.MedicineId LIKE @SearchText
+                       OR m.SerialNumber LIKE @SearchText
+                       OR m.Price LIKE @SearchText
+                       OR m.StockQuantity LIKE @SearchText
                        OR man.Name LIKE @SearchText
                        OR sup.Name LIKE @SearchText";
             var parameters = new[] { new SqlParameter("@SearchText", $"%{searchText}%") };

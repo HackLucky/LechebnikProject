@@ -26,6 +26,7 @@ namespace LechebnikProject.ViewModels
 
         public ContactAdminViewModel()
         {
+            Messages = new ObservableCollection<Message>();
             LoadMessages();
             SendCommand = new RelayCommand(Send);
             GoBackCommand = new RelayCommand(o => WindowManager.ShowWindow<MainMenuWindow>());
@@ -38,7 +39,7 @@ namespace LechebnikProject.ViewModels
                 JOIN Users u ON m.SenderId = u.UserId";
             var parameters = new[] { new SqlParameter("@UserId", AppContext.CurrentUser.UserId) };
             DataTable dataTable = DatabaseHelper.ExecuteQuery(query, parameters);
-            Messages = new ObservableCollection<Message>();
+            Messages.Clear();
             foreach (DataRow row in dataTable.Rows)
             {
                 Messages.Add(new Message
@@ -70,14 +71,13 @@ namespace LechebnikProject.ViewModels
             try
             {
                 DatabaseHelper.ExecuteNonQuery(query, parameters);
-                MessageBox.Show("Сообщение отправлено!", "Информирование.", MessageBoxButton.OK, MessageBoxImage.Information);
                 MessageText = string.Empty;
+                LoadMessages();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Исключение.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            LoadMessages();
         }
     }
 }

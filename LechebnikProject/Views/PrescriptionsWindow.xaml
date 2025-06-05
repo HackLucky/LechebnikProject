@@ -30,8 +30,8 @@
                 <DataGridTextColumn Header="Фамилия врача" Binding="{Binding DoctorLastName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Имя врача" Binding="{Binding DoctorFirstName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Отчество врача" Binding="{Binding DoctorMiddleName}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Препарат" Binding="{Binding MedicineId}" HeaderStyle="{StaticResource ColumnHeader}"/>
-                <DataGridTextColumn Header="Фармацевт" Binding="{Binding PharmacistId}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Препарат" Binding="{Binding MedicineName}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Фармацевт" Binding="{Binding PharmacistFullName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Срок действия" Binding="{Binding ExpiryDate, StringFormat=dd.MM.yyyy}" HeaderStyle="{StaticResource ColumnHeader}"/>
             </DataGrid.Columns>
         </DataGrid>

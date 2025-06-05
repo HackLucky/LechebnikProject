@@ -7,7 +7,7 @@ using System.Windows;
 // связанные со сборкой.
 [assembly: AssemblyTitle("Проект ЛЕЧЕБНИК (LechebnikProject)")]
 [assembly: AssemblyDescription("Дипломная работа, программа ЛЕЧЕБНИК - управление электронной аптекой.")]
-[assembly: AssemblyConfiguration("Debug")]
+[assembly: AssemblyConfiguration("Release")]
 [assembly: AssemblyCompany("Соколов Андрей Сергеевич")]
 [assembly: AssemblyProduct("ЛЕЧЕБНИК")]
 [assembly: AssemblyCopyright("SOKOLOV AS. Copyright ©  2025")]

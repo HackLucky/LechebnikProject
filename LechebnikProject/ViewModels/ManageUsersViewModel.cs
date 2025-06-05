@@ -25,6 +25,17 @@ namespace LechebnikProject.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             }
         }
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                LoadAllData();
+            }
+        }
 
         public ICommand DelUserCommand { get; }
         public ICommand ChangeRoleCommand { get; }
@@ -47,15 +58,22 @@ namespace LechebnikProject.ViewModels
             AllEntities.Clear();
             LoadUsers();
             LoadClients();
-            OnPropertyChanged(nameof(AllEntities));
         }
 
         private void LoadUsers()
         {
             try
             {
-                string query = "SELECT UserId, LastName, FirstName, MiddleName, Login, Role, Status FROM Users";
-                DataTable table = DatabaseHelper.ExecuteQuery(query);
+                string query = @"
+                    SELECT UserId, LastName, FirstName, MiddleName, Login, Role, Status 
+                        FROM Users
+                    WHERE LastName LIKE @SearchText
+                        OR FirstName LIKE @SearchText
+                        OR MiddleName LIKE @SearchText
+                        OR Login LIKE @SearchText";
+                string searchValue = string.IsNullOrEmpty(SearchText) ? "%" : $"%{SearchText}%";
+                var parameters = new[] { new SqlParameter("@SearchText", searchValue) };
+                DataTable table = DatabaseHelper.ExecuteQuery(query, parameters);
                 foreach (DataRow row in table.Rows)
                 {
                     var u = new User
@@ -78,8 +96,16 @@ namespace LechebnikProject.ViewModels
         {
             try
             {
-                string query = "SELECT ClientId, LastName, FirstName, MiddleName, Login, Discount, Status FROM Clients";
-                DataTable table = DatabaseHelper.ExecuteQuery(query);
+                string query = @"
+                    SELECT ClientId, LastName, FirstName, MiddleName, Login, Discount, Status 
+                        FROM Clients
+                    WHERE LastName LIKE @SearchText
+                        OR FirstName LIKE @SearchText
+                        OR MiddleName LIKE @SearchText
+                        OR Login LIKE @SearchText";
+                string searchValue = string.IsNullOrEmpty(SearchText) ? "%" : $"%{SearchText}%";
+                var parameters = new[] { new SqlParameter("@SearchText", searchValue) };
+                DataTable table = DatabaseHelper.ExecuteQuery(query, parameters);
                 foreach (DataRow row in table.Rows)
                 {
                     var c = new Client
@@ -221,7 +247,6 @@ namespace LechebnikProject.ViewModels
             public string MiddleName { get; set; }
             public string Login { get; set; }
             public string Status { get; set; }
-            public string Type { get; set; }
         }
 
         public class User : BaseUser

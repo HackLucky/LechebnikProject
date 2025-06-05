@@ -25,6 +25,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding MedicineId}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Название" Binding="{Binding Name}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Серийный номер" Binding="{Binding SerialNumber}" HeaderStyle="{StaticResource ColumnHeader}"/>
+                <DataGridTextColumn Header="Поставщик" Binding="{Binding SupplierName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Производитель" Binding="{Binding ManufacturerName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Требует рецепт" Binding="{Binding RequiresPrescription, Converter={StaticResource BooleanToStringConverter}}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="На складе" Binding="{Binding StockQuantity}" HeaderStyle="{StaticResource ColumnHeader}"/>

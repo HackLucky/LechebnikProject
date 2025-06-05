@@ -16,7 +16,6 @@ namespace LechebnikProject.ViewModels
 
         public List<string> DiscountTypes { get; } = new List<string> { "50%", "Бесплатно" };
 
-        //public Prescription Prescription { get; set; } = new Prescription();
         public Medicine SelectedMedicine { get; set; }
         public string QuantityText { get; set; }
         public string SelectedDiscountType { get; set; }
@@ -141,7 +140,6 @@ namespace LechebnikProject.ViewModels
                     finalPrice = basePrice * 0.5m;
                     MessageBox.Show($"Препарат с рецептом добавлен в корзину по скидке 50%. Итого: {finalPrice} руб.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Добавляем в глобальный контекст корзины
                     AppContext.CartItems.Add(new CartItem
                     {
                         Medicine = SelectedMedicine,
@@ -154,7 +152,6 @@ namespace LechebnikProject.ViewModels
                 }
                 else if (DiscountType == "Бесплатно")
                 {
-                    // Записываем заказ с нулевой суммой и 100% скидкой
                     string insertOrderSql = @"
                         INSERT INTO Orders 
                             (UserId, OrderDate, TotalAmount, PaymentMethod, DiscountApplied, DiscountPercentage)

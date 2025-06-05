@@ -20,7 +20,6 @@
         </StackPanel>
         <DataGrid Grid.Row="2" ItemsSource="{Binding AllEntities}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedEntity}" IsReadOnly="True" Margin="10,0,10,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Тип" Binding="{Binding Type}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Логин" Binding="{Binding Login}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" HeaderStyle="{StaticResource ColumnHeader}"/>
                 <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" HeaderStyle="{StaticResource ColumnHeader}"/>
